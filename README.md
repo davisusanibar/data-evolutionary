@@ -14,6 +14,7 @@
    - [CDC Postgres / Kafka / Flink / Join](#change-data-capture--flink--kafka--join--flink-sum--flink-count)
    - [Flink hacia Iceberg HDFS](#flink--iceberg-hdfs)
    - [Flink hacia Iceberg Hive](#flink--iceberg-hive)
+   - [Flink hacia Iceberg Minio](#flink--iceberg-minio)
 
 # Modelo de Referencia
 
@@ -55,9 +56,12 @@ En este proyecto, se implementa una arquitectura de referencia utilizando un sta
 
 # Trabajos Pendientes o En Proceso
 
-- Apache Flink EOS Sistemas Soportan Semantica Unica por configuracion (Ejemplo: Kafka - Flink - Kafka).
-- Apache Flink EOS Sistemas que NO Soportan Semantica Unica por configuracion (Ejemplo: Kafka - REST - Flink - REST).
-- Apache Iceberg con Minio.
+- [ ] Apache Iceberg con Minio.
+- [ ] Apache Flink EOS Sistemas Soportan Semantica Unica por configuracion (Ejemplo: Kafka - Flink - Kafka).
+- [ ] Apache Flink EOS Sistemas que NO Soportan Semantica Unica por configuracion (Ejemplo: Kafka - REST Externo - Flink - REST Externo).
+- [ ] Apache Iceberg Query
+- [ ] Apache Flink Table
+- [ ] Apache Flink SQL
 
 # Stack Tecnológico
 
@@ -123,6 +127,8 @@ $ cat /etc/hosts
 192.168.18.5  broker
 192.168.18.5  registry
 192.168.18.5  hive
+192.168.18.5  rest
+192.168.18.5  warehouse.minio
 ```
 
 ## Usando docker compose
@@ -131,16 +137,20 @@ $ cat /etc/hosts
 $ cd infra/dockercompose 
 $ docker compose up -d
 $ docker compose ps
-|_ NAME                IMAGE                                    COMMAND                  SERVICE             CREATED       STATUS       PORTS
-|_ cdc-postgres        postgres:latest                          "docker-entrypoint.s…"   postgres            2 hours ago   Up 2 hours   0.0.0.0:5432->5432/tcp
-|_ flink-jobmanager    flink:1.20.0-scala_2.12-java11           "/docker-entrypoint.…"   flink-jobmanager    2 hours ago   Up 2 hours   6123/tcp, 0.0.0.0:18081->8081/tcp
-|_ flink-taskmanager   flink:1.20.0-scala_2.12-java11           "/docker-entrypoint.…"   flink-taskmanager   2 hours ago   Up 2 hours   6123/tcp, 8081/tcp
-|_ hadoo_namenode      dockercompose-namenode                   "/usr/local/bin/dumb…"   namenode            2 hours ago   Up 2 hours   0.0.0.0:8020->8020/tcp, 0.0.0.0:9870->9870/tcp
-|_ hadoop_datanode     dockercompose-datanode                   "/usr/local/bin/dumb…"   datanode            2 hours ago   Up 2 hours   0.0.0.0:9864->9864/tcp, 0.0.0.0:9866->9866/tcp
-|_ hive-metastore      apache/hive:4.0.0                        "sh -c /entrypoint.sh"   hive                2 hours ago   Up 2 hours   10000/tcp, 0.0.0.0:9083->9083/tcp, 10002/tcp
-|_ kafka               apache/kafka:latest                      "/__cacert_entrypoin…"   broker              2 hours ago   Up 2 hours   0.0.0.0:9092->9092/tcp
-|_ mysql-hive          mysql:8.0                                "docker-entrypoint.s…"   mysql-hive          2 hours ago   Up 2 hours   33060/tcp, 0.0.0.0:3308->3306/tcp
-|_ schema-registry     confluentinc/cp-schema-registry:latest   "/etc/confluent/dock…"   schema-registry     2 hours ago   Up 2 hours   0.0.0.0:8081->8081/tcp
+|_ NAME                IMAGE                                    COMMAND                  SERVICE             CREATED          STATUS          PORTS
+|_ cdc-postgres        postgres:latest                          "docker-entrypoint.s…"   postgres            12 hours ago     Up 12 hours     0.0.0.0:5432->5432/tcp
+|_ flink-jobmanager    flink:1.20.0-scala_2.12-java11           "/docker-entrypoint.…"   flink-jobmanager    12 hours ago     Up 12 hours     6123/tcp, 0.0.0.0:18081->8081/tcp
+|_ flink-taskmanager   flink:1.20.0-scala_2.12-java11           "/docker-entrypoint.…"   flink-taskmanager   12 hours ago     Up 12 hours     6123/tcp, 8081/tcp
+|_ hadoo_namenode      dockercompose-namenode                   "/usr/local/bin/dumb…"   namenode            12 hours ago     Up 12 hours     0.0.0.0:8020->8020/tcp, 0.0.0.0:9870->9870/tcp
+|_ hadoop_datanode     dockercompose-datanode                   "/usr/local/bin/dumb…"   datanode            12 hours ago     Up 12 hours     0.0.0.0:9864->9864/tcp, 0.0.0.0:9866->9866/tcp
+|_ hive-metastore      apache/hive:4.0.0                        "sh -c /entrypoint.sh"   hive                12 hours ago     Up 12 hours     10000/tcp, 0.0.0.0:9083->9083/tcp, 10002/tcp
+|_ iceberg-rest        tabulario/iceberg-rest                   "java -jar iceberg-r…"   rest                17 minutes ago   Up 17 minutes   0.0.0.0:8181->8181/tcp
+|_ kafka               apache/kafka:latest                      "/__cacert_entrypoin…"   broker              12 hours ago     Up 12 hours     0.0.0.0:9092->9092/tcp
+|_ mc                  minio/mc                                 "/bin/sh -c ' until …"   mc                  17 minutes ago   Up 17 minutes   
+|_ minio               minio/minio                              "/usr/bin/docker-ent…"   minio               17 minutes ago   Up 17 minutes   0.0.0.0:9000-9001->9000-9001/tcp
+|_ mysql-hive          mysql:8.0                                "docker-entrypoint.s…"   mysql-hive          12 hours ago     Up 12 hours     33060/tcp, 0.0.0.0:3308->3306/tcp
+|_ schema-registry     confluentinc/cp-schema-registry:latest   "/etc/confluent/dock…"   schema-registry     12 hours ago     Up 12 hours     0.0.0.0:8081->8081/tcp
+
 ```
 
 ![img.png](img/docker-compose.png)
@@ -161,18 +171,36 @@ Ejemplo completo en: `com.topaya.cdckafkaflinkiceberg.e_cdckafkaflink.JobStreami
 
 ## Flink / Iceberg HDFS
 
-Ejemplo completo en: `com.topaya.cdckafkaflinkiceberg.d_iceberg.hadoop_hdfs.streaming.JobDataStreamToIcebergToHadoopCatalogo`
+Ejemplo completo en: [JobDataStreamToIcebergToHadoopCatalogo.java](data-cdc-kafka-flink-iceberg%2Fsrc%2Fmain%2Fjava%2Fcom%2Ftopaya%2Fcdckafkaflinkiceberg%2Fd_iceberg%2Fhadoop_hdfs%2Fstreaming%2FJobDataStreamToIcebergToHadoopCatalogo.java)
 
 ![img.png](img/flink-iceberg-hdfs.png)
+
 ![img_1.png](img/iceberg_catalogo_hdfs.png)
+
 ![img_2.png](img/hdfs_metada.png)
+
 ![img.png](img/hdfs_data.png)
 
 ## Flink / Iceberg Hive
 
-Ejemplo completo en: `com.topaya.cdckafkaflinkiceberg.d_iceberg.hadoop_hive.streaming.JobStreamingDataStreamToIcebergToHiveCatalogo`
+Ejemplo completo en: [JobStreamingDataStreamToIcebergToHiveCatalogo.java](data-cdc-kafka-flink-iceberg%2Fsrc%2Fmain%2Fjava%2Fcom%2Ftopaya%2Fcdckafkaflinkiceberg%2Fd_iceberg%2Fhadoop_hive%2Fstreaming%2FJobStreamingDataStreamToIcebergToHiveCatalogo.java)
 
 ![img.png](img/flink-iceberg-hive.png)
+
 ![img_1.png](img/iceberg_catalogo_hive.png)
+
 ![img_2.png](img/hive_data.png)
+
 ![img_3.png](img/hive_metadata.png)
+
+## Flink / Iceberg Minio
+
+Ejemplo completo en: [JobStreamingDataStreamToIcebergToMinio.java](data-cdc-kafka-flink-iceberg%2Fsrc%2Fmain%2Fjava%2Fcom%2Ftopaya%2Fcdckafkaflinkiceberg%2Fd_iceberg%2Fminio%2Fstreaming%2FJobStreamingDataStreamToIcebergToMinio.java)
+
+![img.png](img/flink-iceberg-minio.png)
+
+![img_1.png](img/iceberg_storage_minio.png)
+
+![img_2.png](img/minio_metadata.png)
+
+![img_3.png](img/minio_data.png)
