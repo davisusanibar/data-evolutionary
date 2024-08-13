@@ -163,7 +163,7 @@ TBD
 
 ## Change Data Capture / Flink / Kafka / Join / Flink SUM / Flink COUNT
 
-Ejemplo completo en: `com.topaya.cdckafkaflinkiceberg.e_cdckafkaflink.JobStreamingCDCKafkaFlink`
+Ejemplo completo en: [JobStreamingCDCKafkaFlink.java](data-cdc-kafka-flink-iceberg%2Fsrc%2Fmain%2Fjava%2Fcom%2Ftopaya%2Fcdckafkaflinkiceberg%2Fe_cdckafkaflink%2FJobStreamingCDCKafkaFlink.java)
 
 ![img_1.png](data-cdc-kafka-flink-iceberg/src/main/java/com/topaya/cdckafkaflinkiceberg/e_cdckafkaflink/img/img_1.png)
 
