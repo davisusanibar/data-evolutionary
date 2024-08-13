@@ -23,8 +23,9 @@
   <kafka.version>3.7.1</kafka.version>
   <kafka.confluent.serde.version>7.6.1</kafka.confluent.serde.version>
   <flink.version>1.20.0</flink.version>
-  <iceberg.version>1.5.2</iceberg.version> <!-- Actualizar la versión de Iceberg a la que sea compatible con Flink 1.19.1 -->
+  <iceberg.version>1.5.2</iceberg.version> <!-- Actualizar la versión de Iceberg a la que sea compatible con Flink 1.20.0 -->
   <avro.version>1.11.3</avro.version>
+  <minio.awssdk.version>2.27.2</minio.awssdk.version>
 </properties>
 
 <dependencies>
@@ -53,6 +54,42 @@
     <groupId>org.apache.iceberg</groupId>
     <artifactId>iceberg-flink</artifactId>
     <version>${iceberg.version}</version>
+  </dependency>
+
+  <dependency>
+    <groupId>org.apache.iceberg</groupId>
+    <artifactId>iceberg-aws</artifactId>
+    <version>${iceberg.version}</version>
+  </dependency>
+
+  <dependency>
+    <groupId>software.amazon.awssdk</groupId>
+    <artifactId>s3</artifactId>
+    <version>${minio.awssdk.version}</version>
+  </dependency>
+
+  <dependency>
+    <groupId>software.amazon.awssdk</groupId>
+    <artifactId>sts</artifactId>
+    <version>${minio.awssdk.version}</version>
+  </dependency>
+
+  <dependency>
+    <groupId>software.amazon.awssdk</groupId>
+    <artifactId>dynamodb</artifactId>
+    <version>${minio.awssdk.version}</version>
+  </dependency>
+
+  <dependency>
+    <groupId>software.amazon.awssdk</groupId>
+    <artifactId>kms</artifactId>
+    <version>${minio.awssdk.version}</version>
+  </dependency>
+
+  <dependency>
+    <groupId>software.amazon.awssdk</groupId>
+    <artifactId>glue</artifactId>
+    <version>${minio.awssdk.version}</version>
   </dependency>
 
   <dependency>
