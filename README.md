@@ -2,9 +2,9 @@
 
 1. [Arquitectura de Referencia](#Modelo-de-Referencia)
 2. [Alcance](#Alcance)
-3. [Teoria Flink](#Teoria)
-   - [Primitivas: Evento, Estado y Tiempo](#Apache-Flink)
-   - [Iceberg: Opciones de Catalogo: HDFS, Hive, Rest](#Apache-Iceberg)
+3. [Teoria](#Teoria)
+   - [FLink Primitivas: Evento, Estado y Tiempo](#Apache-Flink)
+   - [Iceberg Catalogo: HDFS, Hive, Rest](#Apache-Iceberg)
 4. [Trabajo en Proceso](#Trabajos-Pendientes-o-En-Proceso)
 5. [Stack Tecnológico](#Stack-Tecnológico)
 6. [Arquitectura](#Arquitectura)
@@ -12,7 +12,7 @@
 8. [Iniciar Infraestructura Base](#Iniciar-Infraestructura-Base)
 9. [Casos de Uso de Ejemplo Implementados](#Casos-de-Uso-de-Ejemplo-Implementados)
    - [CDC Postgres / Kafka / Flink / Join](#change-data-capture--flink--kafka--join--flink-sum--flink-count)
-   - [Flink hacia Iceberg HDF](#flink--iceberg-hdfs)
+   - [Flink hacia Iceberg HDFS](#flink--iceberg-hdfs)
    - [Flink hacia Iceberg Hive](#flink--iceberg-hive)
 
 # Modelo de Referencia
