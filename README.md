@@ -1,8 +1,25 @@
-# Arquitectura de Referencia
+# Tabla de contenidos
+
+1. [Arquitectura de Referencia](#Modelo-de-Referencia)
+2. [Alcance](#Alcance)
+3. [Teoria Flink](#Teoria)
+   - [Primitivas: Evento, Estado y Tiempo](#Apache-Flink)
+   - [Iceberg: Opciones de Catalogo: HDFS, Hive, Rest](#Apache-Iceberg)
+4. [Trabajo en Proceso](#Trabajos-Pendientes-o-En-Proceso)
+5. [Stack Tecnológico](#Stack-Tecnológico)
+6. [Arquitectura](#Arquitectura)
+7. [Configuración del Proyecto](#Configuración-del-Proyecto)
+8. [Iniciar Infraestructura Base](#Iniciar-Infraestructura-Base)
+9. [Casos de Uso de Ejemplo Implementados](#Casos-de-Uso-de-Ejemplo-Implementados)
+   - [CDC Postgres / Kafka / Flink / Join](#change-data-capture--flink--kafka--join--flink-sum--flink-count)
+   - [Flink hacia Iceberg HDF](#flink--iceberg-hdfs)
+   - [Flink hacia Iceberg Hive](#flink--iceberg-hive)
+
+# Modelo de Referencia
 
 En este proyecto, se implementa una arquitectura de referencia utilizando un stack de tecnologías robusto y moderno para el procesamiento y evolución de data.
 
-## Caracteristicas de la Arquitecture de Referencia
+# Alcance
 
 - Los ejemplos para cada uno de los casos de uso pueden correrse en el host sin problemas usando Flink Standalone,
 - Los ejemplos para cada uno de los casos de uso pueden correrse como contenedores sin problemas usando Flink CLuster en contenedores,
@@ -12,37 +29,37 @@ En este proyecto, se implementa una arquitectura de referencia utilizando un sta
   - Apache Flink: Version 1.20.0 (release 02 Agosto 2024)
   - Apache Iceberg: Version 1.6.0 (release 23 Julio 2024)
 
-## Teoria Básica
+# Teoria
 
-### Apache Flink
+## Apache Flink
 
 ![img_13.png](img/flink_teoria.png)
 
-#### Primitiva Evento
+### Primitiva Evento
 
 ![img_9.png](img/flink_primitiva_evento.png)
 
-#### Primitva Estado
+### Primitva Estado
 
 ![img_10.png](img/flink_primitiva_estado.png)
 
-#### Primitva Tiempo
+### Primitva Tiempo
 
 ![img_11.png](img/flink_primitiva_tiempo.png)
 
-### Apache Iceberg
+## Apache Iceberg
 
-#### Opciones de Catalogo
+### Opciones de Catalogo
 
 ![img_12.png](img/iceberg_opciones_catalogo.png)
 
-## Trabajos Pendientes y/o En Proceso
+# Trabajos Pendientes o En Proceso
 
 - Apache Flink EOS Sistemas Soportan Semantica Unica por configuracion (Ejemplo: Kafka - Flink - Kafka).
 - Apache Flink EOS Sistemas que NO Soportan Semantica Unica por configuracion (Ejemplo: Kafka - REST - Flink - REST).
 - Apache Iceberg con Minio.
 
-## Stack Tecnológico
+# Stack Tecnológico
 
 Las tecnologías usadas en este proyecto incluyen:
 
@@ -59,18 +76,18 @@ Las tecnologías usadas en este proyecto incluyen:
 
 Estas tecnologías trabajan en conjunto para capturar, procesar, y almacenar cambios en los datos.
 
-## Arquitectura
+# Arquitectura
 
 En este proyecto se implementa una arquitectura utilizando Apache Kafka, Apache Flink y Apache Iceberg. Estas tecnologías trabajan juntas para asegurar un flujo de datos eficiente y escalable.
 
-## Configuración del Proyecto
+# Configuración del Proyecto
 
-### Descargar proyecto
+## Descargar proyecto
 ```bash
 $ git clone https://github.com/davisusanibar/data-evolutionary.git
 ```
 
-### Linter Codigo
+## Linter Codigo
 ```bash
 $ cd data-evolutionary/data-cdc-kafka-flink-iceberg
 $ mvn spotless:check
@@ -80,7 +97,7 @@ $ mvn spotless:apply
 ...
 ```
 
-### Crear paquete de despliegue para cargar a Flink
+## Crear paquete de despliegue para cargar a Flink
 ```bash
 $ cd data-evolutionary/data-cdc-kafka-flink-iceberg
 $ mvn clean package
@@ -88,9 +105,9 @@ $ ls -1 target/data-cdckafkaflinkiceberg-1.0-SNAPSHOT-shaded.jar
 |_ target/data-cdckafkaflinkiceberg-1.0-SNAPSHOT-shaded.jar
 ``` 
 
-## Iniciar Infraestructura Base
+# Iniciar Infraestructura Base
 
-### Configurar mapeo local de hosts
+## Configurar mapeo local de hosts
 
 Obtener la IP local y registrar los hostname asociados a tu IP.
 
@@ -108,7 +125,7 @@ $ cat /etc/hosts
 192.168.18.5  hive
 ```
 
-### Usando docker compose
+## Usando docker compose
 
 ```bash
 $ cd infra/dockercompose 
@@ -128,13 +145,13 @@ $ docker compose ps
 
 ![img.png](img/docker-compose.png)
 
-### Usando Kubernetes
+## Usando Kubernetes
 
 TBD
 
-## Casos de Uso de Ejemplo Implementados
+# Casos de Uso de Ejemplo Implementados
 
-### Change Data Capture / Flink / Kafka / Join / Flink SUM / Flink COUNT
+## Change Data Capture / Flink / Kafka / Join / Flink SUM / Flink COUNT
 
 Ejemplo completo en: `com.topaya.cdckafkaflinkiceberg.e_cdckafkaflink.JobStreamingCDCKafkaFlink`
 
@@ -142,7 +159,7 @@ Ejemplo completo en: `com.topaya.cdckafkaflinkiceberg.e_cdckafkaflink.JobStreami
 
 ![img_18.png](data-cdc-kafka-flink-iceberg/src/main/java/com/topaya/cdckafkaflinkiceberg/e_cdckafkaflink/img/img_18.png)
 
-### Flink / Iceberg HDFS
+## Flink / Iceberg HDFS
 
 Ejemplo completo en: `com.topaya.cdckafkaflinkiceberg.d_iceberg.hadoop_hdfs.streaming.JobDataStreamToIcebergToHadoopCatalogo`
 
@@ -151,7 +168,7 @@ Ejemplo completo en: `com.topaya.cdckafkaflinkiceberg.d_iceberg.hadoop_hdfs.stre
 ![img_2.png](img/hdfs_metada.png)
 ![img.png](img/hdfs_data.png)
 
-### Flink / Iceberg Hive
+## Flink / Iceberg Hive
 
 Ejemplo completo en: `com.topaya.cdckafkaflinkiceberg.d_iceberg.hadoop_hive.streaming.JobStreamingDataStreamToIcebergToHiveCatalogo`
 
