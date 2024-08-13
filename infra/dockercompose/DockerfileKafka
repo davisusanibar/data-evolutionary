@@ -1,0 +1,5 @@
+FROM apache/kafka:latest
+
+USER root
+RUN apk add busybox-extras
+USER appuser

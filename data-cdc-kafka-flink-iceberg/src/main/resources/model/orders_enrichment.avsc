@@ -1,0 +1,39 @@
+{
+  "type": "record",
+  "name": "OrderEnrichment",
+  "namespace": "com.topaya.cdckafkaflinkiceberg.model.avro",
+  "fields": [
+    {
+      "name": "o_custkey",
+      "type": [
+        "null",
+        "long"
+      ],
+      "default": null
+    },
+    {
+      "name": "o_orderkey",
+      "type": [
+        "null",
+        "long"
+      ],
+      "default": null
+    },
+    {
+      "name": "c_name",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "o_totalprice",
+      "type": [
+        "null",
+        "double"
+      ],
+      "default": null
+    }
+  ]
+}

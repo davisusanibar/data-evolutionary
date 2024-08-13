@@ -1,0 +1,6 @@
+# Propiedades de Hadoop
+flink.hadoop.fs.defaultFS: hdfs://namenode
+flink.hadoop.dfs.client.use.datanode.hostname: true
+flink.hadoop.dfs.datanode.use.datanode.hostname: true
+flink.metrics.reporter.slf4j: org.apache.flink.metrics.slf4j.Slf4jReporter
+flink.metrics.reporter.slf4j.interval: 10 SECONDS

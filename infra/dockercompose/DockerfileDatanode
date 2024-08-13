@@ -1,0 +1,18 @@
+FROM apache/hadoop:3.3.5
+
+# Cambiar al usuario root para ejecutar comandos de instalación
+USER root
+
+# Añadir repositorios de CentOS Vault y eliminar repositorios antiguos
+RUN rm -f /etc/yum.repos.d/*.repo && \
+    curl -o /etc/yum.repos.d/CentOS-Vault.repo http://vault.centos.org/7.6.1810/os/x86_64/CentOS-Vault.repo && \
+    echo -e "[base]\nname=CentOS-\$releasever - Base\nbaseurl=http://vault.centos.org/7.6.1810/os/\$basearch/\ngpgcheck=1\ngpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7\n\n[updates]\nname=CentOS-\$releasever - Updates\nbaseurl=http://vault.centos.org/7.6.1810/updates/\$basearch/\ngpgcheck=1\ngpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7\n\n[extras]\nname=CentOS-\$releasever - Extras\nbaseurl=http://vault.centos.org/7.6.1810/extras/\$basearch/\ngpgcheck=1\ngpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7" > /etc/yum.repos.d/CentOS-Vault.repo
+
+# Instalar lsof y otros paquetes necesarios
+RUN yum clean all && yum update -y && yum install -y lsof telnet netstat java-11-openjdk-devel
+
+# Cambiar de nuevo al usuario hadoop (o el usuario que la imagen base utiliza por defecto)
+USER hadoop
+
+# Crear el directorio de datos con permisos adecuados
+RUN mkdir -p /opt/hadoop/dfs/data

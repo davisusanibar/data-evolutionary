@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "CustomerTotalCount",
+  "namespace": "com.topaya.cdckafkaflinkiceberg.model.avro",
+  "fields": [
+    {
+      "name": "o_custkey",
+      "type": "long"
+    },
+    {
+      "name": "count_o_orderkey",
+      "type": "long"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "type": "record",
+  "name": "CustomerTotalPrice",
+  "namespace": "com.topaya.cdckafkaflinkiceberg.model.avro",
+  "fields": [
+    {
+      "name": "o_custkey",
+      "type": "long"
+    },
+    {
+      "name": "o_orderkey",
+      "type": "long"
+    },
+    {
+      "name": "sum_o_totalprice",
+      "type": "double"
+    }
+  ]
+}

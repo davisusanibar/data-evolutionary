@@ -1,0 +1,7 @@
+CORE-SITE.XML_fs.default.name=hdfs://namenode
+CORE-SITE.XML_fs.defaultFS=hdfs://namenode
+HDFS-SITE.XML_dfs.namenode.rpc-address=namenode:8020
+HDFS-SITE.XML_dfs.datanode.data.dir=file:///opt/hadoop/dfs/data
+HDFS-SITE.XML_dfs.replication=1
+HIVE-SITE.XML_hive.metastore.warehouse.dir=hdfs://namenode/usericeberg1/hivedata/warehouse
+HIVE_SITE_CONF_hive.metastore.warehouse.dir=hdfs://namenode/usericeberg2/hivedata/warehouse

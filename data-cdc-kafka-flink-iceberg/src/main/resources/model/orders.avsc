@@ -1,0 +1,89 @@
+{
+  "type": "record",
+  "name": "Orders",
+  "namespace": "com.topaya.cdckafkaflinkiceberg.model.avro",
+  "fields": [
+    {
+      "name": "o_orderkey",
+      "type": [
+        "null",
+        "long"
+      ],
+      "default": null
+    },
+    {
+      "name": "o_custkey",
+      "type": [
+        "null",
+        "long"
+      ],
+      "default": null
+    },
+    {
+      "name": "o_orderstatus",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "o_totalprice",
+      "type": [
+        "null",
+        {
+          "type": "fixed",
+          "name": "o_totalprice",
+          "size": 7,
+          "logicalType": "decimal",
+          "precision": 15,
+          "scale": 2
+        }
+      ],
+      "default": null
+    },
+    {
+      "name": "o_orderdate",
+      "type": [
+        "null",
+        {
+          "type": "int",
+          "logicalType": "date"
+        }
+      ],
+      "default": null
+    },
+    {
+      "name": "o_orderpriority",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "o_clerk",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    },
+    {
+      "name": "o_shippriority",
+      "type": [
+        "null",
+        "int"
+      ],
+      "default": null
+    },
+    {
+      "name": "o_comment",
+      "type": [
+        "null",
+        "string"
+      ],
+      "default": null
+    }
+  ]
+}
