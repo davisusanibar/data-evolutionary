@@ -9,6 +9,7 @@
         <module>data-hadoop</module>
         <module>data-spark</module>
         <module>data-cdc-kafka-flink-iceberg</module>
+        <module>data-kcd2025</module>
     </modules>
     <packaging>pom</packaging>
 </project>

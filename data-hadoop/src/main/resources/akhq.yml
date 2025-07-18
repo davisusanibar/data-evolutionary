@@ -1,0 +1,5 @@
+akhq:
+  connections:
+    local:
+      properties:
+        bootstrap.servers: "localhost:9092"

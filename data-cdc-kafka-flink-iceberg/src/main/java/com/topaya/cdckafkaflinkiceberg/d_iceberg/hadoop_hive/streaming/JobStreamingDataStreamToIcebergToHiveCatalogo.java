@@ -26,24 +26,21 @@ public class JobStreamingDataStreamToIcebergToHiveCatalogo {
         try (final StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment()) {
 
-            env.enableCheckpointing(5000);
-
             final DevolverSourceFunctionConDataFakeDemo sourceFunctionConDataFake =
                     new DevolverSourceFunctionConDataFakeDemo();
             final DataStreamSource<RowData> rowDataDataStreamSource =
                     env.addSource(sourceFunctionConDataFake);
 
+            env.enableCheckpointing(5000);
             rowDataDataStreamSource.print().name("data-stream-row-data").setParallelism(2);
 
             Schema esquemaIceberg =
                     new Schema(
-                            Types.NestedField.optional(1, "usuario", Types.StringType.get()),
-                            Types.NestedField.optional(
-                                    2, "tiempo_evento", Types.TimestampType.withoutZone()));
+                            Types.NestedField.optional(1, "usuario", Types.StringType.get()));
 
             Map<String, String> configuracionIceberg = new HashMap<>();
             configuracionIceberg.put("type", "iceberg");
-            configuracionIceberg.put("uri", "thrift://hive:9083");
+            configuracionIceberg.put("uri", "thrift://hive:9083"); // conectándote al Hive Metastore usando Thrift y gestionando las tablas Iceberg con HiveCatalog
             configuracionIceberg.put("catalog-type", "hive");
             configuracionIceberg.put("property-version", "1");
 

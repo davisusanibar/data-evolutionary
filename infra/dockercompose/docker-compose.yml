@@ -131,7 +131,7 @@ services:
       - mysql-hive
 
   flink-jobmanager:
-    image: flink:1.20.0-scala_2.12-java11
+    image: flink:1.20.2-scala_2.12-java11
     container_name: flink-jobmanager
     ports:
       - "18081:8081"
@@ -144,7 +144,7 @@ services:
       AWS_REGION: us-east-1
 
   flink-taskmanager:
-    image: flink:1.20.0-scala_2.12-java11
+    image: flink:1.20.2-scala_2.12-java11
     container_name: flink-taskmanager
     depends_on:
       - flink-jobmanager
@@ -197,9 +197,9 @@ services:
       - AWS_REGION=us-east-1
     entrypoint: >
       /bin/sh -c "
-      until (/usr/bin/mc config host add minio http://minio:9000 admin password) do echo '...waiting...' && sleep 1; done;
+      until (/usr/bin/mc alias set minio http://minio:9000 admin password) do echo '...waiting...' && sleep 1; done;
       /usr/bin/mc rm -r --force minio/warehouse;
       /usr/bin/mc mb minio/warehouse;
-      /usr/bin/mc policy set public minio/warehouse;
+      /usr/bin/mc anonymous set public minio/warehouse;
       tail -f /dev/null
       "

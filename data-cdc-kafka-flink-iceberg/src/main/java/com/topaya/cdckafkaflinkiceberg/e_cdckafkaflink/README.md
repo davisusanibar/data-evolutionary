@@ -539,3 +539,12 @@ $ rm -rf datanode_data/* hive_database/*
 $ docker compose up -d
 ```
 
+
+mysql
+
+mysql -h postgres -P 3308 -u root -p
+--> abc
+
+docker cp lib/iceberg-flink-runtime-1.20-1.9.1.jar flink-jobmanager:/opt/flink/lib/
+
+docker cp lib/hadoop-common-3.4.0.jar flink-jobmanager:/opt/flink/lib/

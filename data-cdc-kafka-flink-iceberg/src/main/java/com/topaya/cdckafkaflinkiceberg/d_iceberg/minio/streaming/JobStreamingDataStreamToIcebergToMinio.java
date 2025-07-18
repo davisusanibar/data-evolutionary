@@ -19,100 +19,94 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class JobStreamingDataStreamToIcebergToMinio {
-    private static final Logger logger =
-            LoggerFactory.getLogger(JobStreamingDataStreamToIcebergToMinio.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JobStreamingDataStreamToIcebergToMinio.class);
+    private static final String S3_ENDPOINT = "http://minio:9000";
+    private static final String S3_WAREHOUSE = "s3://warehouse/catalogo/minio";
+    private static final String CATALOG_URI = "http://rest:8181";
+    private static final String AWS_REGION_KEY = "aws.region";
+    private static final String AWS_ACCESS_KEY_ID = "aws.accessKeyId";
+    private static final String AWS_SECRET_ACCESS_KEY = "aws.secretAccessKey";
 
     public static void main(String[] args) {
+        try (final StreamExecutionEnvironment executionEnvironment =
+                     StreamExecutionEnvironment.getExecutionEnvironment()) {
 
-        try (final StreamExecutionEnvironment env =
-                StreamExecutionEnvironment.getExecutionEnvironment()) {
+            configureCheckpointing(executionEnvironment);
+            DataStreamSource<RowData> sourceStream = configureFakeSource(executionEnvironment);
 
-            env.enableCheckpointing(5000);
-
-            final DevolverSourceFunctionConDataFakeDemo sourceFunctionConDataFake =
-                    new DevolverSourceFunctionConDataFakeDemo();
-            final DataStreamSource<RowData> rowDataDataStreamSource =
-                    env.addSource(sourceFunctionConDataFake);
-
-            rowDataDataStreamSource.print().name("data-stream-row-data").setParallelism(2);
-
-            Schema esquemaIceberg =
-                    new Schema(
-                            Types.NestedField.optional(1, "usuario", Types.StringType.get()),
-                            Types.NestedField.optional(
-                                    2, "tiempo_evento", Types.TimestampType.withoutZone()));
-
-            Configuration configuracionHadoop = new Configuration();
-            configuracionHadoop.set("fs.defaultFS", "hdfs://namenode");
-            configuracionHadoop.set("dfs.client.use.datanode.hostname", "true");
-            configuracionHadoop.set("dfs.datanode.use.datanode.hostname", "true");
-
-            Map<String, String> configuracionCustomCatalogo = new HashMap<>();
-            configuracionCustomCatalogo.put("uri", "http://rest:8181");
-            configuracionCustomCatalogo.put(
-                    "io-impl",
-                    "org.apache.iceberg.aws.s3.S3FileIO"); // CatalogUtil - Loading custom FileIO
-            // implementation:
-            // org.apache.iceberg.aws.s3.S3FileIO
-
-            configuracionCustomCatalogo.put("warehouse", "s3://warehouse/catalogo/minio");
-            configuracionCustomCatalogo.put("s3.endpoint", "http://minio:9000");
-
-            String baseDatos = "icebergminio";
-            String tableName = "usuarios_minio_streaming";
+            Schema icebergSchema = createIcebergSchema();
+            Map<String, String> customCatalogConfig = createCustomCatalogConfig();
 
             ParameterTool parameters = ParameterTool.fromArgs(args);
-            System.setProperty(
-                    "aws.region",
-                    parameters.get(
-                            "AWS_REGION",
-                            "us-east-1")); // Unable to load region from system settings. Region
-            // must be specified either via environment variable
-            // (AWS_REGION) or system property (aws.region)
-            System.setProperty(
-                    "aws.accessKeyId",
-                    parameters.get(
-                            "AWS_ACCESS_KEY_ID",
-                            "admin")); // Unable to load credentials from any of the providers in
-            // the chain
-            // AwsCredentialsProviderChain(credentialsProviders=
-            System.setProperty(
-                    "aws.secretAccessKey",
-                    parameters.get(
-                            "AWS_SECRET_ACCESS_KEY",
-                            "password")); // Unable to load credentials from any of the providers in
-            // the chain
-            // AwsCredentialsProviderChain(credentialsProviders=
+            configureAwsEnvironment(parameters);
 
-            CatalogLoader tipoCatalogoParaIceberg =
-                    CatalogLoader.custom(
-                            "flink-iceberg-minio",
-                            configuracionCustomCatalogo,
-                            configuracionHadoop,
-                            "org.apache.iceberg.rest.RESTCatalog");
+            CatalogLoader catalogLoader = loadCatalog(customCatalogConfig, new Configuration());
+            TableIdentifier tableIdentifier = TableIdentifier.of("icebergminio", "usuarios_minio_streaming");
+            initializeIcebergTable(catalogLoader, tableIdentifier, icebergSchema);
 
-            TableIdentifier identificadorTablaEnIceberg = TableIdentifier.of(baseDatos, tableName);
+            TableLoader tableLoader = TableLoader.fromCatalog(catalogLoader, tableIdentifier);
+            writeToIceberg(sourceStream, tableLoader);
 
-            if (!tipoCatalogoParaIceberg.loadCatalog().tableExists(identificadorTablaEnIceberg)) {
-                tipoCatalogoParaIceberg
-                        .loadCatalog()
-                        .createTable(identificadorTablaEnIceberg, esquemaIceberg);
-            }
-
-            TableLoader cargarTablaDeIceberg =
-                    TableLoader.fromCatalog(tipoCatalogoParaIceberg, identificadorTablaEnIceberg);
-
-            FlinkSink.forRowData(rowDataDataStreamSource)
-                    .tableLoader(cargarTablaDeIceberg)
-                    .append()
-                    .setParallelism(1)
-                    .name("sink-iceberg-catalogo-minio-streaming");
-
-            env.execute("Demo-Ejemplo-Iceberg-Streaming-Minio");
-
-        } catch (Exception e) {
-            logger.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+            executionEnvironment.execute("Demo-Ejemplo-Iceberg-Streaming-Minio");
+        } catch (Exception exception) {
+            LOGGER.error(exception.getMessage(), exception);
+            throw new RuntimeException(exception);
         }
+    }
+
+    private static void configureCheckpointing(StreamExecutionEnvironment environment) {
+        environment.enableCheckpointing(5000);
+    }
+
+    private static DataStreamSource<RowData> configureFakeSource(StreamExecutionEnvironment environment) {
+        DevolverSourceFunctionConDataFakeDemo sourceFunction = new DevolverSourceFunctionConDataFakeDemo();
+        DataStreamSource<RowData> sourceStream = environment.addSource(sourceFunction);
+        sourceStream.print().name("data-stream-row-data").setParallelism(2);
+        return sourceStream;
+    }
+
+    private static Schema createIcebergSchema() {
+        return new Schema(
+                Types.NestedField.optional(1, "usuario", Types.StringType.get()),
+                Types.NestedField.optional(2, "tiempo_evento", Types.TimestampType.withoutZone())
+        );
+    }
+
+    private static Map<String, String> createCustomCatalogConfig() {
+        Map<String, String> catalogConfig = new HashMap<>();
+        catalogConfig.put("uri", CATALOG_URI);
+        catalogConfig.put("io-impl", "org.apache.iceberg.aws.s3.S3FileIO");
+        catalogConfig.put("warehouse", S3_WAREHOUSE);
+        catalogConfig.put("s3.endpoint", S3_ENDPOINT);
+        return catalogConfig;
+    }
+
+    private static void configureAwsEnvironment(ParameterTool parameters) {
+        System.setProperty(AWS_REGION_KEY, parameters.get("AWS_REGION", "us-east-1"));
+        System.setProperty(AWS_ACCESS_KEY_ID, parameters.get("AWS_ACCESS_KEY_ID", "admin"));
+        System.setProperty(AWS_SECRET_ACCESS_KEY, parameters.get("AWS_SECRET_ACCESS_KEY", "password"));
+    }
+
+    private static CatalogLoader loadCatalog(Map<String, String> customCatalogConfig, Configuration hadoopConfig) {
+        return CatalogLoader.custom(
+                "flink-iceberg-minio",
+                customCatalogConfig,
+                hadoopConfig,
+                "org.apache.iceberg.rest.RESTCatalog"
+        );
+    }
+
+    private static void initializeIcebergTable(CatalogLoader catalogLoader, TableIdentifier tableIdentifier, Schema schema) {
+        if (!catalogLoader.loadCatalog().tableExists(tableIdentifier)) {
+            catalogLoader.loadCatalog().createTable(tableIdentifier, schema);
+        }
+    }
+
+    private static void writeToIceberg(DataStreamSource<RowData> sourceStream, TableLoader tableLoader) {
+        FlinkSink.forRowData(sourceStream)
+                .tableLoader(tableLoader)
+                .append()
+                .setParallelism(1)
+                .name("sink-iceberg-catalogo-minio-streaming");
     }
 }
