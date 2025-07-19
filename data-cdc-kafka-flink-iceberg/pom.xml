@@ -315,7 +315,7 @@
       <artifactId>spotless-maven-plugin</artifactId>
       <version>${spotless.version}</version>
       <configuration>
-        <ratchetFrom>origin/main</ratchetFrom>
+        <ratchetFrom>feature/event-driven</ratchetFrom>
         <formats>
           <format>
             <includes>

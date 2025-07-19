@@ -10,7 +10,7 @@ $ git clone https://github.com/davisusanibar/data-evolutionary.git
 ## Generar Modelos Avro
 ```bash
 $ cd data-evolutionary/data-cdc-kafka-flink-iceberg
-$ mvn clean compime
+$ mvn clean compile
 $ ls -1 target/generated-sources/avro/com/topaya/cdckafkaflinkiceberg/model/avro
 |_ Customer.java
 |_ CustomerTotalCount.java
