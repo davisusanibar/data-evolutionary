@@ -1,0 +1,38 @@
+schema: edaios.sdd.feature/v2
+id: KCD2026-ORDERS-REVENUE-WINDOW
+artifact: data-kcd2026/specs/001-orders-revenue-window/spec.md
+owner: Data & AI Lead
+authority: data-kcd2026/specs/001-orders-revenue-window/plan.md
+purpose: agregar revenue por cliente en ventanas fijas desde Kafka con un contrato Avro verificable por gate
+requirements:
+  - FR-001
+  - FR-002
+  - FR-003
+  - FR-004
+  - FR-005
+  - FR-006
+  - FR-007
+contract:
+  source_topic: orders
+  source_schema: data-cdc-kafka-flink-iceberg/src/main/resources/model/orders.avsc
+  sink_topic: orders_revenue_window
+  sink_schema: data-kcd2026/src/main/resources/model/orders_revenue_window.avsc
+  registry: http://registry:8081
+  bootstrap_servers: broker:9092
+  window_seconds: 60
+fields:
+  - name: o_custkey
+    type: long
+  - name: window_start
+    type: long
+    logicalType: timestamp-millis
+  - name: window_end
+    type: long
+    logicalType: timestamp-millis
+  - name: sum_o_totalprice
+    type: double
+  - name: order_count
+    type: int
+validation:
+  - data-kcd2026/tools/contract_check.py
+  - mvn -q -pl data-kcd2026 test

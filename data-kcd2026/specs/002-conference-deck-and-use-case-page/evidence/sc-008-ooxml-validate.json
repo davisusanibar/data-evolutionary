@@ -1,0 +1,22 @@
+{
+  "schema": "kcd2026.evidence/v1",
+  "criterios": [
+    "SC-008",
+    "FR-008"
+  ],
+  "tarea": "T007",
+  "comando": "/usr/local/bin/python3.13 <skill-pptx>/scripts/office/validate.py deck/build/kcd2026.pptx --original deck/template.pptx (cwd: data-kcd2026)",
+  "fecha": "2026-07-17",
+  "estado_sano": {
+    "exit_code": 0,
+    "salida": [
+      "All validations PASSED!"
+    ]
+  },
+  "veredicto": "passed",
+  "artefactos": {
+    "template.pptx": "sha256:6403764c97960dd08c54ba1799c0bd00a08b9f75526398bbe1ce42afd6ce82a3",
+    "kcd2026.pptx (identidad del build validado, NO un pin esperado)": "sha256:a8ca206a7c24c9108c7ffd5a59c339853860a43b799d6e964ae670843d70bf01"
+  },
+  "claim_boundary": "demuestra que el build vigente del deck valida OOXML contra el template oficial con el validador del entorno; no demuestra que futuros rebuilds validen (debe correrse en cada rebuild), ni fidelidad visual, ni autorizacion de publicacion"
+}

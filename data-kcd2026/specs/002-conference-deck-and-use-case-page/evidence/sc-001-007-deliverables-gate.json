@@ -1,0 +1,66 @@
+{
+  "schema": "kcd2026.evidence/v1",
+  "criterios": [
+    "SC-001",
+    "SC-002",
+    "SC-003",
+    "SC-004",
+    "SC-005",
+    "SC-006",
+    "SC-007"
+  ],
+  "tarea": "T009",
+  "comando": "/usr/local/bin/python3.13 tools/deliverables_check.py (cwd: data-kcd2026)",
+  "fecha": "2026-07-17",
+  "estado_tbd_digest": {
+    "contexto": "primera corrida del gate con template_sha256: TBD-DIGEST y sin evidence/adr-0015-red-gate.json",
+    "exit_code": 1,
+    "salida": [
+      "[deliverables] FAIL: los entregables derivaron de su contrato",
+      "  - el pin del template sigue en TBD-DIGEST; digest real calculado: sha256:6403764c97960dd08c54ba1799c0bd00a08b9f75526398bbe1ce42afd6ce82a3 — fija ese valor en specs/002-conference-deck-and-use-case-page/feature.spec.yaml (template_sha256) para que el pin quede verificable",
+      "  - extracto adr-red-gate: evidencia inexistente data-kcd2026/specs/002-conference-deck-and-use-case-page/evidence/adr-0015-red-gate.json; registra la evidencia antes de reclamar coincidencia (una ausencia no aprueba)"
+    ],
+    "resolucion": "el pin se fijo con el digest calculado y la evidencia adr-0015-red-gate.json se registro (T010) antes de la corrida verde"
+  },
+  "estado_sano": {
+    "exit_code": 0,
+    "salida": [
+      "[deliverables] pagina: flink use case: 1/1 sincronizada; proyección determinista verificada",
+      "[deliverables] OK: deck 35 slides sin placeholders, 3 extractos de log identicos a la evidencia, slide de frontera presente y guion del orador sobre el umbral",
+      "[deliverables] OK: pagina del caso byte-identica a su recompilacion",
+      "[deliverables] frontera: la verificacion del .pptx es ESTRUCTURAL, no byte a byte — un contenedor ZIP no ofrece igualdad de bytes entre corridas y este gate no la finge (ADR-0015, invariante 5)"
+    ],
+    "detalle": {
+      "slides": 35,
+      "slides_con_notas": 33,
+      "umbral_notas": 30,
+      "placeholders_encontrados": 0,
+      "extractos_verificados": [
+        "canary-divergent-fields (slide 28, log-canary-contrato, vs sc-005-contract-gate.json)",
+        "e2e-window-output (slide 30, log-e2e-pipeline, vs sc-002-004-e2e-compose.json)",
+        "adr-red-gate (slide 32, log-gate-rojo-adr, vs adr-0015-red-gate.json)"
+      ],
+      "slide_frontera": "slide 33: 'Qué NO demostramos'"
+    }
+  },
+  "deriva_inducida": {
+    "mutacion": "un byte del derivado docs/edaios-operating-system-flink-use-case.html mutado en el offset 18301 ('150.0' -> '151.0'), sin regenerar desde la config",
+    "exit_code": 1,
+    "salida": [
+      "[deliverables] FAIL: la pagina del caso no coincide byte a byte con su recompilacion",
+      "  - ERROR: derivado fuera de sincronía: docs/edaios-operating-system-flink-use-case.html",
+      "  Regenera con: python3 tools/generate_use_case_page.py (la pagina no se edita a mano)"
+    ],
+    "restauracion": "el HTML se restauro desde la copia previa a la mutacion; corrida posterior del gate en verde (exit 0)"
+  },
+  "veredicto": "passed",
+  "artefactos": {
+    "deliverables_check.py": "sha256:af6ffc7213ed0710ff4ea85243a76c9bf44be1a8c5f0992fbccc7a65c86b4028",
+    "feature.spec.yaml": "sha256:4a1199fb12751fb01b698b5fa7dcc9a26fc1eab43136f646ba821b458613d8de",
+    "template.pptx": "sha256:6403764c97960dd08c54ba1799c0bd00a08b9f75526398bbe1ce42afd6ce82a3",
+    "edaios-operating-system-flink-use-case.html": "sha256:f301eb34aa64fb6e1bdf37a77a7284084e7fa7b356fd6ede8c117e06e22f42a9",
+    "edaios-operating-system-flink-use-case.config.json": "sha256:12def1e7d5f95934751b23bd666a553364007e16298cbefd549c7ea6869e62a8",
+    "kcd2026.pptx (identidad del build inspeccionado, NO un pin esperado)": "sha256:a8ca206a7c24c9108c7ffd5a59c339853860a43b799d6e964ae670843d70bf01"
+  },
+  "claim_boundary": "demuestra que el gate falla cerrado ante pin sin fijar, evidencia ausente y deriva de un byte en la pagina, y que en verde declara su verificacion del deck como estructural; el digest del kcd2026.pptx identifica el build inspeccionado y no funciona como pin (SC-007: el gate no compara el .pptx contra un digest esperado); no demuestra determinismo byte a byte del .pptx, autorizacion de publicacion ni fidelidad de la charla en vivo"
+}

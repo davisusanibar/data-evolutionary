@@ -1,0 +1,6 @@
+# Derivados del generador: se regeneran con el pipeline de 5 pasos
+# (build_estructura -> anexar --paginas -> llenar -> render -> anexar --fusionar).
+# Un derivado no se commitea; su verificacion la hace tools/deliverables_check.py.
+# template.pptx y anexos/ SI se versionan: son fuentes pineadas por sha256
+# en specs/002-conference-deck-and-use-case-page/feature.spec.yaml.
+build/

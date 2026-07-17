@@ -1,0 +1,20 @@
+{
+  "schema": "kcd2026.evidence/v1",
+  "criterios": [
+    "SC-002",
+    "SC-003",
+    "SC-004",
+    "SC-006"
+  ],
+  "tarea": "T011",
+  "comando": "./mvnw -pl data-kcd2026 clean test",
+  "jdk": "Temurin 11.0.31 (arm64)",
+  "resultado": "Tests run: 5, Failures: 0, Errors: 0, Skipped: 0",
+  "exit_code": 0,
+  "veredicto": "passed",
+  "artefactos": {
+    "RevenueVentana.java": "sha256:1945e281b46f3932dc641966a499b48e6d9e097cefd25fa838bdd3356cf3fbe1",
+    "RevenueVentanaTest.java": "sha256:49367d91a7a9cf227bf771ff2790b0e60ea82f75d0e1eae4c96d22b874c5f499"
+  },
+  "claim_boundary": "demuestra la logica de agregacion y descarte sobre fixtures sin cluster; no demuestra ejecucion en Flink, exactitud fiscal, rendimiento ni tolerancia a fallos"
+}

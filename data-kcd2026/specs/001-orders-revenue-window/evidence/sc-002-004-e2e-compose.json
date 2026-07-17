@@ -1,0 +1,75 @@
+{
+  "schema": "kcd2026.evidence/v1",
+  "criterios": [
+    "SC-002",
+    "SC-004",
+    "SC-006",
+    "FR-001",
+    "FR-002",
+    "FR-005",
+    "FR-007"
+  ],
+  "tarea": "T013",
+  "entorno": {
+    "compose": "infra/dockercompose (broker, schema-registry, flink-jobmanager, flink-taskmanager)",
+    "flink": "KCD 2026 - revenue por cliente en ventana de 20s",
+    "job_id": "608ee13c0c502e7309c160d94c448c7e",
+    "estado_job": "RUNNING",
+    "runtime": "Flink 1.20.2 sobre colima aarch64"
+  },
+  "contrato_en_log_arranque": [
+    "/********************** CONTRATO - INICIO **********************/",
+    "origen  : topico=orders esquema=/model/orders.avsc",
+    "destino : topico=orders_revenue_window esquema=/model/orders_revenue_window.avsc",
+    "registry: http://registry:8081",
+    "ventana : 20 segundos (processing time, no solapada)",
+    "gobierno: specs/001-orders-revenue-window/spec.md",
+    "/********************** CONTRATO - FIN **********************/"
+  ],
+  "fixtures_producidos": [
+    {
+      "o_orderkey": 1,
+      "o_custkey": 7,
+      "o_totalprice": "100.50"
+    },
+    {
+      "o_orderkey": 2,
+      "o_custkey": 7,
+      "o_totalprice": "49.50"
+    },
+    {
+      "o_orderkey": 3,
+      "o_custkey": 9,
+      "o_totalprice": "200.00"
+    },
+    {
+      "o_orderkey": 4,
+      "o_custkey": null,
+      "o_totalprice": "999.99",
+      "nota": "incompleta: FR-004 debe descartarla"
+    }
+  ],
+  "salida_observada": [
+    {
+      "o_custkey": 7,
+      "window_start": 1784283820000,
+      "window_end": 1784283840000,
+      "sum_o_totalprice": 150.0,
+      "order_count": 2
+    },
+    {
+      "o_custkey": 9,
+      "window_start": 1784283820000,
+      "window_end": 1784283840000,
+      "sum_o_totalprice": 200.0,
+      "order_count": 1
+    }
+  ],
+  "verificacion": {
+    "SC-002": "custkey 7: 100.50+49.50=150.0 con order_count=2 -> observado",
+    "SC-004": "la orden sin custkey no aparece en la salida; 999.99 no contamino ninguna ventana -> observado",
+    "SC-006": "el log de arranque declara topicos, rutas .avsc y ventana efectiva -> observado"
+  },
+  "veredicto": "passed",
+  "claim_boundary": "demuestra el pipeline end-to-end sobre 4 fixtures sinteticos en un compose local de un solo broker y un taskmanager; no demuestra exactitud fiscal, datos tardios o desordenados, tolerancia a fallos, exactly-once, rendimiento, escalabilidad ni operacion en produccion"
+}

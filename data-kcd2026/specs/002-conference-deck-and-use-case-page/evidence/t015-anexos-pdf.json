@@ -1,0 +1,29 @@
+{
+  "task": "T015",
+  "date": "2026-07-17",
+  "claim": "los 3 anexos HTML viajan completos y paginados en el PDF entregable; el deck lleva un divisor y 3 covers derivados del render de Chrome",
+  "pipeline": [
+    {"paso": 1, "comando": "cd deck && /usr/local/bin/python3.13 build_estructura.py", "exit": 0, "salida": "estructura: 39 slides -> build/kcd2026.pptx (div-anexos en 35, covers en 36-38, gracias en 39)"},
+    {"paso": 2, "comando": "/usr/local/bin/python3.13 anexar.py --paginas", "exit": 0, "salida": "a1: 51 paginas, a2: 8 paginas, a3: 10 paginas; preview-aN.png a 150 dpi"},
+    {"paso": 3, "comando": "/usr/local/bin/python3.13 llenar.py", "exit": 0, "salida": "contenido aplicado a 39 slides; 14 titulos ensanchados"},
+    {"paso": 4, "comando": "/usr/local/bin/python3.13 render.py", "exit": 0, "salida": "render: 39 slides -> build/render"},
+    {"paso": 5, "comando": "/usr/local/bin/python3.13 anexar.py --fusionar", "exit": 0, "salida": "deck 39 + a1 51 + a2 8 + a3 10 = 108 paginas -> build/kcd2026-completo.pdf"}
+  ],
+  "desglose_paginas": {"deck": 39, "a1": 51, "a2": 8, "a3": 10, "total_fusionado": 108},
+  "fuentes_html_sha256": {
+    "a1_edaiosv/docs/demos/edaios-operating-system.html": "b1838fdf96763eba07905adba20a506364b42640cf0e88fec4e6719d22902fe8",
+    "a2_data-kcd2026/docs/edaios-operating-system-flink.html": "98dcd26d14e1258800d55da0c8a8e97e0e0fe4b8d1317975337a72ccfb54cd3b",
+    "a3_data-kcd2026/docs/edaios-operating-system-flink-use-case.html": "f301eb34aa64fb6e1bdf37a77a7284084e7fa7b356fd6ede8c117e06e22f42a9"
+  },
+  "texto_seleccionable": {
+    "comando": "fitz: ''.join(p.get_text() for p in fitz.open('build/anexos/a2.pdf'))",
+    "contiene": ["artículos", "gates", "constitución"],
+    "resultado": "el PDF de anexo es texto paginado por Chrome, no un bitmap"
+  },
+  "gates": [
+    {"comando": "validate.py build/kcd2026.pptx --original template.pptx", "exit": 0, "salida": "All validations PASSED!"},
+    {"comando": "python3.13 data-kcd2026/tools/deliverables_check.py (desde data-evolutionary)", "exit": 0, "salida": "OK: deck 39 slides; 3 anexos HTML paginados presentes y el PDF fusionado suma deck + anexos"},
+    {"comando": "rojo inducido: mv kcd2026-completo.pdf fuera y re-correr el gate", "exit": 1, "salida": "FAIL: el PDF fusionado no existe; pide el pipeline en orden; restaurado y de vuelta en verde (exit 0)"}
+  ],
+  "claim_boundary": "los PDF de anexos son render de Chrome del HTML determinista; el PDF no reclama byte-determinismo (metadatos de fecha de Chrome; misma frontera que el .pptx, ADR-0015 invariante 5). La verificacion es estructural: existencia de las piezas y paginas(fusionado) == paginas(deck) + suma(paginas(aN))."
+}

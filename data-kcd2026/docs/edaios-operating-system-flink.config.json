@@ -1,0 +1,196 @@
+{
+  "schema": "kcd2026.flink-os-page/v1",
+  "meta": {
+    "id": "edaios-operating-system-flink",
+    "lang": "es",
+    "eyebrow": "EDAIOS · VISTA REDUCIDA DEL SISTEMA OPERATIVO",
+    "title": "El sistema operativo EDAIOS, aplicado: un pipeline Flink que se lleva el Core",
+    "subtitle": "El consumer no copia el gobierno: lo consume. data-kcd2026 es un job Flink gobernado por la constitución, los gates y el ciclo SDD de EDAIOS Core 3.1.0. Esta vista vive en el consumer porque ADR-0015 decidió que las proyecciones renderizadas se producen aquí, no en Core.",
+    "badges": ["Core 3.1.0", "Consumer data-kcd2026", "ADR-0015 · Aceptado", "T0 · COMPOSE LOCAL"],
+    "status": "Vista reducida; la página larga del caso enlaza abajo"
+  },
+  "jerarquia": {
+    "eyebrow": "LA JERARQUÍA",
+    "title": "Foundation → Core → Consumer, sin inversión",
+    "lead": "La autoridad baja y la referencia sube. Foundation origina el conocimiento; Core lo compila en constitución y gates; el consumer lo consume para gobernar su pipeline. La restricción constitucional es literal: \"Foundation → Core → Consumer nunca se invierte\".",
+    "tree": [
+      "Foundation                        autoridad del conocimiento",
+      "   │  compila (autoridad baja)",
+      "   ▼",
+      "EDAIOS Core 3.1.0                 constitución (7 artículos) + 15 gates fail-closed",
+      "   ▲",
+      "   │  consume y cita (referencia sube)",
+      "data-evolutionary / data-kcd2026  pipeline Flink + 2 gates propios + esta vista"
+    ],
+    "flecha": "La flecha de referencia apunta del consumer hacia Core: este módulo cita la constitución y los gates de Core; Core no apunta a este consumer ni sabe que existe. ADR-0015 lo fija como invariante: una vista no ratifica el conocimiento que la origina y su ausencia no degrada el canon."
+  },
+  "constitucion": {
+    "eyebrow": "LA CONSTITUCIÓN EN ACCIÓN",
+    "title": "7 artículos de Core, verificados contra la feature Flink",
+    "lead": "A la izquierda, la regla tal como la compila Core (constitution.md, versión 1.0.0). A la derecha, el veredicto del Constitution Check del plan de la spec 001 del consumer, con su evidencia. Un VIOLA detiene el plan; el camino sería un ADR, no una excepción.",
+    "articulos": [
+      {
+        "num": "I",
+        "titulo": "El conocimiento manda",
+        "regla": "Ninguna implementación tiene mayor autoridad que el conocimiento que la origina.",
+        "veredicto": "PASS",
+        "evidencia": "El contrato vive en feature.spec.yaml y spec.md; el .avsc y el job los consumen. contract_check.py falla si el esquema pretende mandar sobre la spec."
+      },
+      {
+        "num": "II",
+        "titulo": "Spec antes que artefacto",
+        "regla": "Todo cambio gobernado declara contrato, criterios y owner antes de implementar.",
+        "veredicto": "PASS",
+        "evidencia": "La spec declara FR-001..FR-007 y SC-001..SC-006 antes del job. El contrato tipado precede al .avsc."
+      },
+      {
+        "num": "III",
+        "titulo": "El canon crece por decisión",
+        "regla": "Un cambio estructural requiere ADR aceptado; un RFC explora alternativas.",
+        "veredicto": "N/A",
+        "evidencia": "La feature no introduce frontera estructural en EDAIOS Core. Es un consumer que aplica el gobierno existente."
+      },
+      {
+        "num": "IV",
+        "titulo": "Cero cifras sin fuente",
+        "regla": "Cada cifra, claim y outcome declara fuente, fecha, alcance y owner.",
+        "veredicto": "PASS",
+        "evidencia": "La única cifra del pipeline (sum_o_totalprice) declara su fuente (tópico orders), su alcance (ventana de N segundos) y su límite (Clarification 2: no es exactitud fiscal)."
+      },
+      {
+        "num": "V",
+        "titulo": "Una fuente, muchas vistas",
+        "regla": "Git conserva la autoridad y las vistas se regeneran desde ella.",
+        "veredicto": "PASS",
+        "evidencia": "El contrato tiene una fuente (feature.spec.yaml) y tres representaciones (prosa FR-002, .avsc, job). El gate verifica que no deriven."
+      },
+      {
+        "num": "VI",
+        "titulo": "La IA consume; el humano firma",
+        "regla": "La IA no inventa verdad ni acepta decisiones reservadas a una persona.",
+        "veredicto": "PASS",
+        "evidencia": "El job lo genera un agente desde la spec; la aceptación de la feature y el cierre exigen firma del owner. Ningún gate acepta por su cuenta."
+      },
+      {
+        "num": "VII",
+        "titulo": "Privacidad por diseño",
+        "regla": "Sensibilidad, fuente y autorización preceden cualquier consumo de datos.",
+        "veredicto": "PASS",
+        "evidencia": "T0 declarado. orders es TPC-H sintético: no hay PII. Ningún campo del contrato de salida identifica a una persona; o_custkey es una clave sintética."
+      }
+    ],
+    "nota_pin": "El plan lo declara sin maquillaje: \"Constitución verificada: 1.0.0 · pin no aplicable — este consumer no vive en el árbol de Core y no puede resolver constitution.md localmente. La verificación es manual y se registra aquí. Esa es la frontera honesta: el consumer aplica los artículos, no los verifica mecánicamente.\"",
+    "fuente": "Fuente: edaiosv/.specify/memory/constitution.md (v1.0.0, Ratificado) · data-kcd2026/specs/001-orders-revenue-window/plan.md (Constitution Check)"
+  },
+  "controles": {
+    "eyebrow": "LOS CONTROLES HEREDADOS",
+    "title": "Los controles viajan con el conocimiento",
+    "lead": "Core protege su propio canon con 15 gates fail-closed declarados en gates.json (v3.1.0). El consumer no los re-ejecuta: replica el patrón con 2 gates propios sobre sus propios contratos. Ninguno tiene modo warning.",
+    "core_titulo": "15 gates de EDAIOS Core (gates.json, schema edaios.sdd.gates/v1)",
+    "core_gates": [
+      "FND-PROJECTION", "CATALOG-PROJECTION", "AGENT-PARITY", "SDD-CONTRACT",
+      "KOM", "MONOREPO-STRUCTURE", "TRACEABILITY", "BASELINE-SURFACE",
+      "CORE-CONFORMANCE", "CLAIM-SURFACE", "CORE-DISTRIBUTION",
+      "CORE-RELEASE-SEAL", "CORE-BASE-DEMO", "TEST", "VALIDATE"
+    ],
+    "consumer_titulo": "2 gates del consumer (data-kcd2026/tools/)",
+    "consumer_gates": [
+      {
+        "id": "contract_check.py",
+        "descripcion": "Verifica que tres representaciones del mismo contrato no hayan derivado entre sí: feature.spec.yaml (la fuente), FR-002 (prosa) y el .avsc que ejecuta Flink. Falla cerrado antes de compilar."
+      },
+      {
+        "id": "deliverables_check.py",
+        "descripcion": "Verifica que el deck y las páginas no deriven de su fuente: el .pptx de forma estructural (ADR-0015, invariante 5) y cada HTML byte a byte propagando el --check de su generador."
+      }
+    ],
+    "mensaje": "El consumer se lleva el Core sin copiarlo: hereda el patrón (fuente única, derivado regenerable, gate fail-closed), no los ficheros.",
+    "fuente": "Fuente: edaiosv/.specify/gates.json (version 3.1.0) · docstrings de data-kcd2026/tools/contract_check.py y deliverables_check.py"
+  },
+  "ciclo": {
+    "eyebrow": "EL CICLO SDD APLICADO",
+    "title": "Dos specs, el mismo ciclo",
+    "lead": "Cada spec del consumer recorre el ciclo completo: spec.md → plan.md (con Constitution Check) → tasks.md → verification.md → evidence/. Los frontmatter declaran estado, fase y tramo de sensibilidad.",
+    "specs": [
+      {
+        "carpeta": "specs/001-orders-revenue-window",
+        "id": "KCD2026-ORDERS-REVENUE-WINDOW",
+        "estado": "Propuesto",
+        "fase": "implemented",
+        "tramo": "T0",
+        "hipotesis": "Un pipeline cuyo contrato de datos es verificable por un gate no puede derivar en silencio entre el esquema y lo que la especificación declara.",
+        "produjo": [
+          "El job Flink (JobOrdersRevenueWindow, RevenueVentana, FiltroOrdenCompleta) y el contrato orders_revenue_window.avsc.",
+          "El gate contract_check.py con rojo inducido y revertido.",
+          "3 evidencias selladas: tests JUnit, canary de contrato y e2e sobre compose."
+        ]
+      },
+      {
+        "carpeta": "specs/002-conference-deck-and-use-case-page",
+        "id": "KCD2026-CONFERENCE-DECK-AND-USE-CASE-PAGE",
+        "estado": "Propuesto",
+        "fase": "implemented",
+        "tramo": "T0",
+        "hipotesis": "Un entregable de conferencia que se regenera por contrato no puede derivar en silencio entre lo que la evidencia registró y lo que la audiencia ve.",
+        "produjo": [
+          "El deck de 35 slides regenerable desde el template oficial pinado por sha256.",
+          "La página del caso como proyección determinista byte a byte.",
+          "El gate deliverables_check.py y 3 evidencias (gate de entregables, gate rojo del ADR, validación OOXML)."
+        ]
+      }
+    ],
+    "fuente": "Fuente: frontmatter de spec.md y tasks.md de las specs 001 y 002 en data-kcd2026/specs/"
+  },
+  "adr0015": {
+    "eyebrow": "LA DECISIÓN",
+    "title": "ADR-0015: el render vive en el consumer",
+    "estado": "Aceptado · 2026-07-17 · Owner: Principal Architect · Amends: ADR-0003, ADR-0006, ADR-0007",
+    "cita": "Core publica conocimiento; un consumer produce vistas. Una vista no ratifica el conocimiento que la origina y su ausencia no degrada el canon.",
+    "detalle": "Por eso esta página y su generador viven en data-kcd2026 y no en el árbol de Core: Core gobierna la fuente y sus claims; el render, su determinismo y su check son responsabilidad del consumer (invariantes 1, 3 y 5). Publicar sigue siendo un permiso humano separado de commit y push (invariante 6).",
+    "fuente": "Fuente: edaiosv/governance/ADR-0015-rendered-projections-and-publication-surface.md (cita textual del invariante 3)"
+  },
+  "evidencia": {
+    "eyebrow": "EVIDENCIA MÍNIMA",
+    "title": "Dos extractos bastan; la página larga tiene el resto",
+    "lead": "El canary demuestra que el gobierno muerde; el e2e demuestra que el pipeline corre bajo ese gobierno. Ambos extractos se reproducen de la evidencia sellada de la spec 001.",
+    "canary_label": "Canary de contrato · evidence/sc-005-contract-gate.json (T012, deriva inducida → exit 1)",
+    "canary_lines": [
+      "$ # deriva inducida: renombrar el campo sum_o_totalprice a total_revenue en el .avsc",
+      "[contract] FAIL: el contrato derivo entre sus representaciones",
+      "  - campo declarado en feature.spec.yaml y ausente del .avsc: 'sum_o_totalprice'",
+      "  - campo presente en el .avsc y no declarado en feature.spec.yaml: 'total_revenue'",
+      "  La especificacion manda. Corrige la fuente y regenera; no ajustes el .avsc para que el gate calle."
+    ],
+    "e2e_label": "Salida e2e · evidence/sc-002-004-e2e-compose.json (T013, compose local, ventana de 20s)",
+    "e2e_lines": [
+      "fixtures: (custkey 7: 100.50) (custkey 7: 49.50) (custkey 9: 200.00) (custkey null: 999.99 → FR-004 descarta)",
+      "{\"o_custkey\":7,\"window_start\":1784283820000,\"window_end\":1784283840000,\"sum_o_totalprice\":150.0,\"order_count\":2}",
+      "{\"o_custkey\":9,\"window_start\":1784283820000,\"window_end\":1784283840000,\"sum_o_totalprice\":200.0,\"order_count\":1}"
+    ],
+    "link_href": "edaios-operating-system-flink-use-case.html",
+    "link_texto": "Ver la página completa del caso: arquitectura, FR/SC, bugs que los tests no atraparon, e2e íntegro y ADR-0015 en detalle",
+    "fuente": "Fuente: data-kcd2026/specs/001-orders-revenue-window/evidence/sc-005-contract-gate.json y sc-002-004-e2e-compose.json"
+  },
+  "frontera": {
+    "eyebrow": "FRONTERA DE CLAIMS",
+    "title": "Qué demuestra esta vista — y qué no",
+    "demuestra": [
+      "Que una feature de consumer (un pipeline Flink) traza a los 7 artículos de la constitución de Core mediante el Constitution Check de su plan, en un entorno local.",
+      "Que los controles viajan con el conocimiento: 15 gates fail-closed en Core y 2 gates propios en el consumer, con rojo inducido y revertido.",
+      "Que el ciclo SDD completo (spec → plan → tasks → verification → evidence) se aplicó dos veces en el consumer.",
+      "Que las vistas renderizadas viven en el consumer y se regeneran deterministas desde su fuente, como decidió ADR-0015."
+    ],
+    "no_demuestra": [
+      "Adopción organizacional de EDAIOS: todo ocurrió en repositorios locales de una laptop.",
+      "Operación en producción del pipeline: el e2e corrió en un compose local con 4 fixtures sintéticos.",
+      "Outcome de negocio: el value ledger de ambas specs declara N/A; no hay iniciativa ni baseline.",
+      "Que Core dependa de Flink o de este consumer: la referencia va en una sola dirección y la ausencia de esta vista no degrada el canon.",
+      "Verificación mecánica de la constitución en el consumer: el Constitution Check del plan es manual (pin no aplicable fuera del árbol de Core)."
+    ],
+    "nota": "Esta vista es T0 sobre artefactos locales. Sostiene trazabilidad, no adopción: un gobierno que funciona en dos repos de una laptop no es un gobierno desplegado en una organización.",
+    "fuente": "Fuente: fronteras de claim declaradas en plan.md (spec 001), verification.md (spec 002) y ADR-0015"
+  },
+  "footer": {
+    "linea": "Vista regenerable. Fuente: docs/edaios-operating-system-flink.config.json. Regenerar: python3 tools/generate_os_flink_page.py. El HTML es derivado determinista; no se edita a mano."
+  }
+}

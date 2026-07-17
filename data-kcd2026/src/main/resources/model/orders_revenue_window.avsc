@@ -1,0 +1,35 @@
+{
+  "type": "record",
+  "name": "OrdersRevenueWindow",
+  "namespace": "com.topaya.kcd2026.model.avro",
+  "doc": "Revenue agregado por cliente en ventana fija. Contrato gobernado por FR-002 de specs/001-orders-revenue-window/spec.md; verificado por tools/contract_check.py.",
+  "fields": [
+    {
+      "name": "o_custkey",
+      "type": "long"
+    },
+    {
+      "name": "window_start",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    },
+    {
+      "name": "window_end",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    },
+    {
+      "name": "sum_o_totalprice",
+      "type": "double",
+      "doc": "Suma aritmetica sobre fixtures. No es exactitud fiscal: el origen es decimal y aqui se degrada a double (Clarification 2)."
+    },
+    {
+      "name": "order_count",
+      "type": "int"
+    }
+  ]
+}

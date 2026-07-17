@@ -1,0 +1,44 @@
+{
+  "schema": "kcd2026.evidence/v1",
+  "criterios": [
+    "SC-006",
+    "FR-006"
+  ],
+  "tarea": "T014",
+  "fecha": "2026-07-17",
+  "entregable": "vista reducida del sistema operativo EDAIOS aplicada al caso Flink (ADR-0015: la proyeccion renderizada vive en el consumer)",
+  "comando": "python3 data-kcd2026/tools/deliverables_check.py",
+  "determinismo": {
+    "corridas": 2,
+    "resultado": "dos ejecuciones consecutivas de generate_os_flink_page.py producen el mismo sha256 del HTML",
+    "sha256_html": "sha256:98dcd26d14e1258800d55da0c8a8e97e0e0fe4b8d1317975337a72ccfb54cd3b"
+  },
+  "estado_sano": {
+    "exit_code": 0,
+    "salida": [
+      "[deliverables] pagina del caso: flink use case: 1/1 sincronizada; proyección determinista verificada",
+      "[deliverables] vista reducida del OS: flink os view: 1/1 sincronizada; proyección determinista verificada",
+      "[deliverables] OK: 2 paginas byte-identicas a su recompilacion (caso de uso y vista reducida del OS)"
+    ]
+  },
+  "deriva_inducida": {
+    "mutacion": "un byte del HTML derivado: 150.0 -> 151.0 en el offset 16100",
+    "exit_code": 1,
+    "salida": [
+      "[deliverables] FAIL: la vista reducida del OS no coincide byte a byte con su recompilacion",
+      "  - ERROR: derivado fuera de sincronía: docs/edaios-operating-system-flink.html",
+      "  Regenera con: python3 tools/generate_os_flink_page.py (el HTML no se edita a mano)"
+    ],
+    "restauracion": "regenerado con generate_os_flink_page.py; gate de vuelta en verde (exit 0) y sha256 identico al estado sano"
+  },
+  "verificaciones_adicionales": {
+    "html_parser": "html.parser de la stdlib parsea el derivado completo sin error (229 start tags)",
+    "placeholders": "grep -E 'TODO|TBD|PLACEHOLDER|[Ll]orem|FIXME|\\{\\{' sobre HTML y config: sin coincidencias"
+  },
+  "veredicto": "passed",
+  "artefactos": {
+    "edaios-operating-system-flink.config.json": "sha256:f767785bd6caf062d8848121489d988b422dbd8e856f1c9ae8c86b6932bbd0e2",
+    "edaios-operating-system-flink.html": "sha256:98dcd26d14e1258800d55da0c8a8e97e0e0fe4b8d1317975337a72ccfb54cd3b"
+  },
+  "claim_boundary": "demuestra que la vista reducida del OS es una proyeccion determinista byte a byte, regenerable desde su config y protegida por el gate de entregables en una laptop local; el texto de constitucion, veredictos, gates y evidencias se transcribio de los archivos fuente de edaiosv y data-kcd2026. No demuestra adopcion organizacional de EDAIOS, operacion en produccion, outcome de negocio, verificacion mecanica de la constitucion en el consumer, ni autorizacion de commit, push o publicacion"
+}

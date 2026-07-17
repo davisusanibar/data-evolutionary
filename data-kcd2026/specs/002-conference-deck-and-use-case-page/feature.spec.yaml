@@ -1,0 +1,93 @@
+schema: edaios.sdd.feature/v2
+id: KCD2026-CONFERENCE-DECK-AND-USE-CASE-PAGE
+artifact: data-kcd2026/specs/002-conference-deck-and-use-case-page/spec.md
+owner: Data & AI Lead
+authority: data-kcd2026/specs/002-conference-deck-and-use-case-page/plan.md
+purpose: gobernar el deck KCD 2026 y la pagina del caso como proyecciones regenerables por contrato bajo ADR-0015
+requirements:
+  - FR-001
+  - FR-002
+  - FR-003
+  - FR-004
+  - FR-005
+  - FR-006
+  - FR-007
+  - FR-008
+contract:
+  deck:
+    template: data-kcd2026/deck/template.pptx
+    template_sha256: 6403764c97960dd08c54ba1799c0bd00a08b9f75526398bbe1ce42afd6ce82a3
+    generator:
+      - data-kcd2026/deck/build_estructura.py
+      - data-kcd2026/deck/llenar.py
+      - data-kcd2026/deck/kcd_estilo.py
+      - data-kcd2026/deck/contenido_1.py
+      - data-kcd2026/deck/contenido_diagramas.py
+      - data-kcd2026/deck/contenido_2.py
+      - data-kcd2026/deck/contenido_anexos.py
+      - data-kcd2026/deck/anexar.py
+      - data-kcd2026/deck/render.py
+    artifact: data-kcd2026/deck/build/kcd2026.pptx
+    slides: 43
+    boundary_slide_title: "Qué NO demostramos"
+    min_slides_with_notes: 30
+    determinism: structural   # el .pptx no reclama igualdad byte a byte (ADR-0015 inv. 5)
+  page:
+    config: data-kcd2026/docs/edaios-operating-system-flink-use-case.config.json
+    generator: data-kcd2026/tools/generate_use_case_page.py
+    artifact: data-kcd2026/docs/edaios-operating-system-flink-use-case.html
+    determinism: byte   # texto: la recompilacion debe ser byte-identica
+  page_os:
+    config: data-kcd2026/docs/edaios-operating-system-flink.config.json
+    generator: data-kcd2026/tools/generate_os_flink_page.py
+    artifact: data-kcd2026/docs/edaios-operating-system-flink.html
+    determinism: byte   # vista reducida del OS aplicada al caso Flink (ADR-0015: vive en el consumer)
+  annexes:
+    # El pptx presenta; el PDF documenta: cada HTML viaja completo, paginado
+    # por Chrome headless (texto seleccionable), fusionado tras las slides.
+    # Un PDF de Chrome lleva metadatos de fecha: NO se reclama determinismo
+    # byte a byte; misma frontera que el .pptx (ADR-0015, invariante 5).
+    determinism: structural
+    merged_artifact: data-kcd2026/deck/build/kcd2026-completo.pdf
+    items:
+      - source_html: ../edaiosv/docs/demos/edaios-operating-system.html
+        pdf_artifact: data-kcd2026/deck/build/anexos/a1.pdf
+      - source_html: data-kcd2026/docs/edaios-operating-system-flink.html
+        pdf_artifact: data-kcd2026/deck/build/anexos/a2.pdf
+      - source_html: data-kcd2026/docs/edaios-operating-system-flink-use-case.html
+        pdf_artifact: data-kcd2026/deck/build/anexos/a3.pdf
+  captures:
+    # Anexos A4/A5 (T016): capturas del owner de la sesion e2e (Flink UI y
+    # TUI de engram), insertadas TAL CUAL como slides 39-42. Son evidencia
+    # visual aportada, no un derivado del pipeline: se pinan por sha256 y
+    # reemplazar o alterar una pone el gate en rojo (fail closed).
+    - file: data-kcd2026/deck/anexos/Flink-Job-ID.jpeg
+      sha256: 34cc5469a081f9346b3ac704908d04acc50b9a9424d02b8f1f03178c25196aa8
+    - file: data-kcd2026/deck/anexos/Flink-Job.jpeg
+      sha256: ca69fee4e9947776ffecb981b6ff64cffc95e7d0bbf05949ffc48f15164419cd
+    - file: data-kcd2026/deck/anexos/Engram-Logs.png
+      sha256: 05d74551f4bf0f74e350365a242f84482e0af11cb956d8d01a64eb85275a391d
+    - file: data-kcd2026/deck/anexos/Engram-Logs-ID.png
+      sha256: b96a2e19c668fd8896e90a50e385f507effe61a9e7d9280e5cc7051ad9b7f1fe
+log_extracts:
+  - id: canary-divergent-fields
+    slide_label: log-canary-contrato
+    evidence: data-kcd2026/specs/001-orders-revenue-window/evidence/sc-005-contract-gate.json
+    must_match:
+      - "campo declarado en feature.spec.yaml y ausente del .avsc: 'sum_o_totalprice'"
+      - "campo presente en el .avsc y no declarado en feature.spec.yaml: 'total_revenue'"
+  - id: e2e-window-output
+    slide_label: log-e2e-pipeline
+    evidence: data-kcd2026/specs/001-orders-revenue-window/evidence/sc-002-004-e2e-compose.json
+    must_match:
+      - {field: sum_o_totalprice, value: 150.0}
+      - {field: order_count, value: 2}
+  - id: adr-red-gate
+    slide_label: log-gate-rojo-adr
+    evidence: data-kcd2026/specs/002-conference-deck-and-use-case-page/evidence/adr-0015-red-gate.json
+    must_match:
+      - {field: proposed, value: 1}
+validation:
+  - data-kcd2026/tools/deliverables_check.py
+  - data-kcd2026/tools/generate_use_case_page.py --check
+  - data-kcd2026/tools/generate_os_flink_page.py --check

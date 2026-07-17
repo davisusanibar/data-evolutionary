@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Construyendo Data Pipelines con Apache Flink y Spec Driven Development</title>
+<meta name="description" content="El caso data-kcd2026: un job Flink cuyo contrato de datos no puede derivar en silencio. Esta página es una proyección determinista: se compila desde un JSON gobernado y no se edita a mano.">
+<style>
+:root{--kcd-blue:#0F87FF;--kcd-gray:#EFEFEF;--ink:#262626;--muted:#5c6470;
+--line:#d7dbe2;--paper:#ffffff;--panel:#1b2129;--panel-ink:#e8eef6;
+--blue-soft:#e5f1ff;--amber:#c07600;--amber-soft:#fff4df;--red:#b3362e;
+--green:#0a7a5c;--green-soft:#e7f6f0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--kcd-gray);color:var(--ink);
+font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:1.55}
+.shell{width:min(1080px,calc(100% - 40px));margin:0 auto}
+.hero{background:var(--kcd-blue);color:#fff;padding:56px 0 44px}
+.hero .eyebrow{color:#dcecff}
+.hero h1{margin:.25em 0;font-size:clamp(1.8rem,4.4vw,3.1rem);line-height:1.08;
+letter-spacing:-.02em}
+.hero .lead{color:#eaf4ff;font-size:clamp(1rem,2vw,1.2rem);max-width:62ch;margin:0}
+.hero-meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.hero-meta span{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.35);
+border-radius:999px;padding:6px 12px;font-size:.82rem;font-weight:700}
+.eyebrow{margin:0 0 .35em;font-size:.78rem;font-weight:800;letter-spacing:.13em;
+text-transform:uppercase;color:var(--kcd-blue)}
+h2{margin:.1em 0 .4em;font-size:clamp(1.4rem,3vw,2.1rem);line-height:1.12;
+letter-spacing:-.02em}
+h3{margin:.2em 0 .4em}
+section{padding:44px 0 8px}
+section>.shell>p.lead{color:var(--muted);max-width:78ch;margin:0 0 18px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;
+padding:20px 22px;box-shadow:0 10px 26px rgba(38,38,38,.06)}
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.grid-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.log{margin:18px 0}
+.log figcaption{font-size:.76rem;font-weight:800;letter-spacing:.09em;
+text-transform:uppercase;color:var(--panel-ink);background:var(--panel);
+border-radius:12px 12px 0 0;padding:10px 16px;border-bottom:1px solid #313a46}
+.log pre{margin:0;background:var(--panel);color:var(--panel-ink);
+border-radius:0 0 12px 12px;padding:16px 18px;overflow-x:auto;
+font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+font-size:.85rem;line-height:1.5}
+pre.tree{background:var(--panel);color:var(--panel-ink);border-radius:12px;
+padding:16px 18px;overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Menlo,
+Consolas,monospace;font-size:.85rem;line-height:1.5}
+.table-wrap{overflow-x:auto;background:var(--paper);border:1px solid var(--line);
+border-radius:12px;margin:14px 0}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{text-align:left;vertical-align:top;border-bottom:1px solid var(--line);
+padding:10px 14px}
+th{background:var(--blue-soft);color:#0a5cb8;font-size:.74rem;letter-spacing:.07em;
+text-transform:uppercase}
+tr:last-child td{border-bottom:0}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+background:#e4e8ee;border-radius:5px;padding:1px 5px;font-size:.9em}
+.callout{border-left:5px solid var(--kcd-blue);background:var(--blue-soft);
+border-radius:0 10px 10px 0;padding:14px 16px;margin:16px 0}
+.boundary{border-left:5px solid var(--amber);background:var(--amber-soft);
+border-radius:0 10px 10px 0;padding:14px 16px;margin:16px 0}
+.pill{display:inline-block;background:var(--blue-soft);color:#0a5cb8;
+border-radius:999px;padding:4px 10px;font-size:.75rem;font-weight:800}
+.pill.ok{background:var(--green-soft);color:var(--green)}
+.pill.fail{background:#fdeceb;color:var(--red)}
+.digests li{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+font-size:.8rem;overflow-wrap:anywhere}
+.claims{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.claims .card.no h3{color:var(--red)}
+.claims .card.si h3{color:var(--green)}
+.footer{border-top:4px solid var(--kcd-blue);margin-top:44px;padding:26px 0 40px;
+color:var(--muted);font-size:.86rem;background:var(--paper)}
+.footer code{overflow-wrap:anywhere}
+@media(max-width:860px){.grid-3,.grid-2,.claims{grid-template-columns:1fr}
+table{min-width:480px}}
+</style>
+</head>
+<body>
+<header class="hero"><div class="shell">
+<p class="eyebrow">KCD LIMA PERÚ 2026 · CASO DE USO EDAIOS</p>
+<h1>Construyendo Data Pipelines con Apache Flink y Spec Driven Development</h1>
+<p class="lead">El caso data-kcd2026: un job Flink cuyo contrato de datos no puede derivar en silencio. Esta página es una proyección determinista: se compila desde un JSON gobernado y no se edita a mano.</p>
+<div class="hero-meta"><span>KCD Lima Perú 2026</span><span>David Susanibar</span><span>Jorge Alor</span><span>T0 · COMPOSE LOCAL · FIXTURES SINTÉTICOS</span></div>
+</div></header>
+<main>
+<section id="tesis"><div class="shell">
+<p class="eyebrow">LA TESIS</p>
+<h2>El .avsc no es la verdad. Es una representación.</h2>
+<p class="lead">La verdad es la especificación, y un gate falla cerrado si dejan de coincidir. El módulo data-kcd2026 agrega revenue por cliente en ventanas temporales desde Kafka; lo interesante no es el job, es que el contrato de datos no puede derivar en silencio.</p>
+<div class="callout"><b>Hipótesis de valor.</b> Un pipeline cuyo contrato de datos es verificable por un gate no puede derivar en silencio entre el esquema y lo que la especificación declara.</div>
+<p>Es el mismo patrón que EDAIOS Core aplica a su propia Constitución, que no compila si Foundation dejó de decir lo que la Constitución afirma que dice.</p>
+<p>El deck de la charla son 35 slides sobre el template oficial de KCD. Los logs de esta página, como los del deck, son transcripciones reales de la sesión de construcción: no son maquetas y su contenido no se altera.</p>
+</div></section>
+<section id="patologia"><div class="shell">
+<p class="eyebrow">LA PATOLOGÍA DEL PIPELINE</p>
+<h2>Tres formas de derivar en silencio</h2>
+<div class="grid-3"><article class="card"><h3>El esquema se &quot;mejora&quot; sin tocar la especificación</h3><p>Alguien renombra un campo del .avsc con buenas intenciones. El código compila, los tests pasan, y el requisito dejó de describir lo que el pipeline hace. Sin un gate, nadie se entera hasta que un consumidor rompe.</p></article><article class="card"><h3>Los tests verdes prueban la lógica, no el despliegue</h3><p>Con 5 tests en verde y el módulo compilando, tres defectos reales seguían vivos en este caso. Solo aparecieron con datos fluyendo por un cluster: el jar sin dependencias, el contrato ausente del classpath y la caída a Kryo.</p></article><article class="card"><h3>La documentación afirma más de lo que se verificó</h3><p>Un pipeline verificado en un compose no es un pipeline en producción. Por eso cada artefacto de este caso declara su frontera de claims: qué demuestra, y qué no.</p></article></div>
+</div></section>
+<section id="arquitectura"><div class="shell">
+<p class="eyebrow">ARQUITECTURA DEL CASO</p>
+<h2>data-kcd2026 en un vistazo</h2>
+<p class="lead">El alcance es un job Flink de streaming y su contrato de datos. Quedan fuera: persistencia en Iceberg, CDC, exactitud fiscal del importe, reprocesamiento histórico y cualquier decisión de negocio sobre qué es &quot;revenue&quot;.</p>
+<pre class="tree">data-kcd2026/
+├── specs/001-orders-revenue-window/
+│   ├── feature.spec.yaml     ← el contrato tipado: la fuente
+│   ├── spec.md               ← FR-001..007, SC-001..006, frontera de claims
+│   ├── plan.md               ← Constitution Check (7 artículos)
+│   ├── tasks.md              ← [TNNN] [FR-NNN] acción y ruta
+│   └── verification.md       ← matriz SC | FR | Tarea | Test | Gate | Evidencia
+├── tools/contract_check.py   ← el gate: falla cerrado ante deriva
+├── src/main/resources/model/orders_revenue_window.avsc
+└── src/main/java/com/topaya/kcd2026/
+    ├── JobOrdersRevenueWindow.java   ← wiring de Flink
+    ├── RevenueVentana.java           ← lógica pura, testeable sin cluster
+    └── FiltroOrdenCompleta.java      ← FR-004: descarta y cuenta</pre>
+<h3>Contrato</h3>
+<div class="table-wrap"><table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td>Origen</td><td>tópico orders, esquema orders.avsc vía registry</td></tr><tr><td>Destino</td><td>tópico orders_revenue_window, esquema orders_revenue_window.avsc</td></tr><tr><td>Ventana</td><td>processing time, fija, 60s por defecto, --ventana-segundos</td></tr><tr><td>Registry</td><td>http://registry:8081</td></tr><tr><td>Broker</td><td>broker:9092</td></tr></tbody></table></div>
+<h3>Requisitos funcionales (FR)</h3>
+<div class="table-wrap"><table><thead><tr><th>ID</th><th>Requisito funcional</th></tr></thead><tbody><tr><td>FR-001</td><td>Leer el tópico orders con el esquema Avro vigente orders.avsc mediante Schema Registry, sin declarar el esquema en el código.</td></tr><tr><td>FR-002</td><td>La salida se ajusta al contrato orders_revenue_window.avsc con exactamente los campos o_custkey (long), window_start (long, timestamp-millis), window_end (long, timestamp-millis), sum_o_totalprice (double) y order_count (int).</td></tr><tr><td>FR-003</td><td>Ventanas fijas no solapadas de tamaño parametrizable, con un valor por defecto declarado y observable en el log.</td></tr><tr><td>FR-004</td><td>Una orden sin o_custkey o sin o_totalprice no aborta el job ni contamina una ventana; se descarta y se cuenta como descartada.</td></tr><tr><td>FR-005</td><td>El job no escribe en orders ni en ningún tópico de entrada; su única escritura es el tópico de salida declarado.</td></tr><tr><td>FR-006</td><td>Un gate verifica que los campos declarados en FR-002 coinciden con el .avsc publicado; una divergencia falla cerrado antes de compilar.</td></tr><tr><td>FR-007</td><td>El job declara su contrato de origen y destino en el log de arranque, incluyendo el nombre del tópico y la ruta del .avsc.</td></tr></tbody></table></div>
+<h3>Criterios de éxito (SC)</h3>
+<div class="table-wrap"><table><thead><tr><th>ID</th><th>Criterio de éxito</th><th>Verificado por</th></tr></thead><tbody><tr><td>SC-001</td><td>Con orders.avsc en el registry, el job arranca y consume sin esquema embebido en el código; un grep del fuente no encuentra literales de esquema Avro.</td><td>gate</td></tr><tr><td>SC-002</td><td>Dos órdenes del mismo cliente en la misma ventana producen exactamente un registro con sum_o_totalprice igual a la suma y order_count igual a 2.</td><td>test + e2e</td></tr><tr><td>SC-003</td><td>Dos órdenes del mismo cliente en ventanas distintas producen dos registros con window_start distintos y ningún acumulado entre ventanas.</td><td>test</td></tr><tr><td>SC-004</td><td>Una orden con o_custkey nulo no aparece en la salida, el job sigue vivo y el contador de descartes se incrementa en uno.</td><td>test + e2e</td></tr><tr><td>SC-005</td><td>Si se altera un campo de orders_revenue_window.avsc respecto de FR-002, el gate de contrato falla con exit distinto de cero y nombra el campo divergente.</td><td>gate</td></tr><tr><td>SC-006</td><td>El log de arranque contiene el tópico de origen, el de destino, la ruta de ambos .avsc y el tamaño de ventana efectivo.</td><td>test + e2e</td></tr></tbody></table></div>
+<h3>Clarifications</h3>
+<ul><li>La ventana es de processing time, no de event time: o_orderdate es una fecha sin hora y usar event time exigiría una decisión sobre watermarks y datos tardíos que esta demo no toma.</li><li>sum_o_totalprice es double y no decimal: el origen declara o_totalprice como decimal fixed(7) precision 15 scale 2; la conversión a double pierde exactitud y por eso esta feature no reclama exactitud fiscal.</li><li>&quot;Revenue&quot; aquí es la suma aritmética de o_totalprice de las órdenes observadas en la ventana; no descuenta cancelaciones ni devoluciones ni considera o_orderstatus.</li><li>Una orden descartada por FR-004 se cuenta pero no se persiste; esta feature no instala dead-letter queue.</li></ul>
+<div class="callout"><b>Estado.</b> Verificado sobre Temurin 11.0.31: ./mvnw -pl data-kcd2026 clean test → Tests run: 5, Failures: 0, Errors: 0, Skipped: 0 → BUILD SUCCESS.</div>
+</div></section>
+<section id="canary"><div class="shell">
+<p class="eyebrow">EL CANARY DE CONTRATO</p>
+<h2>El gate en 30 segundos</h2>
+<p class="lead">El gate compara tres representaciones del mismo contrato: el feature.spec.yaml (fuente), el texto de FR-002 (prosa) y el .avsc (lo que ejecuta Flink). Si alguien &quot;mejora&quot; el esquema sin tocar la especificación, el gate no deja pasar. Si agregas un campo al esquema y al contrato tipado pero no lo explicas en el requisito, también falla: el requisito dejó de describir lo que el pipeline hace.</p>
+<figure class="log"><figcaption>LOG B · el canary de contrato · reproducido de la evidencia sellada sc-005-contract-gate.json</figcaption><pre>$ python3 data-kcd2026/tools/contract_check.py
+[contract] OK: 5 campos coinciden entre feature.spec.yaml, FR-002 y data-kcd2026/src/main/resources/model/orders_revenue_window.avsc
+[contract] contrato: o_custkey, window_start, window_end, sum_o_totalprice, order_count
+
+$ # deriva inducida (T012): renombrar el campo sum_o_totalprice a total_revenue en el .avsc
+$ python3 data-kcd2026/tools/contract_check.py
+[contract] FAIL: el contrato derivo entre sus representaciones
+  - campo declarado en feature.spec.yaml y ausente del .avsc: &#x27;sum_o_totalprice&#x27;
+  - campo presente en el .avsc y no declarado en feature.spec.yaml: &#x27;total_revenue&#x27;
+
+  La especificacion manda. Corrige la fuente y regenera; no ajustes el .avsc para que el gate calle.</pre></figure>
+<article class="card">
+<h3>Evidencia sellada: sc-005-contract-gate.json</h3>
+<p><span class="pill">T012</span>
+<span class="pill">SC-001 · SC-005</span>
+<span class="pill ok">estado sano · exit 0</span>
+<span class="pill fail">deriva inducida · exit 1</span>
+<span class="pill ok">veredicto · passed</span></p>
+<p><b>Comando:</b> <code>python3 data-kcd2026/tools/contract_check.py</code></p>
+<p><b>Mutación inducida:</b> renombrar el campo sum_o_totalprice a total_revenue en el .avsc.</p>
+<ul class="digests"><li>contract_check.py · sha256:efcc32210984aae49dc7048937d015b829871ade3db53a37bc2c82e9f49d8169</li><li>orders_revenue_window.avsc · sha256:76a718733bc5bf3b117a16f0fbd09543ea948440957017d675846844f0af589f</li><li>feature.spec.yaml · sha256:b507424933e906dfeed31d22b5cfb98e83565013bb5936f9175d2cf7a1f2d686</li></ul>
+<div class="boundary"><b>Límite del claim.</b> Demuestra que la deriva entre spec, contrato tipado y esquema falla cerrado; no demuestra corrección semántica del contrato ni calidad del dato.</div>
+</article>
+</div></section>
+<section id="bugs"><div class="shell">
+<p class="eyebrow">LO QUE LOS TESTS NO ATRAPARON</p>
+<h2>Tres defectos vivos con 5 tests en verde</h2>
+<p class="lead">T013 (ejecutar contra el compose) no fue una formalidad. Con los 5 tests verdes, el módulo compilando y el job llegando a RUNNING, tres defectos reales seguían vivos y solo aparecieron con datos fluyendo por un cluster. Ninguno era detectable por un test unitario ni por un gate de contrato.</p>
+<div class="table-wrap"><table><thead><tr><th>Tarea</th><th>FR</th><th>Defecto</th><th>Síntoma</th><th>Corrección</th></tr></thead><tbody><tr><td>T014</td><td>FR-005</td><td>Thin jar de 14 KB, sin shade</td><td>El jar no llevaba el conector de Kafka ni el formato Avro del registry. Habría fallado con ClassNotFoundException al hacer submit.</td><td>maven-shade-plugin</td></tr><tr><td>T015</td><td>FR-001</td><td>orders.avsc ausente del classpath</td><td>El job falló cerrado al arrancar y nombró el contrato ausente.</td><td>maven-resources-plugin: derivar orders.avsc desde la ruta que declara contract.source_schema en vez de duplicarlo en este módulo</td></tr><tr><td>T016</td><td>FR-002</td><td>Falta .returns(new GenericRecordAvroTypeInfo(...))</td><td>Sin esa declaración Flink no infiere el tipo de GenericRecord, cae a Kryo y revienta con UnsupportedOperationException al reenviar el primer elemento fuera de la ventana. El job llegaba a RUNNING y moría al recibir datos.</td><td>.returns(new GenericRecordAvroTypeInfo(...)) en el pipeline</td></tr></tbody></table></div>
+<div class="callout"><b>Moraleja.</b> Un test verde prueba la lógica, no el despliegue. T014–T016 son la razón por la que T013 existía como tarea separada.</div>
+</div></section>
+<section id="e2e"><div class="shell">
+<p class="eyebrow">END-TO-END REAL</p>
+<h2>Cuatro fixtures, dos registros, un descarte</h2>
+<p class="lead">T013: el pipeline corrió en el compose local (broker, schema-registry, flink-jobmanager, flink-taskmanager) sobre Flink 1.20.2 en colima aarch64, con ventana de 20 segundos, job 608ee13c0c502e7309c160d94c448c7e en estado RUNNING.</p>
+<figure class="log"><figcaption>Contrato declarado en el log de arranque (FR-007, SC-006)</figcaption><pre>/********************** CONTRATO - INICIO **********************/
+origen  : topico=orders esquema=/model/orders.avsc
+destino : topico=orders_revenue_window esquema=/model/orders_revenue_window.avsc
+registry: http://registry:8081
+ventana : 20 segundos (processing time, no solapada)
+gobierno: specs/001-orders-revenue-window/spec.md
+/********************** CONTRATO - FIN **********************/</pre></figure>
+<h3>Fixtures producidos a <code>orders</code></h3>
+<div class="table-wrap"><table><thead><tr><th>o_orderkey</th><th>o_custkey</th><th>o_totalprice</th><th>Nota</th></tr></thead><tbody><tr><td>1</td><td>7</td><td>100.50</td><td></td></tr><tr><td>2</td><td>7</td><td>49.50</td><td></td></tr><tr><td>3</td><td>9</td><td>200.00</td><td></td></tr><tr><td>4</td><td>null</td><td>999.99</td><td>incompleta: FR-004 debe descartarla</td></tr></tbody></table></div>
+<figure class="log"><figcaption>Salida observada en orders_revenue_window</figcaption><pre>{&quot;o_custkey&quot;:7,&quot;window_start&quot;:1784283820000,&quot;window_end&quot;:1784283840000,&quot;sum_o_totalprice&quot;:150.0,&quot;order_count&quot;:2}
+{&quot;o_custkey&quot;:9,&quot;window_start&quot;:1784283820000,&quot;window_end&quot;:1784283840000,&quot;sum_o_totalprice&quot;:200.0,&quot;order_count&quot;:1}</pre></figure>
+<div class="grid-3"><article class="card"><span class="pill ok">SC-002</span><p>cliente 7: 100.50 + 49.50 = 150.0 con order_count = 2 → observado.</p></article><article class="card"><span class="pill ok">SC-004</span><p>la orden sin custkey (999.99) no aparece en la salida y no contaminó ninguna ventana; de haber pasado, el total sería 1149.99 → observado.</p></article><article class="card"><span class="pill ok">SC-006</span><p>el log de arranque declaró tópicos, rutas .avsc y ventana efectiva → observado.</p></article></div>
+<div class="boundary"><b>Límite del claim.</b> Demuestra el pipeline end-to-end sobre 4 fixtures sintéticos en un compose local de un solo broker y un taskmanager; no demuestra exactitud fiscal, datos tardíos o desordenados, tolerancia a fallos, exactly-once, rendimiento, escalabilidad ni operación en producción.</div>
+</div></section>
+<section id="adr-0015"><div class="shell">
+<p class="eyebrow">GOBIERNO DEL ARTEFACTO PÚBLICO</p>
+<h2>ADR-0015 y el gate que se puso rojo solo</h2>
+<p class="lead">La charla exige llenar un template .pptx provisto por un tercero. Ese artefacto rompe dos propiedades que Core daba por sentadas: el derivado deja de ser texto (un .pptx es un ZIP cuyos timestamps y orden de entradas varían entre corridas) y renderizarlo exige una dependencia externa que tools/ no tiene. Y toca una tercera frontera: es el primer artefacto pensado para salir del repositorio y sostener claims sobre EDAIOS ante una audiencia que no puede leer las fuentes.</p>
+<div class="callout"><b>La decisión.</b> ADR-0015 define la proyección renderizada: Core gobierna la fuente y sus claims; el render y su determinismo son responsabilidad de un consumer. tools/ permanece acotado a la biblioteca estándar. Y publicar es un permiso separado de commit y push: un deck compilado no autoriza su exhibición; la autorización es una decisión humana registrada, con evento y versión declarados.</div>
+<p>Al proponer ADR-0015, el gate del day-zero demo de Core se puso rojo solo: el release exige ADR vigentes sin propuestas abiertas, y el catálogo recompilado registraba 1 propuesto. Nadie tuvo que acordarse de revisar: el sistema falló cerrado hasta la firma humana.</p>
+<figure class="log"><figcaption>LOG A · el gate rojo · reproducido del commit real</figcaption><pre>commit 274812f  feat(governance): acepta ADR-0015 sobre proyecciones renderizadas
+
+$ python3 tools/validation/day_zero_demo_check.py .
+[FAIL] drift config→HTML: ERROR: el release requiere ADR vigentes sin
+       propuestas abiertas: {&#x27;total&#x27;: 15, &#x27;accepted&#x27;: 14, &#x27;proposed&#x27;: 1,
+                             &#x27;deprecated&#x27;: 0}
+
+$ # ADR-0015 aceptado por firma humana; catálogo recompilado
+$ python3 tools/validation/day_zero_demo_check.py .
+[core-demo] OK: Core 3.1.0 portable bajo ADR-0013; raíz única derivada,
+            Engram adapter incluido sin runtime y crecimiento sin iniciativa</pre></figure>
+<div class="boundary"><b>Frontera.</b> ADR-0015 no autoriza publicar el deck. La autorización es una decisión humana posterior y separada, con evento y versión declarados. La suite demuestra que la fuente valida contra su schema, que sus fuentes de conocimiento resuelven y que su frontera de claims está presente; no demuestra determinismo del render, fidelidad del artefacto exhibido, licencia ni derechos sobre el template de un tercero.</div>
+</div></section>
+<section id="frontera"><div class="shell">
+<p class="eyebrow">FRONTERA DE CLAIMS</p>
+<h2>Qué demuestra este caso — y qué no</h2>
+<div class="claims">
+<article class="card si"><h3>Demuestra (compose local)</h3><ul><li>Lectura Avro por Schema Registry sin esquema embebido en el código (compose local).</li><li>Agregación por ventana fija de processing time con tamaño parametrizable.</li><li>Descarte y conteo de registros incompletos sin abortar el job.</li><li>Fallo cerrado del gate de contrato ante deriva del esquema, nombrando el campo divergente.</li><li>La cadena SC → FR → tarea → test → gate con evidencia sellada por digest.</li></ul></article>
+<article class="card no"><h3>No demuestra</h3><ul><li>Exactitud fiscal del importe: el origen es decimal y aquí se degrada a double (Clarification 2).</li><li>Corrección ante datos tardíos o desordenados: la ventana es de processing time.</li><li>Tolerancia a fallos, exactly-once, rendimiento ni escalabilidad.</li><li>Operación en producción: todo corrió en un compose local de un broker y un taskmanager.</li><li>Calidad del dato de origen: los 4 fixtures son sintéticos.</li><li>Adopción ni outcome de negocio: el value ledger declara N/A; no hay iniciativa ni baseline de outcome.</li></ul></article>
+</div>
+<div class="boundary"><b>Nota.</b> T0 sobre datos sintéticos. El importe agregado no es una cifra de negocio: es una suma sobre fixtures. Un pipeline verificado en un compose no es un pipeline en producción.</div>
+</div></section>
+</main>
+<footer class="footer"><div class="shell">
+<p><strong>Vista regenerable. Fuente: docs/edaios-operating-system-flink-use-case.config.json. Regenerar: python3 tools/generate_use_case_page.py. El HTML es derivado determinista; no se edita a mano.</strong></p>
+<p>Config <code>sha256:12def1e7d5f95934751b23bd666a553364007e16298cbefd549c7ea6869e62a8</code></p>
+</div></footer>
+</body>
+</html>

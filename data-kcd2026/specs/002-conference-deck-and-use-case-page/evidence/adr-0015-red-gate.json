@@ -1,0 +1,37 @@
+{
+  "schema": "kcd2026.evidence/v1",
+  "criterios": [
+    "FR-003",
+    "SC-003"
+  ],
+  "tarea": "T010",
+  "titulo": "Gate rojo del baseline durante la propuesta de ADR-0015 (copia versionada para el deck)",
+  "fuente": {
+    "repositorio": "edaiosv",
+    "commit": "274812fd3146bf8cbdb6ef6afff770ad827531fe",
+    "commit_subject": "feat(governance): acepta ADR-0015 sobre proyecciones renderizadas",
+    "check": "tools/validation/day_zero_demo_check.py (invoca tools/publishing/generate_day_zero_demos.py --check)",
+    "regla": "tools/publishing/generate_day_zero_demos.py:198 — require(adr['total'] >= 1 and adr['accepted'] == adr['total'] and adr['proposed'] == 0, f\"el release requiere ADR vigentes sin propuestas abiertas: {adr}\")"
+  },
+  "estado_rojo": {
+    "contexto": "ADR-0015 en estado Propuesto en el arbol de trabajo, durante la redaccion de la propuesta",
+    "comando": "python3 tools/validation/day_zero_demo_check.py .",
+    "exit_code": 1,
+    "mensaje": "el release requiere ADR vigentes sin propuestas abiertas:",
+    "conteo": {
+      "total": 15,
+      "accepted": 14,
+      "proposed": 1,
+      "deprecated": 0
+    },
+    "consistencia": "en 274812f~1 el ADR_CATALOG.md registra Total 14, Aceptados 14, Propuestos 0; con ADR-0015 propuesto el conteo observado es total 15, accepted 14, proposed 1"
+  },
+  "estado_verde": {
+    "contexto": "ADR-0015 aceptado por firma humana y catalogo recompilado con compile_catalogs.py --write",
+    "comando": "python3 tools/validation/day_zero_demo_check.py .",
+    "exit_code": 0,
+    "registro_en_commit": "Verificado: con el ADR en Propuesto, CORE-BASE-DEMO falla cerrado (\"el release requiere ADR vigentes sin propuestas abiertas: proposed: 1\"), tal como exige generate_day_zero_demos.py:198. La aceptacion humana lo devuelve a verde. Gates: catalogs, traceability, claim-surface, core-demo OK; 146 tests OK."
+  },
+  "veredicto": "registered",
+  "claim_boundary": "reconstruccion desde el historial de git de edaiosv (mensaje del commit 274812f, regla del gate en generate_day_zero_demos.py:198 y ADR_CATALOG.md en 274812f~1); el estado rojo ocurrio sobre el arbol de trabajo durante la propuesta y no quedo como commit intermedio, por lo que esta evidencia documenta el ciclo registrado, no una re-ejecucion del gate en rojo"
+}

@@ -1,0 +1,33 @@
+{
+  "schema": "kcd2026.evidence/v1",
+  "criterios": [
+    "SC-001",
+    "SC-005"
+  ],
+  "tarea": "T012",
+  "comando": "python3 data-kcd2026/tools/contract_check.py",
+  "estado_sano": {
+    "exit_code": 0,
+    "salida": [
+      "[contract] OK: 5 campos coinciden entre feature.spec.yaml, FR-002 y data-kcd2026/src/main/resources/model/orders_revenue_window.avsc",
+      "[contract] contrato: o_custkey, window_start, window_end, sum_o_totalprice, order_count"
+    ]
+  },
+  "deriva_inducida": {
+    "mutacion": "renombrar el campo sum_o_totalprice a total_revenue en el .avsc",
+    "exit_code": 1,
+    "salida": [
+      "[contract] FAIL: el contrato derivo entre sus representaciones",
+      "  - campo declarado en feature.spec.yaml y ausente del .avsc: 'sum_o_totalprice'",
+      "  - campo presente en el .avsc y no declarado en feature.spec.yaml: 'total_revenue'",
+      "  La especificacion manda. Corrige la fuente y regenera; no ajustes el .avsc para que el gate calle."
+    ]
+  },
+  "veredicto": "passed",
+  "artefactos": {
+    "contract_check.py": "sha256:efcc32210984aae49dc7048937d015b829871ade3db53a37bc2c82e9f49d8169",
+    "orders_revenue_window.avsc": "sha256:76a718733bc5bf3b117a16f0fbd09543ea948440957017d675846844f0af589f",
+    "feature.spec.yaml": "sha256:b507424933e906dfeed31d22b5cfb98e83565013bb5936f9175d2cf7a1f2d686"
+  },
+  "claim_boundary": "demuestra que la deriva entre spec, contrato tipado y esquema falla cerrado; no demuestra correccion semantica del contrato ni calidad del dato"
+}
