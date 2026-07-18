@@ -1,0 +1,51 @@
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for com.topaya.cdckafkaflinkiceberg:data-cdckafkaflinkiceberg:jar:1.0-SNAPSHOT
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: org.apache.iceberg:iceberg-flink-runtime-1.20:jar -> duplicate declaration of version ${iceberg.version} @ line 98, column 15
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] oss                                                                [pom]
+[INFO] topaya-data-kcd2026                                                [jar]
+[INFO] 
+[INFO] ---------------------------< com.topaya:oss >---------------------------
+[INFO] Building oss 1.0-SNAPSHOT                                          [1/2]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ oss ---
+[INFO] 
+[INFO] ------------------< com.topaya.kcd2026:data-kcd2026 >-------------------
+[INFO] Building topaya-data-kcd2026 1.0-SNAPSHOT                          [2/2]
+[INFO]   from data-kcd2026/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ data-kcd2026 ---
+[INFO] Deleting /Users/jorgealor/git/data-evolutionary/data-kcd2026/target
+[INFO] 
+[INFO] --- avro:1.11.3:schema (default) @ data-kcd2026 ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ data-kcd2026 ---
+[INFO] Copying 2 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ data-kcd2026 ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 4 source files with javac [debug target 11] to target/classes
+[INFO] /Users/jorgealor/git/data-evolutionary/data-kcd2026/src/main/java/com/topaya/kcd2026/revenue/RevenueVentanaClienteJob.java: /Users/jorgealor/git/data-evolutionary/data-kcd2026/src/main/java/com/topaya/kcd2026/revenue/RevenueVentanaClienteJob.java uses or overrides a deprecated API.
+[INFO] /Users/jorgealor/git/data-evolutionary/data-kcd2026/src/main/java/com/topaya/kcd2026/revenue/RevenueVentanaClienteJob.java: Recompile with -Xlint:deprecation for details.
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for oss 1.0-SNAPSHOT:
+[INFO] 
+[INFO] oss ................................................ SUCCESS [  0.105 s]
+[INFO] topaya-data-kcd2026 ................................ SUCCESS [  1.451 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.633 s
+[INFO] Finished at: 2026-07-18T09:59:25-05:00
+[INFO] ------------------------------------------------------------------------

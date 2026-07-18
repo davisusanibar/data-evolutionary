@@ -1,0 +1,5 @@
+NAMES                       IMAGE                                    STATUS         PORTS
+kcd2026-schema-registry     confluentinc/cp-schema-registry:latest   Up 5 minutes   0.0.0.0:8081->8081/tcp
+kcd2026-flink-taskmanager   flink:1.20.2-scala_2.12-java11           Up 5 minutes   6123/tcp, 8081/tcp
+kcd2026-flink-jobmanager    flink:1.20.2-scala_2.12-java11           Up 5 minutes   6123/tcp, 0.0.0.0:18081->8081/tcp
+kcd2026-kafka               apache/kafka:latest                      Up 5 minutes   0.0.0.0:9092->9092/tcp

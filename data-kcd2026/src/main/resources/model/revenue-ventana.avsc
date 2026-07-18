@@ -1,0 +1,33 @@
+{
+  "type": "record",
+  "name": "RevenueVentana",
+  "namespace": "com.topaya.kcd2026.revenue.avro",
+  "fields": [
+    {
+      "name": "cliente_id",
+      "type": "string"
+    },
+    {
+      "name": "inicio_ventana",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    },
+    {
+      "name": "fin_ventana",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    },
+    {
+      "name": "revenue_acumulado",
+      "type": "double"
+    },
+    {
+      "name": "numero_ordenes",
+      "type": "int"
+    }
+  ]
+}

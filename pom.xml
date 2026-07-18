@@ -10,6 +10,7 @@
         <module>data-spark</module>
         <module>data-cdc-kafka-flink-iceberg</module>
         <module>data-kcd2025</module>
+        <module>data-kcd2026</module>
     </modules>
     <packaging>pom</packaging>
 </project>

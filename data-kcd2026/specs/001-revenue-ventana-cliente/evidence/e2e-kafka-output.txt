@@ -1,0 +1,10 @@
+Comando: kafka-avro-console-consumer --topic kcd2026.revenue-ventana --from-beginning
+Entrada real (kcd2026.ordenes, Avro contra Schema Registry):
+  cliente-demo importe=120.50 timestamp_evento=1784388020007
+  cliente-demo importe=79.75  timestamp_evento=1784388022007
+  cliente-de-relleno importe=1.00 timestamp_evento=1784388143711 (empuja el watermark)
+
+Salida real consumida de kcd2026.revenue-ventana:
+{"cliente_id":"cliente-demo","inicio_ventana":1784388000000,"fin_ventana":1784388060000,"revenue_acumulado":200.25,"numero_ordenes":2}
+
+Verificacion: 120.50 + 79.75 = 200.25 (coincide exactamente). Ventana [1784388000000, 1784388060000) = 1 minuto tumbling, alineada al epoch, como especifica FR-002.

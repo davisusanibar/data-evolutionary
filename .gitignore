@@ -42,6 +42,9 @@ src/main/java/org/example/kcd101/
 ### Mac OS ###
 .DS_Store
 
+### EDAIOS tooling venv (local, no se commitea) ###
+.venv-edaios/
+
 ### Hadoop HDFS, Hive
 infra/dockercompose/hive_database/**
 infra/dockercompose/datanode_data/**

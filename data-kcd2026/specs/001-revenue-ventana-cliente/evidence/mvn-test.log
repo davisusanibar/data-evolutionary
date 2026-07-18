@@ -1,0 +1,72 @@
+[INFO] Scanning for projects...
+[WARNING] 
+[WARNING] Some problems were encountered while building the effective model for com.topaya.cdckafkaflinkiceberg:data-cdckafkaflinkiceberg:jar:1.0-SNAPSHOT
+[WARNING] 'dependencies.dependency.(groupId:artifactId:type:classifier)' must be unique: org.apache.iceberg:iceberg-flink-runtime-1.20:jar -> duplicate declaration of version ${iceberg.version} @ line 98, column 15
+[WARNING] 
+[WARNING] It is highly recommended to fix these problems because they threaten the stability of your build.
+[WARNING] 
+[WARNING] For this reason, future Maven versions might no longer support building such malformed projects.
+[WARNING] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] oss                                                                [pom]
+[INFO] topaya-data-kcd2026                                                [jar]
+[INFO] 
+[INFO] ---------------------------< com.topaya:oss >---------------------------
+[INFO] Building oss 1.0-SNAPSHOT                                          [1/2]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] ------------------< com.topaya.kcd2026:data-kcd2026 >-------------------
+[INFO] Building topaya-data-kcd2026 1.0-SNAPSHOT                          [2/2]
+[INFO]   from data-kcd2026/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- avro:1.11.3:schema (default) @ data-kcd2026 ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ data-kcd2026 ---
+[INFO] Copying 2 resources from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ data-kcd2026 ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ data-kcd2026 ---
+[INFO] skip non existing resourceDirectory /Users/jorgealor/git/data-evolutionary/data-kcd2026/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ data-kcd2026 ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 1 source file with javac [debug target 11] to target/test-classes
+[INFO] /Users/jorgealor/git/data-evolutionary/data-kcd2026/src/test/java/com/topaya/kcd2026/revenue/RevenueVentanaClienteJobTest.java: /Users/jorgealor/git/data-evolutionary/data-kcd2026/src/test/java/com/topaya/kcd2026/revenue/RevenueVentanaClienteJobTest.java uses or overrides a deprecated API.
+[INFO] /Users/jorgealor/git/data-evolutionary/data-kcd2026/src/test/java/com/topaya/kcd2026/revenue/RevenueVentanaClienteJobTest.java: Recompile with -Xlint:deprecation for details.
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ data-kcd2026 ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.topaya.kcd2026.revenue.RevenueVentanaClienteJobTest
+SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+SLF4J: Failed to load class "org.slf4j.impl.StaticMDCBinder".
+SLF4J: Defaulting to no-operation MDCAdapter implementation.
+SLF4J: See http://www.slf4j.org/codes.html#no_static_mdc_binder for further details.
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.424 s -- in com.topaya.kcd2026.revenue.RevenueVentanaClienteJobTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for oss 1.0-SNAPSHOT:
+[INFO] 
+[INFO] oss ................................................ SUCCESS [  0.002 s]
+[INFO] topaya-data-kcd2026 ................................ SUCCESS [  4.412 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  4.491 s
+[INFO] Finished at: 2026-07-18T09:59:39-05:00
+[INFO] ------------------------------------------------------------------------

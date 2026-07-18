@@ -1,0 +1,22 @@
+{
+  "type": "record",
+  "name": "Orden",
+  "namespace": "com.topaya.kcd2026.revenue.avro",
+  "fields": [
+    {
+      "name": "cliente_id",
+      "type": "string"
+    },
+    {
+      "name": "importe",
+      "type": "double"
+    },
+    {
+      "name": "timestamp_evento",
+      "type": {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    }
+  ]
+}

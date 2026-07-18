@@ -1,0 +1,12 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-07-18T14:27:11Z",
+  "bundles": [
+    {
+      "bundle_id": "edaios-core-governed-delivery",
+      "version": "3.1.0",
+      "installed_at": "2026-07-18T14:27:11Z",
+      "contributed_components": []
+    }
+  ]
+}
