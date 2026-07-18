@@ -67,6 +67,13 @@ timestamp muy posterior) cuyo único propósito es empujar el watermark. No es u
 truco de laboratorio: es la semántica que gobierna cualquier pipeline de ventanas
 en streaming, y en una demostración en vivo conviene decirlo en voz alta.
 
+## Cierre
+
+El owner declaró el cierre el 2026-07-18. La declaración literal, su alcance y la
+naturaleza de lo que constituye —un registro de trazabilidad, no una firma
+verificable, porque EDAIOS no instala mecanismo de firma— están en
+`evidence/cierre-owner.txt`.
+
 ## Lo que sigue sin verificarse
 
 El comportamiento ante fallo y recuperación —checkpoints, reinicio del job,

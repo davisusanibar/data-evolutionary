@@ -1,0 +1,47 @@
+# Cierre de la feature 001-revenue-ventana-cliente
+
+## Declaración del owner
+
+Fecha:      2026-07-18
+Actor:      david-susanibar
+Rol:        initiative-owner (.edaios/authority-registry.json)
+Capacidad:  approve
+Medio:      confirmación directa en la sesión de trabajo
+
+Texto literal de la confirmación:
+
+    "Yo David confirmo entregable"
+
+## Qué autoriza
+
+El paso de la feature de fase `tasked` / estado `Propuesto` a fase `implemented` /
+estado `Cerrado`, sobre el alcance verificado que se detalla en verification.md.
+
+## Naturaleza de esta declaración — leer antes de citarla como prueba
+
+EDAIOS **no** instala ningún mecanismo de firma: no hay criptografía, ni receipt
+de cierre, ni verificación de identidad. El gate (`spec_kit_gate.py`) solo
+comprueba que la cadena literal `[SEAL]` aparezca en una línea de tarea; no puede
+comprobar —ni comprueba— que una persona haya autorizado nada.
+
+Este archivo es por tanto el **registro de una declaración**, no una firma
+verificable. Su valor es de trazabilidad: deja constancia de quién dijo qué y
+cuándo. Quien audite esta feature debe saber que la autoridad real de este cierre
+es la declaración del owner recogida arriba y el historial de Git, no un control
+automático.
+
+## Alcance cubierto por el cierre
+
+Verificado y con evidencia:
+  SC-001  aritmética contra referencia calculada a mano
+  SC-002  build verde con contrato íntegro
+  SC-003  build rojo con contrato derivado
+  SC-004  canary en 4 s y 5 s frente a umbral de 30 s
+  SC-005  gate consumer-release 42/42, fail-closed comprobado
+  SC-006  ejecución end-to-end sobre Kafka, Schema Registry y cluster Flink
+
+Declarado explícitamente como NO verificado:
+  checkpoints, recuperación ante fallo y garantías de entrega superiores al
+  AT_LEAST_ONCE configurado en el sink.
+
+El cierre no reclama nada sobre lo segundo.

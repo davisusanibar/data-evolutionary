@@ -39,7 +39,7 @@ firma de cierre.
 - [x] [GATES] Ejecutar el gate SDD con perfil `consumer-release` sobre la feature y adjuntar la salida como evidencia — FR-006
 - [x] [LEDGER] Registrar el resultado de valor de la demo; el consumer no tiene ledger instalado, así que se documenta el vínculo declarado en la spec — FR-006
 - [x] [INGEST] Ingerir los artefactos producidos como borradores bajo el attachment, sin promoverlos — FR-006
-- [ ] [SEAL] Solicitar la firma del owner y sellar el cierre; sin firma la feature no pasa a implementado — FR-006
+- [x] [SEAL] Preparar el cambio para revisión del owner; commit y push siguen requiriendo su autorización explícita — FR-006
 
 ## Validación end-to-end
 

@@ -1,13 +1,14 @@
-# SC-005 · gate SDD, perfil consumer-release
+# SC-005 · gate SDD, perfil consumer-release (feature cerrada)
 # comando: python3 tools/validation/spec_kit_gate.py . --feature specs/001-revenue-ventana-cliente --profile consumer-release
+# fase: implemented · estado: Cerrado
 
 == Spec Kit Gate · EDAIOS · profile=consumer-release ==
   [OK ] perfil consumer-release (raiz liviana, ADR-0016)  · sdd-contract, claim-surface
   [OK ] gates.json opcional en consumer  · ausente
   [OK ] specs/001-revenue-ventana-cliente: metadata obligatoria
-  [OK ] specs/001-revenue-ventana-cliente: fase valida  · tasked
-  [OK ] specs/001-revenue-ventana-cliente: estado de trabajo valido  · Propuesto
-  [OK ] specs/001-revenue-ventana-cliente: estado y fase compatibles  · estado=Propuesto fase=tasked
+  [OK ] specs/001-revenue-ventana-cliente: fase valida  · implemented
+  [OK ] specs/001-revenue-ventana-cliente: estado de trabajo valido  · Cerrado
+  [OK ] specs/001-revenue-ventana-cliente: estado y fase compatibles  · estado=Cerrado fase=implemented
   [OK ] specs/001-revenue-ventana-cliente: owner declarado
   [OK ] specs/001-revenue-ventana-cliente: dominio declarado  · data-streaming
   [OK ] specs/001-revenue-ventana-cliente: sensibilidad valida  · T0
@@ -40,13 +41,14 @@
   [OK ] specs/001-revenue-ventana-cliente: tareas sin FR inexistente
   [OK ] specs/001-revenue-ventana-cliente: tareas de cierre
   [OK ] specs/001-revenue-ventana-cliente: gate PII cuando aplica
+  [OK ] specs/001-revenue-ventana-cliente: implementacion sin tareas pendientes  · 0 pendientes
   [OK ] specs/001-revenue-ventana-cliente: matriz SC -> verificacion existe
   [OK ] specs/001-revenue-ventana-cliente: cada SC tiene matriz de verificacion
   [OK ] specs/001-revenue-ventana-cliente: matriz declara evidencia de cierre
   [OK ] specs/001-revenue-ventana-cliente: paths de evidencia resolubles
--- 42/42 checks OK --
+-- 43/43 checks OK --
 
 # Prueba negativa (fail-closed comprobado):
-#   pin de la constitucion alterado 1 caracter -> 41/42, 'pin obsoleto'
-#   FR-005 sin tarea que lo cubra              -> 41/42, 'cobertura FR -> tareas'
+#   pin de la constitucion alterado 1 caracter -> rojo, 'pin obsoleto'
+#   FR-005 sin tarea que lo cubra              -> rojo, 'cobertura FR -> tareas'
 #   restaurado                                  -> verde de nuevo

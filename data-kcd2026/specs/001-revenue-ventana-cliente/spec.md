@@ -1,7 +1,7 @@
 ---
 id: 001-revenue-ventana-cliente
-estado: Propuesto
-fase: tasked
+estado: Cerrado
+fase: implemented
 dominio: data-streaming
 tramo_sensibilidad: T0
 owner: david-susanibar
