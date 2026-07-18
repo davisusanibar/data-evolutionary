@@ -51,13 +51,11 @@
       "python3 build_estructura.py",
       "python3 anexar.py --paginas",
       "python3 llenar.py",
-      "python3 render.py",
-      "python3 anexar.py --fusionar"
+      "python3 render.py"
     ],
     "exit_code": 0,
     "deck_slides": 43,
-    "merged_pdf": "data-kcd2026/deck/build/kcd2026-completo.pdf",
-    "merged_pages": {"deck": 43, "a1": 51, "a2": 8, "a3": 10, "total": 112}
+    "anexos_pages": {"a1": 51, "a2": 8, "a3": 10}
   },
   "gates": {
     "ooxml_validate": {

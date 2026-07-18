@@ -8,7 +8,6 @@ genera anexar.py --paginas, y build_estructura borra build/):
     python3 anexar.py --paginas      # 2. HTML -> aN.pdf + preview-aN.png
     python3 llenar.py                # 3. este script
     python3 render.py                # 4. pptx -> kcd2026.pdf + PNGs
-    python3 anexar.py --fusionar     # 5. deck + anexos -> kcd2026-completo.pdf
 """
 from pptx import Presentation
 from pptx.util import Emu, Pt

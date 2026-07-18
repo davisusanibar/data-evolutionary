@@ -51,14 +51,13 @@ hay tarea sin requisito que la justifique.
   headless (`aN.pdf`, texto seleccionable) y exporta `preview-aN.png` (150 dpi)
   para los covers; `deck/contenido_anexos.py` añade el divisor "Anexos" (slide
   35) y 3 covers sobre el layout lienzo (slides 36–38, preview + fuente +
-  remisión al anexo del PDF), fallando cerrado si falta un preview;
-  `anexar.py --fusionar` concatena deck + a1 + a2 + a3 →
-  `build/kcd2026-completo.pdf` (39+51+8+10 = 108 páginas). Contrato:
-  `contract.deck.slides: 39` y `contract.annexes` con
+  remisión al anexo independiente `aN.pdf`), fallando cerrado si falta un
+  preview; cada `aN.pdf` es un PDF paginado por Chrome (a1 51, a2 8, a3 10
+  páginas). Contrato: `contract.annexes` con
   `determinism: structural` (un PDF de Chrome lleva metadatos de fecha; misma
   frontera que el pptx, ADR-0015 inv. 5). Gate: `deliverables_check.py`
-  verifica fuentes, PDFs, fusionado y la suma de páginas; rojo inducido
-  (fusionado ausente → exit 1) y revertido. Evidencia:
+  verifica fuentes y que cada aN.pdf tenga páginas; rojo inducido
+  (a2.pdf ausente → exit 1) y revertido. Evidencia:
   `evidence/t015-anexos-pdf.json`
 - [x] [T016] [FR-007] anexos A4 y A5: **4** capturas del owner (no 3: llegaron
   dos vistas de engram), entregadas en
@@ -77,8 +76,8 @@ hay tarea sin requisito que la justifique.
   `contract.deck.slides: 43` y `contract.captures` con sha256 REAL por
   captura; `deliverables_check.check_captures` pone el gate en rojo si una
   captura falta o no coincide con su pin ("captura reemplazada o ausente" —
-  rojo inducido con mutación de 1 byte, exit 1, restaurado). PDF fusionado:
-  43+51+8+10 = 112 páginas. Evidencia: `evidence/t016-capturas.json`
+  rojo inducido con mutación de 1 byte, exit 1, restaurado). Evidencia:
+  `evidence/t016-capturas.json`
 
 ## Página del caso
 
@@ -119,9 +118,9 @@ hay tarea sin requisito que la justifique.
 
 ## Estado
 
-T001–T016 y [GATES] cerradas: el deck de 43 slides y su PDF entregable con
-anexos (`kcd2026-completo.pdf`, 112 páginas: 43 slides + a1 51 + a2 8 +
-a3 10) se regeneran completos desde el generador; las 4 capturas del owner
+T001–T016 y [GATES] cerradas: el deck de 43 slides y sus anexos
+independientes (`aN.pdf`: a1 51 + a2 8 + a3 10 páginas) se regeneran
+completos desde el generador; las 4 capturas del owner
 (anexos A4/A5, slides 39–42) se insertan tal cual y quedan pineadas por
 sha256 en `contract.captures`. El deck
 valida OOXML contra el template (exit 0, `evidence/sc-008-ooxml-validate.json`)

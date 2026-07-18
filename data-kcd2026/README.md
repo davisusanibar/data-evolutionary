@@ -51,13 +51,11 @@ Los dos materiales de la charla son proyecciones gobernadas por
 # regenerar el deck (39 slides sobre el template oficial KCD) y su PDF
 # entregable con los 3 anexos HTML — el orden importa: build_estructura
 # borra build/, los covers leen los previews de anexar.py --paginas y la
-# fusión necesita el kcd2026.pdf que emite render.py
 cd data-kcd2026/deck \
   && python3 build_estructura.py \
   && python3 anexar.py --paginas \
   && python3 llenar.py \
-  && python3 render.py \
-  && python3 anexar.py --fusionar   # -> build/kcd2026-completo.pdf
+  && python3 render.py
 
 # regenerar la página del caso
 python3 data-kcd2026/tools/generate_use_case_page.py
@@ -66,11 +64,11 @@ python3 data-kcd2026/tools/generate_use_case_page.py
 python3 data-kcd2026/tools/deliverables_check.py
 ```
 
-Los anexos: el pptx presenta, el PDF documenta. Un `.pptx` no puede contener
-HTML vivo, así que cada vista HTML (el OS day-zero de `edaiosv`, la vista
-aplicada a Flink y la página del caso) viaja completa y paginada por Chrome
-headless —texto seleccionable— fusionada tras las slides en
-`build/kcd2026-completo.pdf`; el deck solo lleva un cover por anexo con la
+Los anexos: el pptx presenta, cada `aN.pdf` documenta. Un `.pptx` no puede
+contener HTML vivo, así que cada vista HTML (el OS day-zero de `edaiosv`, la
+vista aplicada a Flink y la página del caso) viaja completa y paginada por
+Chrome headless —texto seleccionable— como PDF independiente en
+`build/anexos/aN.pdf`; el deck solo lleva un cover por anexo con la
 portada real. Los PDF de anexos son render de Chrome del HTML determinista y
 no reclaman byte-determinismo (metadatos de fecha): su verificación es
 estructural, la misma frontera que el `.pptx` (ADR-0015, invariante 5).

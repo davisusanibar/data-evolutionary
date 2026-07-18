@@ -45,9 +45,9 @@ PAGES = (
     ("page_os", Path("tools/generate_os_flink_page.py"), "vista reducida del OS"),
 )
 # Orden completo del pipeline: los anexos se paginan tras la estructura
-# (build_estructura borra build/) y se fusionan tras el render.
+# (build_estructura borra build/) y el deck se renderiza al final.
 REBUILD = ("cd deck && python3 build_estructura.py && python3 anexar.py --paginas "
-           "&& python3 llenar.py && python3 render.py && python3 anexar.py --fusionar")
+           "&& python3 llenar.py && python3 render.py")
 
 # Textos placeholder de los 8 slides del template oficial KCD. Un rebuild
 # completo no deja ninguno; una sola ocurrencia delata contenido sin llenar.
@@ -304,20 +304,21 @@ def check_speaker_notes(pres: Presentation, deck: dict) -> list[str]:
 
 
 def check_annexes(root: Path, contract: dict, deck: dict) -> list[str]:
-    """T015 (FR-007/FR-008): los anexos HTML viajan completos en el PDF fusionado.
+    """T015 (FR-007/FR-008): los anexos HTML viajan completos como aN.pdf.
 
-    Verifica que las 3 fuentes HTML resuelvan, que los 3 PDFs paginados por
-    Chrome y el fusionado existan, y que paginas(fusionado) == paginas(deck.pdf)
-    + suma(paginas(aN.pdf)). El PDF no reclama determinismo byte a byte (los
-    PDF de Chrome llevan metadatos de fecha): la verificacion es estructural,
-    misma frontera que el .pptx (ADR-0015, invariante 5).
+    Verifica que las 3 fuentes HTML resuelvan y que los 3 PDFs paginados por
+    Chrome existan y tengan paginas (texto seleccionable). Cada anexo es un PDF
+    independiente; el deck lleva un cover con el preview de su primera pagina.
+    El PDF no reclama determinismo byte a byte (los PDF de Chrome llevan
+    metadatos de fecha): la verificacion es estructural, misma frontera que el
+    .pptx (ADR-0015, invariante 5).
     """
     import fitz
 
     annexes = contract.get("annexes")
     if not isinstance(annexes, dict):
         return ["contract.annexes ausente del contrato: los anexos HTML del deck "
-                "declaran fuente, PDF paginado y PDF fusionado"]
+                "declaran fuente y PDF paginado"]
     problems: list[str] = []
     pdfs: list[Path] = []
     for index, item in enumerate(annexes.get("items", []), start=1):
@@ -335,30 +336,17 @@ def check_annexes(root: Path, contract: dict, deck: dict) -> list[str]:
         else:
             pdfs.append(pdf)
     deck_pdf = resolve(root, deck["artifact"]).with_suffix(".pdf")
-    merged = resolve(root, annexes.get("merged_artifact", ""))
     if not deck_pdf.is_file():
         problems.append(f"el PDF del deck no existe ({deck_pdf}); "
                         f"ejecuta el pipeline en orden: {REBUILD}")
-    if not merged.is_file():
-        problems.append(
-            f"el PDF fusionado no existe ({annexes.get('merged_artifact')}); "
-            f"ejecuta el pipeline en orden: {REBUILD}"
-        )
     if problems:
         return problems
-    if len(pdfs) != len(annexes.get("items", [])):
-        return problems
-    paginas_deck = fitz.open(deck_pdf).page_count
-    paginas_anexos = [fitz.open(pdf).page_count for pdf in pdfs]
-    paginas_merged = fitz.open(merged).page_count
-    esperadas = paginas_deck + sum(paginas_anexos)
-    if paginas_merged != esperadas:
-        problems.append(
-            f"el fusionado tiene {paginas_merged} paginas y las piezas suman "
-            f"{esperadas} (deck {paginas_deck} + anexos "
-            f"{'+'.join(str(n) for n in paginas_anexos)}); el PDF entregable "
-            f"derivo de sus piezas — regenera en orden: {REBUILD}"
-        )
+    for index, pdf in enumerate(pdfs, start=1):
+        if fitz.open(pdf).page_count == 0:
+            problems.append(
+                f"anexo {index}: {pdf.name} quedo sin paginas; la fuente HTML "
+                "no rindio contenido"
+            )
     return problems
 
 
@@ -499,7 +487,7 @@ def main(argv: list[str] | None = None) -> int:
           "recompilacion (caso de uso y vista reducida del OS)")
     annexes = data["contract"].get("annexes", {})
     print(f"[deliverables] OK: {len(annexes.get('items', []))} anexos HTML "
-          "paginados presentes y el PDF fusionado suma deck + anexos "
+          "paginados presentes como aN.pdf independientes "
           "(verificacion estructural: un PDF de Chrome no ofrece bytes estables)")
     captures = data["contract"].get("captures", [])
     print(f"[deliverables] OK: {len(captures)} capturas del owner (anexos A4/A5) "

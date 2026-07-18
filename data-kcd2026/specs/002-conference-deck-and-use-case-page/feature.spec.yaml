@@ -43,12 +43,11 @@ contract:
     artifact: data-kcd2026/docs/edaios-operating-system-flink.html
     determinism: byte   # vista reducida del OS aplicada al caso Flink (ADR-0015: vive en el consumer)
   annexes:
-    # El pptx presenta; el PDF documenta: cada HTML viaja completo, paginado
-    # por Chrome headless (texto seleccionable), fusionado tras las slides.
+    # El pptx presenta; cada aN.pdf documenta: cada HTML viaja completo,
+    # paginado por Chrome headless (texto seleccionable), como PDF independiente.
     # Un PDF de Chrome lleva metadatos de fecha: NO se reclama determinismo
     # byte a byte; misma frontera que el .pptx (ADR-0015, invariante 5).
     determinism: structural
-    merged_artifact: data-kcd2026/deck/build/kcd2026-completo.pdf
     items:
       - source_html: ../edaiosv/docs/demos/edaios-operating-system.html
         pdf_artifact: data-kcd2026/deck/build/anexos/a1.pdf

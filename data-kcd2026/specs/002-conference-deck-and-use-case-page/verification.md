@@ -15,8 +15,8 @@ evidencia vacía no es un resultado anticipado, es trabajo pendiente**.
 | SC-006 (vista OS) | FR-006 | T014 | `generate_os_flink_page.py --check` | deliverables (`contract.page_os`) | `evidence/t014-os-flink-page.json` (verde exit 0; mutación de un byte `150.0`→`151.0` offset 16100 → exit 1 propagado por el gate; restaurado; sha256 estable entre dos corridas) |
 | SC-007 | FR-007 | T008, T009 | salida del gate declara verificación estructural | deliverables | `evidence/sc-001-007-deliverables-gate.json` (salida verde declara "ESTRUCTURAL, no byte a byte"; ningún check pina el build) |
 | SC-008 | FR-008 | T006, T007 | `validate.py --original template.pptx` | ooxml | `evidence/sc-008-ooxml-validate.json` ("All validations PASSED!", exit 0, 2026-07-17) |
-| Anexos (T015) | FR-007, FR-008 | T015 | `deliverables_check.check_annexes` | deliverables (`contract.annexes`) | `evidence/t015-anexos-pdf.json` (pipeline completo exit 0; deck 39 + a1 51 + a2 8 + a3 10 = 108 páginas en `kcd2026-completo.pdf`; texto seleccionable verificado en a2.pdf; rojo inducido con el fusionado ausente → exit 1, restaurado; el PDF no reclama byte-determinismo — verificación estructural, ADR-0015 inv. 5) |
-| Capturas (T016) | FR-007 | T016 | `deliverables_check.check_captures` | deliverables (`contract.captures`) | `evidence/t016-capturas.json` (4 capturas del owner copiadas byte a byte a `deck/anexos/` y pineadas por sha256; slides 39–42, deck 39→43; pipeline completo exit 0, `validate.py` PASSED exit 0, gate verde exit 0; fusionado 43+51+8+10 = 112 páginas; rojo inducido mutando 1 byte de `Flink-Job.jpeg` → exit 1 "captura reemplazada o ausente", restaurado y verde; fail-closed del generador probado con captura ausente → `FileNotFoundError`. Claim boundary: las capturas documentan la sesión del owner sobre el job real `608ee13c…`; son evidencia visual aportada, no generada por el pipeline, y no prueban por sí mismas ejecución reproducible) |
+| Anexos (T015) | FR-007, FR-008 | T015 | `deliverables_check.check_annexes` | deliverables (`contract.annexes`) | `evidence/t015-anexos-pdf.json` (pipeline de 4 pasos exit 0; deck 43, a1 51, a2 8, a3 10 páginas como `aN.pdf` independientes; texto seleccionable verificado en a2.pdf; rojo inducido moviendo a2.pdf → exit 1, restaurado; el PDF no reclama byte-determinismo — verificación estructural, ADR-0015 inv. 5) |
+| Capturas (T016) | FR-007 | T016 | `deliverables_check.check_captures` | deliverables (`contract.captures`) | `evidence/t016-capturas.json` (4 capturas del owner copiadas byte a byte a `deck/anexos/` y pineadas por sha256; slides 39–42, deck 43; pipeline de 4 pasos exit 0, `validate.py` PASSED exit 0, gate verde exit 0; rojo inducido mutando 1 byte de `Flink-Job.jpeg` → exit 1 "captura reemplazada o ausente", restaurado y verde; fail-closed del generador probado con captura ausente → `FileNotFoundError`. Claim boundary: las capturas documentan la sesión del owner sobre el job real `608ee13c…`; son evidencia visual aportada, no generada por el pipeline, y no prueban por sí mismas ejecución reproducible) |
 
 ## Estado verificado
 
@@ -53,10 +53,10 @@ evidencia vacía no es un resultado anticipado, es trabajo pendiente**.
 
 - Capturas (T016) — sobre el build regenerado de 43 slides (2026-07-17): las 4
   capturas del owner (anexos A4/A5, slides 39–42) son byte-idénticas a su pin
-  `contract.captures` y a los originales entregados; pipeline de 5 pasos
+  `contract.captures` y a los originales entregados; pipeline de 4 pasos
   exit 0, `validate.py --original` PASSED (exit 0), `deliverables_check.py`
-  verde (exit 0) incluyendo `check_captures`; fusionado de 112 páginas
-  (43+51+8+10). Rojo inducido: 1 byte mutado en `deck/anexos/Flink-Job.jpeg`
+  verde (exit 0) incluyendo `check_captures`; deck de 43 slides, anexos
+  a1 51 + a2 8 + a3 10. Rojo inducido: 1 byte mutado en `deck/anexos/Flink-Job.jpeg`
   → exit 1 nombrando el archivo ("captura reemplazada o ausente");
   restaurado, verde. Fail-closed del generador probado (captura ausente →
   `FileNotFoundError` con acción correctiva). `evidence/t016-capturas.json`.

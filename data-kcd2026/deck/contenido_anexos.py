@@ -1,9 +1,9 @@
 """Slides 35-42: divisor de anexos, tres covers HTML y cuatro capturas del owner.
 
-El pptx presenta; el PDF documenta. Cada cover (layout lienzo) muestra la
+El pptx presenta; cada aN.pdf documenta. Cada cover (layout lienzo) muestra la
 primera pagina del anexo tal como la pagino Chrome (preview PNG generado por
 anexar.py --paginas) y una caja lateral con la fuente real y la remision al
-anexo completo del PDF fusionado. Falla cerrado si el preview no existe:
+anexo independiente aN.pdf. Falla cerrado si el preview no existe:
 los covers no se inventan; se derivan.
 
 Los anexos A4/A5 (slides 39-42, T016) insertan las capturas del owner
@@ -13,7 +13,7 @@ retocan, y estan pineadas por sha256 en feature.spec.yaml; si falta el
 archivo, el slide falla cerrado.
 
 Orden del pipeline: build_estructura.py -> anexar.py --paginas -> llenar.py
--> render.py -> anexar.py --fusionar.
+-> render.py.
 """
 from pathlib import Path
 
@@ -70,7 +70,7 @@ def _cover(s, numero, clave, titulo_texto, ruta, resumen):
     # Titulo a 20pt: los titulos de anexo son largos y a 25pt envolverian.
     caja(s, MARGEN, 0.75, 8.9, 0.45, titulo_texto, tamano=20, negrita=True)
     caja(s, MARGEN, 1.22, 8.9, 0.3,
-         f"Anexo {numero} del PDF entregable — vista completa, texto seleccionable",
+         f"Anexo {numero} ({clave}.pdf) — vista completa, texto seleccionable",
          tamano=12, color=TINTA_SUAVE)
 
     # Preview de la pagina 1, enmarcado. x >= FARO_X: su base (4.9) cae por
@@ -91,7 +91,7 @@ def _cover(s, numero, clave, titulo_texto, ruta, resumen):
          ["Vista regenerable — derivado determinista;", "no se edita a mano."],
          tamano=11)
     caja(s, lado_x + 0.2, 3.30, lado_w - 0.4, 0.55,
-         [f"Versión completa y paginada: anexo {numero}", "del PDF (kcd2026-completo.pdf)."],
+         [f"Versión completa y paginada", f"en el anexo {clave}.pdf."],
          tamano=11, negrita=True)
     caja(s, lado_x + 0.2, 3.98, lado_w - 0.4, 0.6, resumen, tamano=10,
          color=TINTA_SUAVE)
@@ -114,7 +114,7 @@ def _captura(s, nombre, x, y, w):
             "deck/anexos/ y estan pineadas por sha256 en feature.spec.yaml. "
             "Copia el archivo original del owner a esa carpeta y reejecuta el "
             "pipeline en orden (build_estructura.py -> anexar.py --paginas -> "
-            "llenar.py -> render.py -> anexar.py --fusionar).")
+            "llenar.py -> render.py).")
     pic = s.shapes.add_picture(str(ruta), pulg(x), pulg(y), width=pulg(w))
     marco = bloque(s, x, y, pic.width / 914400, pic.height / 914400,
                    relleno=None, borde=GRIS_BORDE, radio=False)
