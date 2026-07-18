@@ -1,0 +1,44 @@
+# SC-006 · validacion end-to-end sobre la infraestructura real
+# Fecha: 2026-07-18T07:27:26Z
+
+## Entorno
+Servicios levantados desde infra/dockercompose (docker-compose sobre colima):
+flink-taskmanager	flink:1.20.2-scala_2.12-java11
+schema-registry	confluentinc/cp-schema-registry:latest
+flink-jobmanager	flink:1.20.2-scala_2.12-java11
+kafka	apache/kafka:latest
+
+Cluster Flink:
+{"taskmanagers":1,"slots-total":3,"slots-available":2,"jobs-running":1,"jobs-finished":0,"jobs-cancelled":0,"jobs-failed":0,"flink-version":"1.20.2","flink-commit":"1641cb9"}
+## Ejecucion
+Job sometido al cluster real: JobID ec15637ae8b5def6761e968ba8e3a1fc
+Entry class: com.topaya.kcd2026.revenue.RevenueWindowJob
+Estado:
+  name : KCD2026 · revenue por cliente en ventana temporal
+  state: RUNNING
+
+## Entrada
+  topico orders-kcd2026: 11 mensajes Avro (9 del fixture + 2 de avance de watermark)
+  esquema registrado: orders-kcd2026-value
+
+## Salida obtenida del topico revenue-por-cliente-ventana
+  {"customerId":1,"windowStart":1749999960000,"windowEnd":1750000020000,"revenueTotal":160.0,"orderCount":3}
+  {"customerId":2,"windowStart":1749999960000,"windowEnd":1750000020000,"revenueTotal":75.25,"orderCount":1}
+  {"customerId":1,"windowStart":1750000020000,"windowEnd":1750000080000,"revenueTotal":200.75,"orderCount":2}
+  {"customerId":2,"windowStart":1750000020000,"windowEnd":1750000080000,"revenueTotal":30.0,"orderCount":3}
+
+## Comparacion contra revenue-referencia.csv (calculada a mano)
+  c1 @ W0  referencia (160.00, 3)  end-to-end (160.0, 3)   OK
+  c2 @ W0  referencia ( 75.25, 1)  end-to-end ( 75.25, 1)  OK
+  c1 @ W1  referencia (200.75, 2)  end-to-end (200.75, 2)  OK
+  c2 @ W1  referencia ( 30.00, 3)  end-to-end ( 30.0, 3)   OK
+
+VEREDICTO: coincide exactamente. El mismo resultado que la verificacion local,
+ahora atravesando Kafka, Schema Registry y un cluster Flink 1.20.2 real.
+
+## Hallazgo de semantica streaming
+Con fuente Kafka NO acotada las ventanas solo cierran cuando el watermark supera
+su fin. El fixture por si solo deja la ultima ventana abierta indefinidamente; por
+eso la entrada incluye 2 eventos de avance (cliente 99, ts muy posterior) que
+empujan el watermark. En la verificacion local esto no ocurria porque el stream
+acotado emite un watermark final al terminar.

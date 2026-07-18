@@ -11,6 +11,7 @@ redactados a posteriori.
 | SC-003 | Introducir la deriva y confirmar que el build falla identificando el campo, sin producir artefacto ejecutable. | `evidence/sc-003-build-rojo-deriva.txt` | verificado |
 | SC-004 | Cronometrar el canary completo desde un único comando. | `evidence/sc-004-canary-cronometraje.txt` | verificado |
 | SC-005 | Ejecutar el gate con perfil `consumer-release` y comprobar que degradar un artefacto lo devuelve a rojo. | `evidence/sc-005-gate-consumer-release.txt` | verificado |
+| SC-006 | Levantar la infraestructura, producir el fixture en Avro, someter el job al cluster Flink y comparar la salida real contra la referencia. | `evidence/sc-006-end-to-end-infra-real.txt` | verificado |
 
 ## Resultados
 
@@ -35,10 +36,39 @@ fallar. Los tres se rompieron a propósito:
 | SC-003 | es en sí mismo la prueba negativa del contrato | build en rojo, restaurado a verde |
 | SC-005 | pin de la constitución alterado un carácter; y FR-005 sin cobertura | 41/42 en cada caso, verde al restaurar |
 
-## Lo que no se verificó
+## El resultado end-to-end
 
-La ejecución extremo a extremo contra Kafka y Schema Registry **no** se ejecutó:
-la infraestructura de `infra/dockercompose` no estaba levantada. El job compila y
-está completo, pero su comportamiento en runtime contra el transporte real no
-tiene evidencia aquí y no se reclama. SC-001 verifica la aritmética del caso, que
-es lo que declaró verificar.
+SC-006 cierra la brecha que quedó abierta en la primera pasada. El job se sometió
+al cluster Flink 1.20.2 del repositorio, leyendo Avro desde Kafka a través del
+Schema Registry y escribiendo Avro de vuelta:
+
+| Cliente y ventana | Referencia | End-to-end |
+|---|---|---|
+| cliente 1 · ventana 0 | 160.00 sobre 3 órdenes | 160.0 sobre 3 |
+| cliente 2 · ventana 0 | 75.25 sobre 1 orden | 75.25 sobre 1 |
+| cliente 1 · ventana 1 | 200.75 sobre 2 órdenes | 200.75 sobre 2 |
+| cliente 2 · ventana 1 | 30.00 sobre 3 órdenes | 30.0 sobre 3 |
+
+La aritmética verificada en local es la misma que atraviesa el transporte real.
+
+## Hallazgo de semántica: las ventanas no cierran solas
+
+La verificación local y la end-to-end **no** son equivalentes, y la diferencia
+importa para la demo en vivo.
+
+Con un stream acotado, Flink emite un watermark final al terminar la entrada y
+todas las ventanas pendientes cierran. Con una fuente Kafka **no acotada** eso no
+ocurre: una ventana solo cierra cuando el watermark supera su fin, y el watermark
+solo avanza si siguen llegando eventos. El fixture por sí solo deja la última
+ventana abierta indefinidamente.
+
+Por eso la entrada de SC-006 incluye dos eventos de avance (cliente 99, con
+timestamp muy posterior) cuyo único propósito es empujar el watermark. No es un
+truco de laboratorio: es la semántica que gobierna cualquier pipeline de ventanas
+en streaming, y en una demostración en vivo conviene decirlo en voz alta.
+
+## Lo que sigue sin verificarse
+
+El comportamiento ante fallo y recuperación —checkpoints, reinicio del job,
+exactly-once contra el sink— no se ejercitó. El sink está configurado como
+`AT_LEAST_ONCE` y no se reclama nada más fuerte.

@@ -86,6 +86,10 @@ Queda fuera de alcance:
   se ejecuta en 30 segundos o menos desde un único comando documentado.
 - **SC-005** — El gate SDD con perfil `consumer-release` queda verde sobre esta
   feature, y vuelve a rojo si se degrada cualquiera de sus artefactos.
+- **SC-006** — El job, ejecutado sobre la infraestructura real del repositorio
+  (Kafka, Schema Registry y un cluster Flink), produce para el mismo fixture el
+  mismo resultado que la verificación local, comparado contra la tabla de
+  referencia.
 
 ## Decisiones de diseño
 

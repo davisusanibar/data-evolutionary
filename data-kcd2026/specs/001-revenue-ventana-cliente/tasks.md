@@ -41,16 +41,34 @@ firma de cierre.
 - [x] [INGEST] Ingerir los artefactos producidos como borradores bajo el attachment, sin promoverlos — FR-006
 - [ ] [SEAL] Solicitar la firma del owner y sellar el cierre; sin firma la feature no pasa a implementado — FR-006
 
+## Validación end-to-end
+
+- [x] Levantar Kafka, Schema Registry y el cluster Flink desde `infra/dockercompose` — FR-006
+- [x] Producir el fixture en Avro sobre el tópico de entrada, registrando el contrato — FR-001
+- [x] Someter el job al cluster Flink real y comprobar que alcanza estado RUNNING — FR-002, FR-003
+- [x] Consumir el tópico de salida y comparar el resultado real contra la tabla de referencia — FR-002
+
 ## Notas de ejecución
 
-**Alcance real de lo verificado.** La aritmética del caso (SC-001) se verificó en
-local sobre el fixture, ejercitando el mismo `RevenueWindowPipeline` que usa el
-job. El transporte Kafka y Schema Registry **no** se ejecutó: la infraestructura de
-`infra/dockercompose` no estaba levantada durante la implementación. El job
-compila y está completo, pero su ejecución extremo a extremo contra Kafka queda
-sin evidencia y no se reclama.
+**Alcance verificado.** SC-001 verificó la aritmética en local sobre el fixture, y
+SC-006 la volvió a verificar atravesando Kafka, Schema Registry y un cluster Flink
+1.20.2 real. Ambas coinciden con la referencia calculada a mano.
+
+**Hallazgo de semántica streaming.** Con fuente Kafka no acotada las ventanas solo
+cierran cuando el watermark supera su fin; el fixture por sí solo deja la última
+ventana abierta. La entrada end-to-end incluye dos eventos de avance de watermark.
+Detallado en `verification.md`.
+
+**Sin verificar.** Checkpoints, recuperación ante fallo y garantías de entrega más
+fuertes que el `AT_LEAST_ONCE` configurado.
 
 **Desviación respecto al plan.** El plan preveía `flink-connector-kafka` como
 única dependencia de conector. Al compilar apareció que `DeliveryGuarantee` vive
 en `flink-connector-base`, que el conector de Kafka no arrastra; se añadió
 explícitamente.
+
+**Nota de entorno.** El repositorio documenta mapear los hostnames del compose en
+`/etc/hosts` para operar desde el host. No se modificó: la validación se hizo
+íntegramente dentro de la red de Docker, que además es más fiel a cómo corre el
+job en el cluster. Para lanzar el job desde el host sí haría falta ese mapeo,
+porque Kafka anuncia `broker:9092` y no `localhost`.

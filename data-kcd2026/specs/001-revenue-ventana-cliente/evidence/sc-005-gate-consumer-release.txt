@@ -35,7 +35,7 @@
   [OK ] specs/001-revenue-ventana-cliente: Gate Impact declarado con contenido
   [OK ] specs/001-revenue-ventana-cliente: plan sin placeholders bloqueantes
   [OK ] specs/001-revenue-ventana-cliente: tasks existe
-  [OK ] specs/001-revenue-ventana-cliente: tasks con tareas reales  · 22 tareas
+  [OK ] specs/001-revenue-ventana-cliente: tasks con tareas reales  · 26 tareas
   [OK ] specs/001-revenue-ventana-cliente: cobertura FR -> tareas
   [OK ] specs/001-revenue-ventana-cliente: tareas sin FR inexistente
   [OK ] specs/001-revenue-ventana-cliente: tareas de cierre
@@ -48,5 +48,5 @@
 
 # Prueba negativa (fail-closed comprobado):
 #   pin de la constitucion alterado 1 caracter -> 41/42, 'pin obsoleto'
-#   FR-005 sin tarea que lo cubra            -> 41/42, 'cobertura FR -> tareas'
-#   restaurado                                -> verde de nuevo
+#   FR-005 sin tarea que lo cubra              -> 41/42, 'cobertura FR -> tareas'
+#   restaurado                                  -> verde de nuevo
