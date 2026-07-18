@@ -1,0 +1,183 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1170" width="1500" height="1170" role="img" aria-label="Las puertas de control de la feature 001 y sus responsables">
+  <title>Puertas de control y responsables — data-kcd2026</title>
+  <desc>Las seis puertas que atraviesa un cambio, qué verifica cada una, quién la ejecuta, quién decide y si se puede esquivar; más las dos puertas no instaladas y los actores con autoridad declarada.</desc>
+
+  <defs>
+    <pattern id="grid" width="26" height="26" patternUnits="userSpaceOnUse">
+      <path d="M26 0H0V26" fill="none" stroke="#78684a" stroke-opacity=".13" stroke-width="1"/>
+    </pattern>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#9c6626"/>
+    </marker>
+    <style>
+      .mono{font-family:ui-monospace,"SFMono-Regular","SF Mono",Menlo,Consolas,"Liberation Mono",monospace}
+      .sans{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif}
+      .h1{font-size:31px;font-weight:700;fill:#16202a;letter-spacing:-.4px}
+      .h2{font-size:15px;fill:#5f5643}
+      .eyebrow{font-size:12px;fill:#9c6626;font-weight:700;letter-spacing:2.4px}
+      .zone{font-size:12px;font-weight:700;letter-spacing:1.7px}
+      .ct{font-size:15px;font-weight:700;fill:#16202a}
+      .cw{font-size:10.5px;fill:#6b5f42;letter-spacing:.3px}
+      .lbl{font-size:9.5px;fill:#8a7a5c;font-weight:700;letter-spacing:1.1px}
+      .val{font-size:11.5px;fill:#2c3742}
+      .src{font-size:10px;fill:#8a7a5c}
+      .num{font-size:13px;font-weight:700;fill:#fdfcf8}
+      .badge{font-size:11px;font-weight:700}
+    </style>
+  </defs>
+
+  <rect width="1500" height="1170" fill="#f6f3ea"/>
+  <rect width="1500" height="1170" fill="url(#grid)"/>
+  <rect x="14" y="14" width="1472" height="1142" fill="none" stroke="#c9ba97" stroke-width="1.5" rx="8"/>
+
+  <!-- CABECERA -->
+  <text class="mono eyebrow" x="44" y="56">FEATURE 001 · PERFIL CONSUMER-RELEASE · ESTADO VERIFICADO 2026-07-18</text>
+  <text class="sans h1" x="44" y="92">Las puertas y quién responde de cada una</text>
+  <text class="sans h2" x="44" y="116">Seis puertas atraviesa un cambio. Solo una no se puede esquivar: la que está soldada al build. Las otras cinco esperan a que alguien decida ejecutarlas.</text>
+
+  <!-- ================= PUERTAS ================= -->
+  <text class="mono zone" x="44" y="156" style="fill:#16202a">LAS SEIS PUERTAS, EN ORDEN</text>
+
+  <!-- 1 -->
+  <g>
+    <rect x="44" y="168" width="440" height="252" fill="#ffffff" stroke="#9c6626" stroke-width="1.6" rx="8"/>
+    <circle cx="74" cy="198" r="15" fill="#9c6626"/><text class="mono num" x="74" y="203" text-anchor="middle">1</text>
+    <text class="mono ct" x="100" y="196">Revisión de la spec</text>
+    <text class="mono cw" x="100" y="212">TRAS EL CHECKLIST, ANTES DEL PLAN</text>
+    <line x1="62" y1="230" x2="466" y2="230" stroke="#e3dccb"/>
+    <text class="mono lbl" x="62" y="250">VERIFICA</text>
+    <text class="mono val" x="62" y="268">alcance, valor, sensibilidad y requisitos</text>
+    <text class="mono lbl" x="62" y="294">EJECUTA</text><text class="mono val" x="150" y="294">humano</text>
+    <text class="mono lbl" x="62" y="316">DECIDE</text><text class="mono val" x="150" y="316" style="fill:#9c6626;font-weight:700">owner · david-susanibar</text>
+    <rect x="62" y="332" width="300" height="28" fill="#fdf2ef" stroke="#b4432f" rx="5"/>
+    <text class="mono badge" x="76" y="351" style="fill:#6d2116">ESQUIVABLE — solo vive en el runner</text>
+    <text class="mono src" x="62" y="392">.specify/workflows/edaios-delivery/workflow.yml:34</text>
+  </g>
+  <line x1="484" y1="294" x2="524" y2="294" stroke="#9c6626" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- 2 -->
+  <g>
+    <rect x="530" y="168" width="440" height="252" fill="#ffffff" stroke="#9c6626" stroke-width="1.6" rx="8"/>
+    <circle cx="560" cy="198" r="15" fill="#9c6626"/><text class="mono num" x="560" y="203" text-anchor="middle">2</text>
+    <text class="mono ct" x="586" y="196">Revisión del plan</text>
+    <text class="mono cw" x="586" y="212">ANTES DE DESCOMPONER EN TAREAS</text>
+    <line x1="548" y1="230" x2="952" y2="230" stroke="#e3dccb"/>
+    <text class="mono lbl" x="548" y="250">VERIFICA</text>
+    <text class="mono val" x="548" y="268">Constitution Check, ADR y Gate Impact</text>
+    <text class="mono lbl" x="548" y="294">EJECUTA</text><text class="mono val" x="636" y="294">humano</text>
+    <text class="mono lbl" x="548" y="316">DECIDE</text><text class="mono val" x="636" y="316" style="fill:#9c6626;font-weight:700">arquitectura / owner</text>
+    <rect x="548" y="332" width="300" height="28" fill="#fdf2ef" stroke="#b4432f" rx="5"/>
+    <text class="mono badge" x="562" y="351" style="fill:#6d2116">ESQUIVABLE — solo vive en el runner</text>
+    <text class="mono src" x="548" y="392">.specify/workflows/edaios-delivery/workflow.yml:42</text>
+  </g>
+  <line x1="970" y1="294" x2="1010" y2="294" stroke="#9c6626" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- 3 -->
+  <g>
+    <rect x="1016" y="168" width="440" height="252" fill="#ffffff" stroke="#2f7d84" stroke-width="1.8" rx="8"/>
+    <circle cx="1046" cy="198" r="15" fill="#2f7d84"/><text class="mono num" x="1046" y="203" text-anchor="middle">3</text>
+    <text class="mono ct" x="1072" y="196">Gate SDD contractual</text>
+    <text class="mono cw" x="1072" y="212">HOOKS after_tasks Y before_implement</text>
+    <line x1="1034" y1="230" x2="1438" y2="230" stroke="#e3dccb"/>
+    <text class="mono lbl" x="1034" y="250">VERIFICA</text>
+    <text class="mono val" x="1034" y="268">43 checks: frontmatter, FR/SC, pin de la</text>
+    <text class="mono val" x="1034" y="284">constitución, cobertura FR a tarea, cierre</text>
+    <text class="mono lbl" x="1034" y="308">EJECUTA</text><text class="mono val" x="1122" y="308" style="fill:#2f7d84;font-weight:700">máquina</text>
+    <text class="mono lbl" x="1034" y="326">DECIDE</text><text class="mono val" x="1122" y="326" style="fill:#2f7d84;font-weight:700">la máquina · exit 1 si falla</text>
+    <rect x="1034" y="340" width="330" height="28" fill="#fdf2ef" stroke="#b4432f" rx="5"/>
+    <text class="mono badge" x="1048" y="359" style="fill:#6d2116">ESQUIVABLE — solo si alguien la invoca</text>
+    <text class="mono src" x="1034" y="392">tools/validation/spec_kit_gate.py</text>
+  </g>
+
+  <!-- 4 -->
+  <g>
+    <rect x="44" y="448" width="440" height="252" fill="#ffffff" stroke="#9c6626" stroke-width="1.6" rx="8"/>
+    <circle cx="74" cy="478" r="15" fill="#9c6626"/><text class="mono num" x="74" y="483" text-anchor="middle">4</text>
+    <text class="mono ct" x="100" y="476">Aprobar implementación</text>
+    <text class="mono cw" x="100" y="492">ANTES DE ESCRIBIR CÓDIGO</text>
+    <line x1="62" y1="510" x2="466" y2="510" stroke="#e3dccb"/>
+    <text class="mono lbl" x="62" y="530">VERIFICA</text>
+    <text class="mono val" x="62" y="548">que análisis y puertas estén en verde</text>
+    <text class="mono lbl" x="62" y="574">EJECUTA</text><text class="mono val" x="150" y="574">humano</text>
+    <text class="mono lbl" x="62" y="596">DECIDE</text><text class="mono val" x="150" y="596" style="fill:#9c6626;font-weight:700">owner · david-susanibar</text>
+    <rect x="62" y="612" width="300" height="28" fill="#fdf2ef" stroke="#b4432f" rx="5"/>
+    <text class="mono badge" x="76" y="631" style="fill:#6d2116">ESQUIVABLE — solo vive en el runner</text>
+    <text class="mono src" x="62" y="672">.specify/workflows/edaios-delivery/workflow.yml:53</text>
+  </g>
+  <line x1="484" y1="574" x2="524" y2="574" stroke="#9c6626" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- 5 · LA INELUDIBLE -->
+  <g>
+    <rect x="530" y="448" width="440" height="252" fill="#eef7f0" stroke="#3f8f5b" stroke-width="2.6" rx="8"/>
+    <circle cx="560" cy="478" r="15" fill="#3f8f5b"/><text class="mono num" x="560" y="483" text-anchor="middle">5</text>
+    <text class="mono ct" x="586" y="476" style="fill:#1c4e30">Contrato Avro a compilación</text>
+    <text class="mono cw" x="586" y="492" style="fill:#3f8f5b">EN CADA BUILD, SIN EXCEPCIÓN</text>
+    <line x1="548" y1="510" x2="952" y2="510" stroke="#bcd9c6"/>
+    <text class="mono lbl" x="548" y="530" style="fill:#3f8f5b">VERIFICA</text>
+    <text class="mono val" x="548" y="548">que el código y el esquema no diverjan</text>
+    <text class="mono lbl" x="548" y="574" style="fill:#3f8f5b">EJECUTA</text><text class="mono val" x="636" y="574" style="fill:#1c4e30;font-weight:700">máquina</text>
+    <text class="mono lbl" x="548" y="596" style="fill:#3f8f5b">DECIDE</text><text class="mono val" x="636" y="596" style="fill:#1c4e30;font-weight:700">el compilador</text>
+    <rect x="548" y="612" width="330" height="28" fill="#dcefe2" stroke="#3f8f5b" stroke-width="1.6" rx="5"/>
+    <text class="mono badge" x="562" y="631" style="fill:#1c4e30">INELUDIBLE — soldada al build</text>
+    <text class="mono src" x="548" y="672">pom.xml · avro-maven-plugin en generate-sources</text>
+  </g>
+  <line x1="970" y1="574" x2="1010" y2="574" stroke="#9c6626" stroke-width="2" marker-end="url(#ar)"/>
+
+  <!-- 6 -->
+  <g>
+    <rect x="1016" y="448" width="440" height="252" fill="#ffffff" stroke="#9c6626" stroke-width="1.6" rx="8"/>
+    <circle cx="1046" cy="478" r="15" fill="#9c6626"/><text class="mono num" x="1046" y="483" text-anchor="middle">6</text>
+    <text class="mono ct" x="1072" y="476">Cierre · marcador SEAL</text>
+    <text class="mono cw" x="1072" y="492">AL PASAR A IMPLEMENTED</text>
+    <line x1="1034" y1="510" x2="1438" y2="510" stroke="#e3dccb"/>
+    <text class="mono lbl" x="1034" y="530">VERIFICA</text>
+    <text class="mono val" x="1034" y="548">que la cadena [SEAL] exista en una tarea.</text>
+    <text class="mono val" x="1034" y="564" style="fill:#b4432f">Ninguna máquina puede verificar una firma.</text>
+    <text class="mono lbl" x="1034" y="588">EJECUTA</text><text class="mono val" x="1122" y="588">humano</text>
+    <text class="mono lbl" x="1034" y="610">DECIDE</text><text class="mono val" x="1122" y="610" style="fill:#9c6626;font-weight:700">owner · david-susanibar</text>
+    <rect x="1034" y="626" width="330" height="28" fill="#fdf2ef" stroke="#b4432f" rx="5"/>
+    <text class="mono badge" x="1048" y="645" style="fill:#6d2116">ESQUIVABLE — declaración, no control</text>
+    <text class="mono src" x="1034" y="678">speckit.tasks.md:19 · evidence/cierre-owner.txt</text>
+  </g>
+
+  <!-- ================= AUSENTES ================= -->
+  <text class="mono zone" x="44" y="738" style="fill:#b4432f">LAS DOS QUE HARÍAN INELUDIBLE A LA NÚMERO 3 — NINGUNA INSTALADA</text>
+  <g>
+    <rect x="44" y="750" width="690" height="96" fill="#fdf2ef" stroke="#b4432f" stroke-width="1.6" stroke-dasharray="7 4" rx="8"/>
+    <text class="mono ct" x="66" y="778" style="fill:#6d2116">Hook pre-push</text>
+    <text class="mono val" x="66" y="802" style="fill:#6d2116">Bloquearía el push con el gate en rojo. Decide: la máquina.</text>
+    <text class="mono src" x="66" y="826">Core lo trae listo en scripts/install-hooks.sh — nunca se ejecutó</text>
+  </g>
+  <g>
+    <rect x="766" y="750" width="690" height="96" fill="#fdf2ef" stroke="#b4432f" stroke-width="1.6" stroke-dasharray="7 4" rx="8"/>
+    <text class="mono ct" x="788" y="778" style="fill:#6d2116">Integración continua</text>
+    <text class="mono val" x="788" y="802" style="fill:#6d2116">Bloquearía el merge del PR. Decide: la máquina.</text>
+    <text class="mono src" x="788" y="826">No existe .github/workflows — la rama ya está en GitHub</text>
+  </g>
+
+  <!-- ================= RESPONSABLES ================= -->
+  <text class="mono zone" x="44" y="886" style="fill:#9c6626">QUIÉN TIENE AUTORIDAD — SEGÚN .edaios/authority-registry.json</text>
+  <g>
+    <rect x="44" y="898" width="690" height="140" fill="#f3e6cf" stroke="#9c6626" stroke-width="1.8" rx="8"/>
+    <text class="mono ct" x="66" y="926" style="fill:#5b3d12">david-susanibar</text>
+    <text class="mono cw" x="66" y="942">HUMANO</text>
+    <text class="mono val" x="66" y="966" style="fill:#5b3d12">roles         initiative-owner · approver</text>
+    <text class="mono val" x="66" y="986" style="fill:#5b3d12">capacidades   approve · delegate · rollback</text>
+    <text class="mono val" x="66" y="1006" style="fill:#5b3d12">decide en     puertas 1, 2, 4 y 6</text>
+    <text class="mono src" x="66" y="1026">Único rol autorizado a aprobar en tramo T0</text>
+  </g>
+  <g>
+    <rect x="766" y="898" width="690" height="140" fill="#ffffff" stroke="#b9a87f" stroke-width="1.6" rx="8"/>
+    <text class="mono ct" x="788" y="926">topaya-value-office</text>
+    <text class="mono cw" x="788" y="942">HUMANO</text>
+    <text class="mono val" x="788" y="966">roles         value-owner</text>
+    <text class="mono val" x="788" y="986">capacidades   outcome:verify</text>
+    <text class="mono val" x="788" y="1006" style="fill:#b4432f;font-weight:700">decide en     ninguna puerta, hoy</text>
+    <text class="mono src" x="788" y="1026">Existe para que owner y value-owner no sean la misma persona</text>
+  </g>
+
+  <!-- ================= TESIS ================= -->
+  <rect x="44" y="1062" width="1412" height="76" fill="#ffffff" stroke="#c9ba97" stroke-width="1.5" rx="8"/>
+  <text class="mono val" x="66" y="1090" style="font-size:12.5px"><tspan style="font-weight:700">De seis puertas, cinco dependen de que alguien decida ejecutarlas.</tspan> La única que nadie puede saltarse es la número 5, porque no pide permiso: está soldada al build.</text>
+  <text class="mono val" x="66" y="1116" style="font-size:12.5px">Instalar el hook pre-push o la CI movería la número 3 a esa misma columna. Es el cambio más pequeño con más efecto sobre el control real de este repositorio.</text>
+</svg>
