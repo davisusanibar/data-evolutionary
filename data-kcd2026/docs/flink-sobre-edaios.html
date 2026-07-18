@@ -1,0 +1,478 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flink sobre EDAIOS · el módulo como proceso</title>
+<style>
+  :root{
+    --ground:#f2eee2; --gridline:rgba(120,104,74,.10);
+    --card:#fdfcf8; --card2:#ffffff;
+    --ink:#16202a; --muted:#5f6b76; --soft:#8a7a5c;
+    --hair:#ddd3bb; --hair2:#c9ba97;
+    --bronze:#9c6626; --teal:#2f7d84; --red:#b4432f; --green:#3f8f5b;
+    --bronze-soft:#f3e6cf; --teal-soft:#e6eef0; --red-soft:#fdf2ef; --green-soft:#eef7f0;
+    --term-bg:#141b22; --term-hair:#26313c; --term-ink:#c9d5df;
+    --term-green:#7dd6a0; --term-red:#f2a08e; --term-dim:#6d7d8a; --term-bronze:#dfae6a;
+    --mono:ui-monospace,"SFMono-Regular","SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --ground:#0e1419; --gridline:rgba(150,160,170,.06);
+      --card:#161f28; --card2:#1b2530;
+      --ink:#dde4ea; --muted:#8b97a4; --soft:#a08d68;
+      --hair:#26313c; --hair2:#33414d;
+      --bronze:#d5a05a; --teal:#5bb3b9; --red:#e0745e; --green:#5cb37e;
+      --bronze-soft:#2a2114; --teal-soft:#122228; --red-soft:#2a1713; --green-soft:#12241a;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0e1419; --gridline:rgba(150,160,170,.06);
+    --card:#161f28; --card2:#1b2530;
+    --ink:#dde4ea; --muted:#8b97a4; --soft:#a08d68;
+    --hair:#26313c; --hair2:#33414d;
+    --bronze:#d5a05a; --teal:#5bb3b9; --red:#e0745e; --green:#5cb37e;
+    --bronze-soft:#2a2114; --teal-soft:#122228; --red-soft:#2a1713; --green-soft:#12241a;
+  }
+  :root[data-theme="light"]{
+    --ground:#f2eee2; --gridline:rgba(120,104,74,.10);
+    --card:#fdfcf8; --card2:#ffffff;
+    --ink:#16202a; --muted:#5f6b76; --soft:#8a7a5c;
+    --hair:#ddd3bb; --hair2:#c9ba97;
+    --bronze:#9c6626; --teal:#2f7d84; --red:#b4432f; --green:#3f8f5b;
+    --bronze-soft:#f3e6cf; --teal-soft:#e6eef0; --red-soft:#fdf2ef; --green-soft:#eef7f0;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--ground);color:var(--ink);
+    background-image:linear-gradient(var(--gridline) 1px,transparent 1px),
+      linear-gradient(90deg,var(--gridline) 1px,transparent 1px);
+    background-size:26px 26px;
+    font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1160px;margin:0 auto;padding:clamp(20px,4vw,52px) clamp(16px,4vw,40px) 80px}
+
+  /* ---------- nav ---------- */
+  nav{position:sticky;top:0;z-index:10;background:var(--ground);border-bottom:1px solid var(--hair2);
+    display:flex;gap:8px;flex-wrap:wrap;padding:10px clamp(16px,4vw,40px);font-family:var(--mono);font-size:12px}
+  nav a{color:var(--muted);text-decoration:none;border:1px solid var(--hair);border-radius:999px;
+    padding:4px 12px;background:var(--card)}
+  nav a:hover,nav a:focus-visible{color:var(--bronze);border-color:var(--bronze);outline:none}
+  nav .brand{color:var(--bronze);font-weight:700;border:none;background:none;padding:4px 0;margin-right:6px}
+
+  /* ---------- hero ---------- */
+  header{padding-top:clamp(28px,5vw,56px)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--bronze);font-weight:700;margin:0 0 18px}
+  h1{font-family:var(--mono);font-weight:700;letter-spacing:-.03em;line-height:1.03;
+    font-size:clamp(30px,5.4vw,58px);margin:0 0 20px;text-wrap:balance;max-width:21ch}
+  h1 .alt{color:var(--bronze)}
+  .lede{font-size:clamp(15px,1.7vw,18px);color:var(--muted);max-width:64ch;margin:0 0 34px}
+  .lede b{color:var(--ink)}
+
+  /* ---------- terminal ---------- */
+  .term{background:var(--term-bg);border:1px solid var(--term-hair);border-radius:10px;
+    font-family:var(--mono);font-size:13px;line-height:1.75;color:var(--term-ink);
+    padding:18px 22px;overflow-x:auto;box-shadow:0 24px 50px -34px rgba(0,0,0,.6)}
+  .term .tbar{display:flex;gap:7px;margin-bottom:12px}
+  .term .tbar i{width:11px;height:11px;border-radius:50%;background:var(--term-hair);display:block}
+  .term .cmd{color:var(--term-bronze)}
+  .term .ok{color:var(--term-green)}
+  .term .dim{color:var(--term-dim)}
+  .bl{opacity:0;animation:blin .3s ease forwards;white-space:pre}
+  @keyframes blin{to{opacity:1}}
+  .caret{display:inline-block;width:8px;height:15px;background:var(--term-green);
+    vertical-align:-2px;animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  @media (prefers-reduced-motion:reduce){
+    .bl{animation:none;opacity:1}.caret{animation:none}
+  }
+
+  /* ---------- secciones ---------- */
+  section{margin-top:clamp(52px,8vw,84px)}
+  .shead{display:flex;align-items:baseline;gap:14px;margin-bottom:8px}
+  .snum{font-family:var(--mono);font-size:12px;color:var(--bronze);font-weight:700;
+    border:1px solid var(--bronze);border-radius:6px;padding:2px 9px;flex:none}
+  h2{font-size:clamp(20px,2.6vw,28px);margin:0;font-weight:740;letter-spacing:-.015em;text-wrap:balance}
+  .sdesc{color:var(--muted);max-width:72ch;margin:10px 0 26px;font-size:15px}
+  .sdesc code,.fact code{font-family:var(--mono);font-size:.86em;background:var(--card2);
+    border:1px solid var(--hair);border-radius:5px;padding:1px 6px;color:var(--ink)}
+
+  /* ---------- stack de anillos ---------- */
+  .stack{display:grid;gap:10px}
+  .ring{display:grid;grid-template-columns:120px 1fr;gap:0;border:1.6px solid var(--hair2);
+    border-radius:10px;overflow:hidden;background:var(--card)}
+  .ring .tag{background:var(--card2);border-right:1px solid var(--hair);padding:16px 14px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--soft);
+    font-weight:700;display:flex;align-items:center}
+  .ring .body{padding:16px 20px}
+  .ring h3{margin:0 0 4px;font-family:var(--mono);font-size:15px;font-weight:700}
+  .ring .role{font-size:13px;color:var(--muted);margin:0 0 10px}
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{font-family:var(--mono);font-size:11.5px;border:1px solid var(--hair);border-radius:6px;
+    padding:3px 9px;background:var(--card2);color:var(--ink);white-space:nowrap}
+  .ring.user{border-color:var(--hair2)}
+  .ring.sys{border-color:var(--bronze)} .ring.sys .tag{color:var(--bronze)}
+  .ring.kern{border-color:var(--teal);background:var(--teal-soft)} .ring.kern .tag{color:var(--teal)}
+  .ring.hw{border-color:var(--bronze);background:var(--bronze-soft)} .ring.hw .tag{color:var(--bronze)}
+  .down{display:flex;justify-content:center;font-family:var(--mono);font-size:11.5px;color:var(--soft);
+    padding:1px 0}
+  .principios{display:flex;flex-wrap:wrap;gap:7px;margin-top:12px}
+  .principios .chip{border-color:var(--teal);color:var(--ink)}
+
+  /* ---------- syscall table ---------- */
+  .systable{border:1.6px solid var(--hair2);border-radius:10px;overflow:hidden;background:var(--card)}
+  .systable .row{display:grid;grid-template-columns:minmax(340px,1.3fr) 1fr;border-top:1px solid var(--hair)}
+  .systable .row:first-child{border-top:none}
+  .systable .call{font-family:var(--mono);font-size:12.5px;padding:13px 18px;color:var(--ink);
+    background:var(--card2);border-right:1px solid var(--hair);overflow-x:auto;white-space:nowrap}
+  .systable .ret{font-size:13.5px;color:var(--muted);padding:13px 18px}
+  .systable .ret b{color:var(--ink)}
+  @media (max-width:760px){.systable .row{grid-template-columns:1fr}
+    .systable .call{border-right:none;border-bottom:1px dashed var(--hair)}}
+
+  /* ---------- mapa de tarjetas ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+  .mapcard{background:var(--card);border:1px solid var(--hair);border-left:3px solid var(--hair2);
+    border-radius:10px;padding:18px 20px;transition:transform .18s ease,box-shadow .18s ease}
+  .mapcard:hover{transform:translateY(-2px);box-shadow:0 14px 30px -22px rgba(0,0,0,.4)}
+  .mapcard .os{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--soft);font-weight:700;margin:0 0 6px}
+  .mapcard h3{font-family:var(--mono);font-size:15px;margin:0 0 8px;font-weight:700}
+  .mapcard .fact{font-size:13.5px;color:var(--muted);margin:0 0 12px}
+  .mapcard .fact b{color:var(--ink)}
+  .mapcard .path{font-family:var(--mono);font-size:11px;color:var(--soft);word-break:break-all}
+  .mapcard.t{border-left-color:var(--teal)}
+  .mapcard.b{border-left-color:var(--bronze)}
+  .mapcard.r{border-left-color:var(--red)}
+  @media (prefers-reduced-motion:reduce){.mapcard{transition:none}.mapcard:hover{transform:none}}
+
+  /* ---------- frontera ---------- */
+  .limits{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+  .limit{border:1.6px dashed var(--red);border-radius:10px;background:var(--red-soft);padding:16px 18px}
+  .limit h3{font-family:var(--mono);font-size:13.5px;margin:0 0 6px;color:var(--red)}
+  .limit p{font-size:13px;color:var(--muted);margin:0}
+
+  /* ---------- dos kernels ---------- */
+  .kernels{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+  .kpanel{border-radius:10px;padding:22px 24px;border:1.8px solid var(--hair2);background:var(--card)}
+  .kpanel.know{border-color:var(--teal)}
+  .kpanel.build{border-color:var(--green);background:var(--green-soft)}
+  .kpanel h3{font-family:var(--mono);font-size:16px;margin:0 0 4px}
+  .kpanel .sub{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--soft);margin:0 0 14px}
+  .kpanel dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:13.5px}
+  .kpanel dt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:var(--soft);
+    text-transform:uppercase;padding-top:2px}
+  .kpanel dd{margin:0;color:var(--muted)}
+  .kpanel dd b{color:var(--ink)}
+  .kpanel.build dd b{color:var(--green)}
+  .verdict{margin-top:22px;border:1px solid var(--hair2);border-radius:10px;background:var(--card2);
+    padding:18px 22px;font-size:14.5px;color:var(--muted)}
+  .verdict b{color:var(--ink)}
+  .filechip{font-family:var(--mono);font-size:12px;border:1px solid var(--bronze);color:var(--bronze);
+    border-radius:6px;padding:3px 10px;background:var(--card);white-space:nowrap}
+
+  footer{margin-top:clamp(56px,8vw,90px);border-top:1px solid var(--hair2);padding-top:22px;
+    font-family:var(--mono);font-size:12px;color:var(--muted);display:grid;gap:6px}
+  footer b{color:var(--ink)}
+
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
+
+<nav aria-label="Secciones">
+  <span class="brand">flink·sobre·edaios</span>
+  <a href="#arranque">arranque</a>
+  <a href="#anillos">anillos</a>
+  <a href="#syscalls">syscalls</a>
+  <a href="#mapa">mapa del sistema</a>
+  <a href="#frontera">frontera</a>
+  <a href="#kernels">los dos kernels</a>
+</nav>
+
+<div class="wrap">
+
+  <header id="arranque">
+    <p class="eyebrow">KCD 2026 · data-kcd2026 · EDAIOS Core 3.1.0 · perfil consumer-release</p>
+    <h1>Flink corre sobre un <span class="alt">sistema operativo de conocimiento</span></h1>
+    <p class="lede">EDAIOS se define a sí mismo como <i>«un sistema operativo del conocimiento para
+    convertir intención humana en cambios gobernados»</i>. Este documento toma la metáfora en serio
+    y la verifica pieza a pieza contra los archivos reales del módulo: <b>qué es el kernel, cuáles
+    son las syscalls, dónde está el sistema de archivos, quién tiene permisos y qué señales matan
+    un proceso</b>. Nada de lo que sigue es decorativo: cada afirmación tiene ruta y evidencia.</p>
+
+    <div class="term" role="img" aria-label="Secuencia de arranque: inyección de EDAIOS en el módulo">
+      <div class="tbar"><i></i><i></i><i></i></div>
+      <div class="bl" style="animation-delay:.2s"><span class="cmd">$ bash inject-consumer.sh --workspace ./data-kcd2026 --id data-kcd2026 \</span></div>
+      <div class="bl" style="animation-delay:.5s"><span class="cmd">    --namespace com.topaya.kcd2026 --owner david-susanibar --value-owner topaya-value-office</span></div>
+      <div class="bl" style="animation-delay:1.0s">== Inyectando EDAIOS Core en data-kcd2026 ==</div>
+      <div class="bl" style="animation-delay:1.5s"><span class="ok">[A]</span> edaios-core OK <span class="dim">· wheel 3.1.0 · doctor verde</span></div>
+      <div class="bl" style="animation-delay:2.0s"><span class="ok">[B]</span> constitucion proyectada <span class="dim">-&gt; .specify/memory/constitution.md</span></div>
+      <div class="bl" style="animation-delay:2.4s"><span class="ok">[B]</span> attachment validado <span class="dim">(initiative-adoption · draft T0)</span></div>
+      <div class="bl" style="animation-delay:2.8s"><span class="ok">[C]</span> bundle Spec Kit gobernado instalado <span class="dim">· 0.12.11 pineado</span></div>
+      <div class="bl" style="animation-delay:3.2s"><span class="ok">[C]</span> gate vendorizado <span class="dim">(pin 3810381) + SOURCE.md</span></div>
+      <div class="bl" style="animation-delay:3.6s"><span class="ok">[D]</span> memoria de agente en CLAUDE.md</div>
+      <div class="bl" style="animation-delay:4.2s">== sistema listo <span class="dim">· nada se commitea sin firma (Art. VI)</span> == <span class="caret"></span></div>
+    </div>
+  </header>
+
+  <!-- ═══════════ ANILLOS ═══════════ -->
+  <section id="anillos" class="reveal">
+    <div class="shead"><span class="snum">01</span><h2>Anillos de protección: dónde vive cada cosa</h2></div>
+    <p class="sdesc">Como en cualquier sistema operativo, lo que puedes tocar depende del anillo en el
+    que estás. El código Flink vive en espacio de usuario y <b>jamás edita el núcleo</b>: la
+    constitución llega proyectada desde Core con la marca <code>derivado, no editar</code>.</p>
+
+    <div class="stack">
+      <div class="ring user">
+        <div class="tag">ANILLO 3<br>USUARIO</div>
+        <div class="body">
+          <h3>El trabajo — lo único que el módulo escribe</h3>
+          <p class="role">Código, contratos y specs. EDAIOS no toca nada de esto: el build de Maven sigue igual.</p>
+          <div class="chips">
+            <span class="chip">RevenueWindowJob.java</span><span class="chip">RevenueWindowPipeline.java</span>
+            <span class="chip">order_event.avsc</span><span class="chip">customer_revenue_window.avsc</span>
+            <span class="chip">specs/001-revenue-ventana-cliente/</span><span class="chip">canary-deriva.sh</span>
+          </div>
+        </div>
+      </div>
+      <div class="down">▼ &nbsp;solo se cruza por la interfaz de llamadas&nbsp; ▼</div>
+      <div class="ring sys">
+        <div class="tag">FRONTERA<br>SYSCALLS</div>
+        <div class="body">
+          <h3>La interfaz de llamadas al sistema</h3>
+          <p class="role">La única forma legítima de pedirle cosas al gobierno. Cada llamada responde con exit 0 o exit 1.</p>
+          <div class="chips">
+            <span class="chip">/speckit.specify … /speckit.implement</span><span class="chip">edaios.gate</span>
+            <span class="chip">spec_kit_gate.py</span><span class="chip">edaios-core validate</span>
+            <span class="chip">edaios-core doctor</span>
+          </div>
+        </div>
+      </div>
+      <div class="down">▼</div>
+      <div class="ring kern">
+        <div class="tag">ANILLO 0<br>NÚCLEO</div>
+        <div class="body">
+          <h3>El kernel de conocimiento</h3>
+          <p class="role">Decide qué está permitido. Proyectado desde Core; el consumer lo lee, no lo escribe.
+          Pin vigente: <code>sha256:c05dfd28…92a3</code>.</p>
+          <div class="principios">
+            <span class="chip">I conocimiento manda</span><span class="chip">II spec antes que artefacto</span>
+            <span class="chip">III canon por decisión</span><span class="chip">IV cero cifras sin fuente</span>
+            <span class="chip">V una fuente, muchas vistas</span><span class="chip">VI la IA consume, el humano firma</span>
+            <span class="chip">VII privacidad por diseño</span>
+          </div>
+        </div>
+      </div>
+      <div class="down">▼ &nbsp;persiste solo con autorización humana&nbsp; ▼</div>
+      <div class="ring hw">
+        <div class="tag">METAL<br>GIT</div>
+        <div class="body">
+          <h3>Git es el hardware</h3>
+          <p class="role">La persistencia final y la única autoridad. El sistema operativo no escribe en el
+          metal por su cuenta: commit, push y release exigen autorización explícita (Restricciones de la
+          constitución, última línea) — que en este consumer significa el owner, según authority-registry.json.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SYSCALLS ═══════════ -->
+  <section id="syscalls" class="reveal">
+    <div class="shead"><span class="snum">02</span><h2>Las llamadas al sistema, con su semántica real</h2></div>
+    <p class="sdesc">No son alias decorativos: cada llamada tiene un contrato de retorno. La más dura es
+    el gate, que responde <code>exit 1</code> ante cualquier check en rojo — <b>fail-closed</b>, como
+    una syscall que deniega en vez de degradar.</p>
+    <div class="systable">
+      <div class="row">
+        <div class="call">/speckit.specify "descripción"</div>
+        <div class="ret">crea <b>specs/NNN/</b> con el contrato: 12 campos de metadata, FR y SC. Sin spec no existe el proceso.</div>
+      </div>
+      <div class="row">
+        <div class="call">python3 tools/validation/spec_kit_gate.py . --feature specs/001-… --profile consumer-release</div>
+        <div class="ret"><b>exit 0</b> si los 43 checks pasan; <b>exit 1</b> si uno solo falla. Es la syscall que decide.</div>
+      </div>
+      <div class="row">
+        <div class="call">edaios-core validate --workspace . --profile initiative-adoption</div>
+        <div class="ret">valida el attachment de iniciativa contra su perfil. Corrió en la capa B del arranque.</div>
+      </div>
+      <div class="row">
+        <div class="call">edaios-core doctor</div>
+        <div class="ret">salud del sistema instalado. En rojo, el bootloader aborta la inyección.</div>
+      </div>
+      <div class="row">
+        <div class="call">edaios-core agent-setup apply --surface claude-code</div>
+        <div class="ret">escribe la memoria de agente en <b>CLAUDE.md</b> y deja receipt con digest y backup reversible.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ MAPA ═══════════ -->
+  <section id="mapa" class="reveal">
+    <div class="shead"><span class="snum">03</span><h2>Mapa del sistema: cada concepto de OS, con su archivo</h2></div>
+    <p class="sdesc">La metáfora aguanta porque cada pieza existe de verdad. Doce equivalencias,
+    cada una con su ruta en el repositorio y un hecho verificado — no una analogía de diapositiva.</p>
+    <div class="grid">
+      <div class="mapcard b">
+        <p class="os">Bootloader</p><h3>inject-consumer.sh</h3>
+        <p class="fact">Cuatro capas A·B·C·D, <b>idempotente y fail-closed</b>. Materializó 59 archivos
+        en el commit <code>2ff96da</code>. Re-ejecutarlo no rompe un consumer ya inyectado.</p>
+        <p class="path">edaiosv/core/framework/extensions/sdd-adapter/inject-consumer.sh</p>
+      </div>
+      <div class="mapcard t">
+        <p class="os">Kernel</p><h3>constitution.md</h3>
+        <p class="fact">7 principios ratificados, huella propia y pin <code>sha256:c05dfd28…92a3</code>.
+        <b>Degradarlo un byte invalida todo Constitution Check vigente</b> — se comprobó rompiéndolo.</p>
+        <p class="path">.specify/memory/constitution.md</p>
+      </div>
+      <div class="mapcard t">
+        <p class="os">Tabla de syscalls</p><h3>skills proyectadas</h3>
+        <p class="fact">12 skills bajo <code>.claude/skills/</code>: <b>8 del preset pineado en el
+        lock</b> (cada comando con su sha256) y 4 de la extensión de gobierno y utilidades del
+        toolchain. La superficie del agente es <b>derivada, no manual</b>.</p>
+        <p class="path">.specify/integrations.lock.json · presets/ · extensions/edaios-governance/</p>
+      </div>
+      <div class="mapcard">
+        <p class="os">/proc · estado del sistema</p><h3>.edaios/</h3>
+        <p class="fact"><b>Local y reconstruible; no es autoridad</b>. <code>attachment-state.json</code>
+        sella con sha256 los 4 archivos de gobierno: si uno cambia sin re-sellar, la integridad delata.</p>
+        <p class="path">.edaios/attachment-state.json</p>
+      </div>
+      <div class="mapcard">
+        <p class="os">/etc · configuración</p><h3>.specify/</h3>
+        <p class="fact">Preset que reemplaza los 8 comandos speckit, extensión de gobierno con hooks
+        <code>after_tasks</code> y <code>before_implement</code>, y workflow con <b>3 checkpoints humanos</b>.</p>
+        <p class="path">.specify/presets/ · extensions/ · workflows/edaios-delivery/</p>
+      </div>
+      <div class="mapcard">
+        <p class="os">Espacio de usuario</p><h3>specs/ + src/</h3>
+        <p class="fact">Lo único que el módulo escribe. El kernel no lo toca: <b>el build de Maven
+        sigue idéntico</b> tras la inyección — esa es la frontera del ADR-0003.</p>
+        <p class="path">specs/001-revenue-ventana-cliente/ · src/main/java/ · src/main/resources/model/</p>
+      </div>
+      <div class="mapcard b">
+        <p class="os">Usuarios y sudoers</p><h3>authority-registry.json</h3>
+        <p class="fact"><b>david-susanibar</b> es root: approve · delegate · rollback.
+        <b>topaya-value-office</b> solo outcome:verify. La política de sensibilidad T0 fija
+        <code>approval_roles=[initiative-owner]</code>; la de iniciativa, <code>exceptions_allowed=false</code>.</p>
+        <p class="path">.edaios/authority-registry.json · policies/initiative-policy.json</p>
+      </div>
+      <div class="mapcard b">
+        <p class="os">Niveles de protección</p><h3>sensibilidad T0–T3</h3>
+        <p class="fact">T0 <b>prohíbe</b> rutas llm, red externa y datos productivos, y <b>exige</b>
+        no-pii y no-secret. Un cambio T2/T3 activaría el gate <code>[PII]</code> en las tareas.</p>
+        <p class="path">.edaios/policies/sensitivity-t0.json</p>
+      </div>
+      <div class="mapcard">
+        <p class="os">Estados de proceso</p><h3>fase × estado</h3>
+        <p class="fact">specified → clarified → planned → tasked → implemented, cruzado con
+        Borrador/Propuesto/Cerrado. El gate <b>rechaza combinaciones ilegales</b>: implemented exige Cerrado.</p>
+        <p class="path">spec_kit_gate.py · PHASES + lifecycle_ok</p>
+      </div>
+      <div class="mapcard r">
+        <p class="os">Señales</p><h3>exit 1 · fail-closed</h3>
+        <p class="fact">Un check en rojo detiene el flujo — el SIGKILL del proceso de entrega. Y un
+        principio en <b>VIOLA es pánico del kernel</b>: no se negocia, el camino es enmendar el canon
+        por ADR o cambiar el plan.</p>
+        <p class="path">spec_kit_gate.py · validate_constitution_check()</p>
+      </div>
+      <div class="mapcard t">
+        <p class="os">Drivers</p><h3>sdd-adapter</h3>
+        <p class="fact">Spec Kit 0.12.11 <b>pineado por lock</b> (digest <code>ff93e1…f453b9</code>).
+        La herramienta externa se invoca al borde; el núcleo de conocimiento queda autocontenido.</p>
+        <p class="path">core/framework/extensions/sdd-adapter/ · integrations.lock.json</p>
+      </div>
+      <div class="mapcard">
+        <p class="os">Memoria de proceso</p><h3>CLAUDE.md</h3>
+        <p class="fact">Bloque <code>agent-working-memory</code> gestionado por agent-setup, con
+        <b>receipt, digest y backup reversible</b>. El agente lee el contrato del sistema al arrancar;
+        la memoria nunca es evidencia.</p>
+        <p class="path">CLAUDE.md · .edaios/agent-setup/receipts/</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FRONTERA ═══════════ -->
+  <section id="frontera" class="reveal">
+    <div class="shead"><span class="snum">04</span><h2>Lo que este sistema operativo no hace</h2></div>
+    <p class="sdesc">Verificado en el repositorio, no asumido. Un OS de conocimiento que exagera sus
+    claims viola su propio principio IV — así que la frontera se declara con la misma precisión que
+    las capacidades.</p>
+    <div class="limits">
+      <div class="limit"><h3>No captura prompts</h3>
+        <p>No hay hooks del harness ni settings del agente. Lo que gobierna son los artefactos que
+        el trabajo produce, nunca la conversación que lo origina.</p></div>
+      <div class="limit"><h3>El planificador es advisory</h3>
+        <p>Sin pre-push y sin CI, 5 de las 6 puertas dependen de que alguien decida invocarlas.
+        La única ineludible es la del build.</p></div>
+      <div class="limit"><h3>No hay firma criptográfica</h3>
+        <p>[SEAL] es una cadena que el gate busca en una línea de tarea. La autoridad real de un
+        cierre es la declaración humana registrada más el historial de Git.</p></div>
+      <div class="limit"><h3>La memoria persistente no está instalada</h3>
+        <p>El adapter Engram viene incluido en Core, pero su runtime es opcional y aquí no está
+        instalado. <code>.edaios/</code> es una vista local, no una base de conocimiento.</p></div>
+    </div>
+  </section>
+
+  <!-- ═══════════ DOS KERNELS ═══════════ -->
+  <section id="kernels" class="reveal">
+    <div class="shead"><span class="snum">05</span><h2>El hallazgo: este módulo corre sobre dos kernels</h2></div>
+    <p class="sdesc">Es la conclusión a la que obliga la sección anterior. El kernel de conocimiento
+    gobierna los artefactos pero espera a ser invocado. Por eso el caso de uso suelda su contrato a
+    un <b>segundo kernel que no pide permiso</b>: el de build.</p>
+    <div class="kernels">
+      <div class="kpanel know">
+        <h3>Kernel de conocimiento</h3>
+        <p class="sub">EDAIOS · constitución + gate</p>
+        <dl>
+          <dt>Gobierna</dt><dd>specs, planes, cobertura, cierre — <b>el porqué del cambio</b></dd>
+          <dt>Decide</dt><dd>spec_kit_gate.py · exit 0/1 · 43 checks</dd>
+          <dt>Carácter</dt><dd><b>advisory</b>: actúa cuando alguien lo invoca</dd>
+          <dt>Se rompe si</dt><dd>nadie lo llama — y hoy nada obliga a llamarlo</dd>
+        </dl>
+      </div>
+      <div class="kpanel build">
+        <h3>Kernel de build</h3>
+        <p class="sub">avro-maven-plugin + javac</p>
+        <dl>
+          <dt>Gobierna</dt><dd>el contrato de datos — <b>el qué exacto que cruza el pipeline</b></dd>
+          <dt>Decide</dt><dd>el compilador · BUILD SUCCESS / FAILURE</dd>
+          <dt>Carácter</dt><dd><b>ineludible</b>: corre en cada compilación, sin excepción</dd>
+          <dt>Se rompe si</dt><dd>alguien usa acceso dinámico por nombre — y el canary lo denuncia</dd>
+        </dl>
+      </div>
+    </div>
+    <div class="verdict">
+      <b>La demo de KCD 2026 vive exactamente en esa costura.</b> El contrato Avro genera las clases en
+      <code>generate-sources</code>; el job accede solo por los accesores generados. Cuando el contrato
+      deriva, no falla un dashboard a las 3 de la madrugada: <b>falla <code>javac</code> en 4 segundos</b>.
+      La traza completa del caso de uso sobre este sistema está en la lámina hermana:
+      <span class="filechip">usecase-001-sobre-edaios.html</span>
+    </div>
+  </section>
+
+  <footer>
+    <div><b>Fuentes verificadas en el repositorio</b> — .specify/memory/constitution.md · .edaios/authority-registry.json ·
+    .edaios/policies/{initiative-policy,sensitivity-t0}.json · .specify/workflows/edaios-delivery/workflow.yml ·
+    .specify/extensions/edaios-governance/extension.yml · tools/validation/spec_kit_gate.py · CLAUDE.md</div>
+    <div>Verificado el 2026-07-18 sobre la rama <b>feature/kcd-2026-demo-01</b> (commits 4787d57 → 26df5a7) · gate <b>43/43</b> · feature 001 <b>Cerrada</b>.</div>
+    <div>La cita de apertura es del README de EDAIOS Core (edaiosv). Este documento es una vista regenerable; la autoridad es Git.</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var els = document.querySelectorAll('.reveal');
+  if (mq.matches || !('IntersectionObserver' in window)) {
+    els.forEach(function(e){ e.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+    });
+  }, {threshold: .08});
+  els.forEach(function(e){ io.observe(e); });
+})();
+</script>

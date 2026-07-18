@@ -1,0 +1,588 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Feature 001 · traza de ejecución sobre EDAIOS</title>
+<style>
+  :root{
+    --ground:#f2eee2; --gridline:rgba(120,104,74,.10);
+    --card:#fdfcf8; --card2:#ffffff;
+    --ink:#16202a; --muted:#5f6b76; --soft:#8a7a5c;
+    --hair:#ddd3bb; --hair2:#c9ba97;
+    --bronze:#9c6626; --teal:#2f7d84; --red:#b4432f; --green:#3f8f5b;
+    --bronze-soft:#f3e6cf; --teal-soft:#e6eef0; --red-soft:#fdf2ef; --green-soft:#eef7f0;
+    --term-bg:#141b22; --term-hair:#26313c; --term-ink:#c9d5df;
+    --term-green:#7dd6a0; --term-red:#f2a08e; --term-dim:#6d7d8a; --term-bronze:#dfae6a;
+    --mono:ui-monospace,"SFMono-Regular","SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --ground:#0e1419; --gridline:rgba(150,160,170,.06);
+      --card:#161f28; --card2:#1b2530;
+      --ink:#dde4ea; --muted:#8b97a4; --soft:#a08d68;
+      --hair:#26313c; --hair2:#33414d;
+      --bronze:#d5a05a; --teal:#5bb3b9; --red:#e0745e; --green:#5cb37e;
+      --bronze-soft:#2a2114; --teal-soft:#122228; --red-soft:#2a1713; --green-soft:#12241a;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0e1419; --gridline:rgba(150,160,170,.06);
+    --card:#161f28; --card2:#1b2530;
+    --ink:#dde4ea; --muted:#8b97a4; --soft:#a08d68;
+    --hair:#26313c; --hair2:#33414d;
+    --bronze:#d5a05a; --teal:#5bb3b9; --red:#e0745e; --green:#5cb37e;
+    --bronze-soft:#2a2114; --teal-soft:#122228; --red-soft:#2a1713; --green-soft:#12241a;
+  }
+  :root[data-theme="light"]{
+    --ground:#f2eee2; --gridline:rgba(120,104,74,.10);
+    --card:#fdfcf8; --card2:#ffffff;
+    --ink:#16202a; --muted:#5f6b76; --soft:#8a7a5c;
+    --hair:#ddd3bb; --hair2:#c9ba97;
+    --bronze:#9c6626; --teal:#2f7d84; --red:#b4432f; --green:#3f8f5b;
+    --bronze-soft:#f3e6cf; --teal-soft:#e6eef0; --red-soft:#fdf2ef; --green-soft:#eef7f0;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--ground);color:var(--ink);
+    background-image:linear-gradient(var(--gridline) 1px,transparent 1px),
+      linear-gradient(90deg,var(--gridline) 1px,transparent 1px);
+    background-size:26px 26px;
+    font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1160px;margin:0 auto;padding:clamp(20px,4vw,52px) clamp(16px,4vw,40px) 80px}
+
+  nav{position:sticky;top:0;z-index:10;background:var(--ground);border-bottom:1px solid var(--hair2);
+    display:flex;gap:8px;flex-wrap:wrap;padding:10px clamp(16px,4vw,40px);font-family:var(--mono);font-size:12px}
+  nav a{color:var(--muted);text-decoration:none;border:1px solid var(--hair);border-radius:999px;
+    padding:4px 12px;background:var(--card)}
+  nav a:hover,nav a:focus-visible{color:var(--bronze);border-color:var(--bronze);outline:none}
+  nav .brand{color:var(--bronze);font-weight:700;border:none;background:none;padding:4px 0;margin-right:6px}
+
+  header{padding-top:clamp(28px,5vw,56px)}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.24em;text-transform:uppercase;
+    color:var(--bronze);font-weight:700;margin:0 0 18px}
+  h1{font-family:var(--mono);font-weight:700;letter-spacing:-.03em;line-height:1.03;
+    font-size:clamp(28px,5vw,54px);margin:0 0 20px;text-wrap:balance;max-width:22ch}
+  h1 .alt{color:var(--bronze)}
+  .lede{font-size:clamp(15px,1.7vw,18px);color:var(--muted);max-width:64ch;margin:0 0 34px}
+  .lede b{color:var(--ink)}
+
+  /* ---------- ficha de proceso ---------- */
+  .proc{display:grid;grid-template-columns:1fr auto;gap:0;border:1.8px solid var(--hair2);
+    border-radius:12px;overflow:hidden;background:var(--card)}
+  .proc .meta{padding:22px 26px;display:grid;grid-template-columns:auto 1fr;gap:8px 18px;
+    font-size:13.5px;align-content:start}
+  .proc dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;color:var(--soft);
+    text-transform:uppercase;font-weight:700;padding-top:3px;margin:0}
+  .proc dd{margin:0;color:var(--muted);font-family:var(--mono);font-size:13px}
+  .proc dd b{color:var(--ink)}
+  .proc .exitp{background:var(--green-soft);border-left:1.8px solid var(--green);
+    padding:22px 30px;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:4px;min-width:210px}
+  .proc .exitp .big{font-family:var(--mono);font-weight:700;font-size:clamp(30px,4vw,44px);color:var(--green);
+    font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+  .proc .exitp .sm{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft)}
+  .frsc{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
+  .chip{font-family:var(--mono);font-size:11.5px;border:1px solid var(--hair);border-radius:6px;
+    padding:3px 9px;background:var(--card2);color:var(--ink);white-space:nowrap}
+  .chip.sc{border-color:var(--teal)}
+  @media (max-width:720px){.proc{grid-template-columns:1fr}.proc .exitp{border-left:none;border-top:1.8px solid var(--green)}}
+
+  section{margin-top:clamp(52px,8vw,84px)}
+  .shead{display:flex;align-items:baseline;gap:14px;margin-bottom:8px}
+  .snum{font-family:var(--mono);font-size:12px;color:var(--bronze);font-weight:700;
+    border:1px solid var(--bronze);border-radius:6px;padding:2px 9px;flex:none}
+  h2{font-size:clamp(20px,2.6vw,28px);margin:0;font-weight:740;letter-spacing:-.015em;text-wrap:balance}
+  .sdesc{color:var(--muted);max-width:72ch;margin:10px 0 26px;font-size:15px}
+  .sdesc code,li code,td code,.tx code{font-family:var(--mono);font-size:.86em;background:var(--card2);
+    border:1px solid var(--hair);border-radius:5px;padding:1px 6px;color:var(--ink)}
+
+  /* ---------- traza ---------- */
+  .trace{position:relative;padding-left:34px}
+  .trace::before{content:"";position:absolute;left:10px;top:6px;bottom:6px;width:2px;background:var(--hair2)}
+  .step{position:relative;margin-bottom:18px;background:var(--card);border:1px solid var(--hair);
+    border-radius:10px;padding:16px 20px}
+  .step::before{content:"";position:absolute;left:-30px;top:20px;width:12px;height:12px;border-radius:50%;
+    background:var(--green);border:2.5px solid var(--ground)}
+  .step.human::before{background:var(--bronze)}
+  .step.neg::before{background:var(--red)}
+  .step.neg{border-color:var(--red);background:var(--red-soft)}
+  .step.human{border-color:var(--bronze)}
+  .step .head{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin-bottom:6px}
+  .step .sys{font-family:var(--mono);font-weight:700;font-size:14.5px}
+  .step.neg .sys{color:var(--red)}
+  .step.human .sys{color:var(--bronze)}
+  .step .commit{font-family:var(--mono);font-size:11px;color:var(--soft);border:1px solid var(--hair);
+    border-radius:5px;padding:1px 8px;background:var(--card2)}
+  .step .ret{font-family:var(--mono);font-size:11.5px;margin-left:auto;font-weight:700}
+  .step .ret.ok{color:var(--green)} .step .ret.ko{color:var(--red)}
+  .step .tx{font-size:13.5px;color:var(--muted);margin:0}
+  .step .tx b{color:var(--ink)}
+
+  /* ---------- canary ---------- */
+  .canary{border:2px solid var(--green);border-radius:12px;background:var(--card);overflow:hidden}
+  .canary.broken{border-color:var(--red)}
+  .canary .cbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:14px 20px;
+    border-bottom:1px solid var(--hair);background:var(--card2)}
+  .canary .cbar .st{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--green)}
+  .canary.broken .cbar .st{color:var(--red)}
+  .canary .cbar .timer{font-family:var(--mono);font-size:11.5px;color:var(--soft);margin-left:auto}
+  button.cbtn{font-family:var(--mono);font-size:12px;border:1px solid var(--hair2);border-radius:7px;
+    background:var(--card);color:var(--ink);padding:7px 14px;cursor:pointer}
+  button.cbtn:hover,button.cbtn:focus-visible{border-color:var(--bronze);color:var(--bronze);outline:none}
+  button.cbtn.danger{border-color:var(--red);color:var(--red)}
+  button.cbtn.danger:hover{background:var(--red-soft)}
+  button.cbtn.calm{border-color:var(--green);color:var(--green)}
+  button.cbtn.calm:hover{background:var(--green-soft)}
+  .cbody{display:grid;grid-template-columns:1fr 1fr;gap:0}
+  @media (max-width:860px){.cbody{grid-template-columns:1fr}}
+  .cpane{padding:18px 20px;overflow-x:auto}
+  .cpane h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--soft);margin:0 0 10px;font-weight:700}
+  .cpane.left{border-right:1px solid var(--hair)}
+  @media (max-width:860px){.cpane.left{border-right:none;border-bottom:1px solid var(--hair)}}
+  pre.code{font-family:var(--mono);font-size:12.5px;line-height:1.7;margin:0;color:var(--ink);white-space:pre}
+  pre.code .hl{background:var(--red-soft);border:1px solid var(--red);border-radius:4px;padding:0 3px;color:var(--red);font-weight:700}
+  pre.code .dimc{color:var(--soft)}
+  .cterm{background:var(--term-bg);border-radius:8px;border:1px solid var(--term-hair);
+    font-family:var(--mono);font-size:12px;line-height:1.7;color:var(--term-ink);padding:14px 16px;
+    overflow-x:auto;white-space:pre}
+  .cterm .ok{color:var(--term-green)} .cterm .ko{color:var(--term-red)}
+  .cterm .dim{color:var(--term-dim)} .cterm .cmd{color:var(--term-bronze)}
+  .cnote{padding:14px 20px;border-top:1px solid var(--hair);font-size:13px;color:var(--muted)}
+  .cnote b{color:var(--ink)}
+
+  /* ---------- resultados ---------- */
+  .tblwrap{overflow-x:auto;border:1.6px solid var(--hair2);border-radius:10px;background:var(--card)}
+  table{border-collapse:collapse;width:100%;font-size:13px;min-width:620px}
+  th{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--soft);
+    text-align:left;padding:12px 16px;border-bottom:1.6px solid var(--hair2);background:var(--card2)}
+  td{padding:11px 16px;border-bottom:1px solid var(--hair);color:var(--muted);
+    font-family:var(--mono);font-variant-numeric:tabular-nums}
+  tr:last-child td{border-bottom:none}
+  td b{color:var(--ink)} td .okv{color:var(--green);font-weight:700}
+  .callout{margin-top:16px;border:1.6px solid var(--teal);border-radius:10px;background:var(--teal-soft);
+    padding:16px 20px;font-size:13.5px;color:var(--muted)}
+  .callout b{color:var(--ink)}
+  .callout .t{font-family:var(--mono);font-size:12px;color:var(--teal);font-weight:700;
+    letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:6px}
+
+  /* ---------- expediente ---------- */
+  .ev{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+  .evcard{background:var(--card);border:1px solid var(--hair);border-left:3px solid var(--teal);
+    border-radius:9px;padding:13px 16px}
+  .evcard .f{font-family:var(--mono);font-size:11.5px;color:var(--ink);font-weight:700;word-break:break-all}
+  .evcard p{font-size:12.5px;color:var(--muted);margin:6px 0 0}
+  .evcard.own{border-left-color:var(--bronze)}
+
+  /* ---------- syscalls consumidas ---------- */
+  .use{border:1.6px solid var(--hair2);border-radius:10px;overflow:hidden;background:var(--card)}
+  .use .row{display:grid;grid-template-columns:26px minmax(180px,.8fr) 1.6fr;gap:0 14px;
+    padding:12px 18px;border-top:1px solid var(--hair);align-items:baseline}
+  .use .row:first-child{border-top:none}
+  .use .m{font-family:var(--mono);font-weight:700}
+  .use .m.si{color:var(--green)} .use .m.no{color:var(--red)}
+  .use .w{font-family:var(--mono);font-size:12.5px;color:var(--ink)}
+  .use .d{font-size:13px;color:var(--muted)}
+  .use .d b{color:var(--ink)}
+  @media (max-width:700px){.use .row{grid-template-columns:26px 1fr}.use .d{grid-column:2}}
+
+  /* ---------- exit ---------- */
+  .exitcard{border:2px solid var(--green);border-radius:12px;background:var(--green-soft);padding:24px 28px}
+  .exitcard .big{font-family:var(--mono);font-weight:700;font-size:clamp(24px,3.4vw,36px);color:var(--green);margin:0 0 8px}
+  .exitcard p{font-size:14px;color:var(--muted);margin:0 0 14px;max-width:70ch}
+  .exitcard p b{color:var(--ink)}
+  .exitcard ul{margin:0;padding-left:20px;font-size:13px;color:var(--muted);display:grid;gap:5px}
+  .filechip{font-family:var(--mono);font-size:12px;border:1px solid var(--bronze);color:var(--bronze);
+    border-radius:6px;padding:3px 10px;background:var(--card);white-space:nowrap}
+
+  footer{margin-top:clamp(56px,8vw,90px);border-top:1px solid var(--hair2);padding-top:22px;
+    font-family:var(--mono);font-size:12px;color:var(--muted);display:grid;gap:6px}
+  footer b{color:var(--ink)}
+
+  .reveal{opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}}
+</style>
+
+<nav aria-label="Secciones">
+  <span class="brand">usecase·001·sobre·edaios</span>
+  <a href="#proceso">proceso</a>
+  <a href="#traza">traza</a>
+  <a href="#canary">canary</a>
+  <a href="#resultados">resultados</a>
+  <a href="#expediente">expediente</a>
+  <a href="#consumo">syscalls</a>
+  <a href="#exit">exit</a>
+</nav>
+
+<div class="wrap">
+
+  <header id="proceso">
+    <p class="eyebrow">KCD 2026 · revenue por cliente en ventana temporal · canary de deriva de contrato</p>
+    <h1>Un caso de uso como <span class="alt">proceso del sistema</span></h1>
+    <p class="lede">Esto no es un diagrama conceptual: es la <b>traza real</b> de la feature 001
+    atravesando el sistema operativo de EDAIOS, del <code style="font-family:var(--mono)">spawn</code> al
+    <code style="font-family:var(--mono)">exit 0</code>. Cada entrada tiene su commit, cada syscall su
+    valor de retorno, y las que fallan — <b>fallan a propósito</b>: un control que nunca se ha visto
+    en rojo no cuenta como control.</p>
+
+    <div class="proc">
+      <dl class="meta">
+        <dt>pid</dt><dd><b>001-revenue-ventana-cliente</b></dd>
+        <dt>comando</dt><dd>revenue por cliente · TumblingEventTimeWindows 60s · desorden 5s · lateness 10s</dd>
+        <dt>usuario</dt><dd><b>david-susanibar</b> (initiative-owner · approve, delegate, rollback)</dd>
+        <dt>nivel</dt><dd>T0 · sin PII · sin red externa · sin datos productivos</dd>
+        <dt>estado</dt><dd><b>Cerrado</b> · fase implemented</dd>
+        <dt>trazas</dt><dd>ADR-0016 · ADR-0003</dd>
+      </dl>
+      <div class="exitp">
+        <span class="big"><span id="counter">0</span>/43</span>
+        <span class="sm">checks del gate · exit 0</span>
+      </div>
+    </div>
+    <div class="frsc">
+      <span class="chip">FR-001 fuente Avro/registry</span><span class="chip">FR-002 ventana event-time</span>
+      <span class="chip">FR-003 salida Avro</span><span class="chip">FR-004 contrato genera código</span>
+      <span class="chip">FR-005 canary reversible</span><span class="chip">FR-006 infra existente</span>
+      <span class="chip sc">SC-001 aritmética exacta</span><span class="chip sc">SC-002 build verde</span>
+      <span class="chip sc">SC-003 build rojo con deriva</span><span class="chip sc">SC-004 ≤ 30s</span>
+      <span class="chip sc">SC-005 gate verde y fail-closed</span><span class="chip sc">SC-006 e2e infra real</span>
+    </div>
+  </header>
+
+  <!-- ═══════════ TRAZA ═══════════ -->
+  <section id="traza" class="reveal">
+    <div class="shead"><span class="snum">01</span><h2>La traza: doce llamadas, tres deliberadamente en rojo</h2></div>
+    <p class="sdesc">Verde = el sistema respondió OK. <span style="color:var(--bronze);font-weight:700">Bronce</span> =
+    decidió un humano. <span style="color:var(--red);font-weight:700">Rojo</span> = prueba negativa:
+    se rompió algo a propósito para comprobar que la puerta cierra.</p>
+
+    <div class="trace">
+      <div class="step">
+        <div class="head"><span class="sys">spawn(spec)</span><span class="commit">adc8e6b</span><span class="ret ok">→ contrato declarado</span></div>
+        <p class="tx"><code>spec.md</code> + <code>feature.spec.yaml</code>: el kernel exige <b>12 campos de
+        metadata</b> y que el contrato tipado enlace id y artefacto exactos. Sin spec no existe el proceso
+        (Artículo II).</p>
+      </div>
+      <div class="step">
+        <div class="head"><span class="sys">open(kernel)</span><span class="commit">plan.md</span><span class="ret ok">→ pin verificado</span></div>
+        <p class="tx">Constitution Check: los <b>7 principios con veredicto y evidencia</b>, atados al kernel
+        vigente por su huella — <code>sha256:c05dfd28…92a3</code>. Si la constitución cambia un byte,
+        este check queda obsoleto y el gate lo dice.</p>
+      </div>
+      <div class="step">
+        <div class="head"><span class="sys">write(tasks)</span><span class="commit">tasks.md</span><span class="ret ok">→ cobertura total</span></div>
+        <p class="tx">22 tareas al declararse — 26 al cierre, tras sumar la validación e2e: <b>cada FR con
+        tarea que lo cubre</b>, ninguna tarea con FR inexistente, y los cuatro marcadores de cierre
+        <code>[GATES]</code> <code>[LEDGER]</code> <code>[INGEST]</code> <code>[SEAL]</code>.</p>
+      </div>
+      <div class="step">
+        <div class="head"><span class="sys">gate()</span><span class="commit">fase tasked</span><span class="ret ok">= 0 · 42/42</span></div>
+        <p class="tx">Primera decisión de la máquina: <code>spec_kit_gate.py --profile consumer-release</code>
+        responde <b>42/42 checks OK, exit 0</b>.</p>
+      </div>
+      <div class="step neg">
+        <div class="head"><span class="sys">kill -TEST</span><span class="commit">pruebas negativas</span><span class="ret ko">= 1 · 41/42 ×2</span></div>
+        <p class="tx">El pin de la constitución alterado <b>un solo carácter</b> → «pin obsoleto». FR-005 sin
+        tarea que lo cubra → «cobertura FR → tareas». Restaurado, verde de nuevo. <b>El sistema mata al
+        proceso que miente.</b></p>
+      </div>
+      <div class="step human">
+        <div class="head"><span class="sys">approve(implementación)</span><span class="commit">workflow.yml:53</span><span class="ret ok">→ autorizado</span></div>
+        <p class="tx">Checkpoint humano <code>approve-implementation</code>: el owner autorizó la
+        implementación de forma explícita — tasks.md registra la aprobación en ese checkpoint. Hasta
+        aquí <b>no existía una sola línea de Java</b>.</p>
+      </div>
+      <div class="step">
+        <div class="head"><span class="sys">exec(implementación)</span><span class="commit">3dcb6d5</span><span class="ret ok">→ 9 clases</span></div>
+        <p class="tx">Contratos <code>.avsc</code> → codegen → job. La lógica vive en
+        <code>RevenueWindowPipeline</code>, <b>aislada de fuentes y sinks</b> para poder verificarla sin
+        infraestructura. Desviación registrada: <code>DeliveryGuarantee</code> vive en
+        <code>flink-connector-base</code>, que el conector de Kafka no arrastra.</p>
+      </div>
+      <div class="step">
+        <div class="head"><span class="sys">build()</span><span class="commit">SC-002</span><span class="ret ok">→ BUILD SUCCESS</span></div>
+        <p class="tx">El segundo kernel entra en juego: <code>avro-maven-plugin</code> regenera las clases en
+        <code>generate-sources</code> y <code>javac</code> compila. Con el contrato íntegro, verde.
+        <b>El canary de abajo demuestra el caso contrario.</b></p>
+      </div>
+      <div class="step">
+        <div class="head"><span class="sys">verify(local)</span><span class="commit">SC-001</span><span class="ret ok">→ exacto</span></div>
+        <p class="tx">El mismo pipeline, contra un fixture determinista, comparado con una <b>tabla de
+        referencia calculada a mano</b>. Perturbada la referencia 160.00 → 160.01, el test falla con el
+        valor exacto: <code>expected: &lt;160.01&gt; but was: &lt;160.0&gt;</code>.</p>
+      </div>
+      <div class="step">
+        <div class="head"><span class="sys">verify(e2e)</span><span class="commit">0585786</span><span class="ret ok">→ 4 ventanas exactas</span></div>
+        <p class="tx">Infra real: Kafka + Schema Registry + cluster Flink 1.20.2. JobID
+        <code>ec15637a</code> en RUNNING. Las 4 ventanas coinciden con la referencia. Hallazgo:
+        <b>las ventanas no cierran solas</b> — hicieron falta 2 eventos de avance de watermark.</p>
+      </div>
+      <div class="step human">
+        <div class="head"><span class="sys">close()</span><span class="commit">e25316f</span><span class="ret ok">→ 43/43</span></div>
+        <p class="tx">Declaración del owner: <b>«Yo David confirmo entregable»</b> → estado Cerrado, fase
+        implemented. El gate suma un check («implementación sin tareas pendientes»): <b>43/43</b>.
+        Registrado en <code>evidence/cierre-owner.txt</code> — con la advertencia de que es una
+        declaración trazable, <b>no una firma verificable</b>.</p>
+      </div>
+      <div class="step neg">
+        <div class="head"><span class="sys">kill -TEST</span><span class="commit">post-cierre</span><span class="ret ko">= 1 · 42/43</span></div>
+        <p class="tx">Última prueba negativa: degradar el estado a Propuesto manteniendo la fase implemented
+        → rojo por <b>«estado y fase compatibles»</b>. Restaurado. El cierre también cierra.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ CANARY ═══════════ -->
+  <section id="canary" class="reveal">
+    <div class="shead"><span class="snum">02</span><h2>El momento canary — pruébalo aquí</h2></div>
+    <p class="sdesc">Es la demo de 30 segundos, reproducida con las <b>salidas reales</b> capturadas en la
+    evidencia. Rompe el contrato y mira qué kernel responde: no es un validador de EDAIOS — es
+    <code>javac</code>, y no pide permiso.</p>
+
+    <div class="canary" id="canaryBox">
+      <div class="cbar">
+        <span class="st" id="canaryState">CONTRATO ÍNTEGRO</span>
+        <button class="cbtn danger" id="btnRen" type="button">Introducir deriva · renombrado</button>
+        <button class="cbtn danger" id="btnTipo" type="button">variante · cambio de tipo</button>
+        <button class="cbtn calm" id="btnRev" type="button">Revertir</button>
+        <span class="timer" id="canaryTimer">./canary-deriva.sh · umbral SC-004: 30s</span>
+      </div>
+      <div class="cbody">
+        <div class="cpane left">
+          <h4>src/main/resources/model/order_event.avsc</h4>
+          <pre class="code" id="avscPane">{
+  "namespace": "com.topaya.kcd2026.model.avro",
+  "type": "record",
+  "name": "OrderEvent",
+  "fields": [
+    {"name": "orderId",    "type": "long"},
+    {"name": "customerId", "type": "long"},
+    {"name": "totalPrice", "type": "double"},
+    {"name": "orderTs",    "type": "long"}
+  ]
+}</pre>
+        </div>
+        <div class="cpane">
+          <h4>./mvnw -pl data-kcd2026 clean compile</h4>
+          <div class="cterm" id="termPane"><span class="cmd">$ ./mvnw -pl data-kcd2026 clean compile</span>
+[INFO] Compiling 9 source files with javac
+<span class="ok">[INFO] BUILD SUCCESS</span>
+<span class="dim">las clases se regeneran desde el contrato</span></div>
+        </div>
+      </div>
+      <div class="cnote" id="canaryNote">
+        El job accede al importe <b>solo por el accesor generado</b> (<code>getTotalPrice()</code>), nunca por
+        nombre dinámico. Esa decisión — FR-001 — es la que convierte la deriva en un error de compilación.
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ RESULTADOS ═══════════ -->
+  <section id="resultados" class="reveal">
+    <div class="shead"><span class="snum">03</span><h2>Tres caminos, una sola aritmética</h2></div>
+    <p class="sdesc">La cifra que verifica SC-001 es la misma que atraviesa el transporte real en SC-006.
+    Importes con fracción binaria exacta (.00 .25 .50 .75): la comparación no depende de tolerancias.</p>
+    <div class="tblwrap">
+      <table>
+        <thead><tr><th>cliente · ventana</th><th>referencia a mano</th><th>test local</th><th>cluster e2e</th><th></th></tr></thead>
+        <tbody>
+          <tr><td><b>c1</b> · W0</td><td>160.00 / 3 órdenes</td><td>160.0 / 3</td><td>160.0 / 3</td><td class="okv">OK</td></tr>
+          <tr><td><b>c2</b> · W0</td><td>75.25 / 1 orden</td><td>75.25 / 1</td><td>75.25 / 1</td><td class="okv">OK</td></tr>
+          <tr><td><b>c1</b> · W1</td><td>200.75 / 2 órdenes</td><td>200.75 / 2</td><td>200.75 / 2</td><td class="okv">OK</td></tr>
+          <tr><td><b>c2</b> · W1</td><td>30.00 / 3 órdenes</td><td>30.0 / 3</td><td>30.0 / 3</td><td class="okv">OK</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <span class="t">Hallazgo de semántica streaming — decirlo en voz alta en la demo</span>
+      Con fuente Kafka <b>no acotada</b>, una ventana solo cierra cuando el watermark supera su fin — y el
+      watermark solo avanza si siguen llegando eventos. El fixture por sí solo dejaba la última ventana
+      <b>abierta indefinidamente</b>: la entrada e2e incluye 2 eventos de avance (cliente 99, timestamps muy
+      posteriores). En el test local no ocurre porque un stream acotado emite watermark final al terminar.
+      <b>Verificación local y end-to-end no son equivalentes.</b>
+    </div>
+  </section>
+
+  <!-- ═══════════ EXPEDIENTE ═══════════ -->
+  <section id="expediente" class="reveal">
+    <div class="shead"><span class="snum">04</span><h2>El expediente: siete piezas de evidencia</h2></div>
+    <p class="sdesc">Capturas reales de los comandos, no resúmenes redactados a posteriori. Viven en
+    <code>specs/001-revenue-ventana-cliente/evidence/</code>. Los criterios que se demuestran fallando
+    (SC-003, SC-005) exigen el par completo: <b>verde y rojo</b>.</p>
+    <div class="ev">
+      <div class="evcard"><span class="f">sc-001-revenue-vs-referencia.txt</span>
+        <p>Test verde contra la referencia + la perturbación 160.01 que lo tumba con valor exacto.</p></div>
+      <div class="evcard"><span class="f">sc-002-build-verde.txt</span>
+        <p>Compilación con contrato íntegro: 9 clases, BUILD SUCCESS.</p></div>
+      <div class="evcard"><span class="f">sc-003-build-rojo-deriva.txt</span>
+        <p>La deriva atrapada en el build — variante por cambio de tipo (incompatible types, 5s): ningún artefacto ejecutable.</p></div>
+      <div class="evcard"><span class="f">sc-004-canary-cronometraje.txt</span>
+        <p>Canary por renombrado cronometrado: símbolo desaparecido en 4s, frente al umbral de 30s.</p></div>
+      <div class="evcard"><span class="f">sc-005-gate-consumer-release.txt</span>
+        <p>Gate 43/43 + las dos perturbaciones que lo ponen en rojo y la vuelta a verde.</p></div>
+      <div class="evcard"><span class="f">sc-006-end-to-end-infra-real.txt</span>
+        <p>JobID, servicios, entrada Avro, salida real y comparación fila a fila.</p></div>
+      <div class="evcard own"><span class="f">cierre-owner.txt</span>
+        <p>La declaración literal del owner, su alcance, y la advertencia: registro trazable, no firma.</p></div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SYSCALLS CONSUMIDAS ═══════════ -->
+  <section id="consumo" class="reveal">
+    <div class="shead"><span class="snum">05</span><h2>Qué consumió del sistema — y qué no</h2></div>
+    <p class="sdesc">La parte honesta del balance. Un caso de uso que dice haber usado «todo el OS»
+    está inflando claims; este usó exactamente esto:</p>
+    <div class="use">
+      <div class="row"><span class="m si">✓</span><span class="w">kernel · pin constitucional</span>
+        <span class="d">consumido <b>dos veces</b>: al escribir el Constitution Check y en cada ejecución del gate que lo re-verifica.</span></div>
+      <div class="row"><span class="m si">✓</span><span class="w">permisos · política T0</span>
+        <span class="d">fixture sintético, sin PII, sin red externa, sin datos productivos — el nivel declarado se respetó de punta a punta.</span></div>
+      <div class="row"><span class="m si">✓</span><span class="w">ciclo de vida · fase × estado</span>
+        <span class="d">tasked/Propuesto → implemented/Cerrado; la combinación ilegal se probó y el gate la rechazó.</span></div>
+      <div class="row"><span class="m si">✓</span><span class="w">gate() · 5 ejecuciones</span>
+        <span class="d">42/42 · 41/42 ×2 · 43/43 con registro en evidencia y verification.md; la post-cierre
+        <b>42/43</b> quedó registrada en el mensaje del commit <code>e25316f</code> — Git es la autoridad. Tres en rojo, a propósito.</span></div>
+      <div class="row"><span class="m si">✓</span><span class="w">memoria de agente · CLAUDE.md</span>
+        <span class="d">el agente arrancó cada sesión leyendo el contrato del sistema (superficie claude-code, lock ff93e1…).</span></div>
+      <div class="row"><span class="m no">✗</span><span class="w">outcome:verify · value-owner</span>
+        <span class="d"><b>nunca invocada.</b> topaya-value-office existe en el registro pero ninguna puerta la consulta hoy.</span></div>
+      <div class="row"><span class="m no">✗</span><span class="w">checkpoints 1 y 2 · spec y plan</span>
+        <span class="d">no se ejercieron como paradas con acta propia — la revisión ocurrió en conversación. Solo el checkpoint 3 (implementación) tiene aprobación explícita registrada.</span></div>
+      <div class="row"><span class="m no">✗</span><span class="w">promoción del attachment</span>
+        <span class="d">el módulo sigue en <code>lifecycle: draft</code>. <b>Cerrar una feature no promueve la iniciativa</b> — son ciclos de vida distintos.</span></div>
+    </div>
+  </section>
+
+  <!-- ═══════════ EXIT ═══════════ -->
+  <section id="exit" class="reveal">
+    <div class="shead"><span class="snum">06</span><h2>Estado de salida</h2></div>
+    <div class="exitcard">
+      <p class="big">exit 0 · gate 43/43 · feature Cerrada</p>
+      <p>Ocho commits en <b>feature/kcd-2026-demo-01</b>, del submódulo vacío al cierre con declaración
+      del owner. El proceso terminó limpio — y estas salvedades forman parte del estado de salida,
+      no de la letra pequeña:</p>
+      <ul>
+        <li><b>Declaración ≠ firma.</b> El cierre es un registro trazable; EDAIOS no instala mecanismo de firma.</li>
+        <li><b>Sin verificar:</b> checkpoints de Flink, recuperación ante fallo y garantías superiores al AT_LEAST_ONCE configurado.</li>
+        <li><b>El planificador sigue advisory:</b> sin pre-push y sin CI, el gate corre cuando alguien lo invoca. La única puerta ineludible sigue siendo el build.</li>
+      </ul>
+      <p style="margin-top:16px;margin-bottom:0">La anatomía del sistema operativo sobre el que corrió este
+      proceso está en la lámina hermana: <span class="filechip">flink-sobre-edaios.html</span></p>
+    </div>
+  </section>
+
+  <footer>
+    <div><b>Fuentes</b> — specs/001-revenue-ventana-cliente/{spec,plan,tasks,verification}.md · evidence/ (7 archivos) ·
+    canary-deriva.sh · tools/validation/spec_kit_gate.py · src/main/resources/model/order_event.avsc</div>
+    <div>Commits: 4787d57 · 2ff96da · 4c04620 · adc8e6b · fdb0dff · 3dcb6d5 · 0585786 · e25316f · docs 26df5a7 · verificado 2026-07-18.</div>
+    <div>Los [ERROR] del canary y los valores de las ventanas son literales de la evidencia; para la lámina se abreviaron las rutas absolutas y se resumió la línea de estado del build.</div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* contador 0 -> 43 */
+  var counter = document.getElementById('counter');
+  if (reduced) { counter.textContent = '43'; }
+  else {
+    var start = null, DUR = 1100;
+    function tick(ts){
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / DUR, 1);
+      counter.textContent = String(Math.round(43 * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  /* reveal on scroll */
+  var els = document.querySelectorAll('.reveal');
+  if (reduced || !('IntersectionObserver' in window)) {
+    els.forEach(function(e){ e.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); }
+      });
+    }, {threshold: .08});
+    els.forEach(function(e){ io.observe(e); });
+  }
+
+  /* canary interactivo */
+  var box   = document.getElementById('canaryBox');
+  var state = document.getElementById('canaryState');
+  var timer = document.getElementById('canaryTimer');
+  var avsc  = document.getElementById('avscPane');
+  var term  = document.getElementById('termPane');
+  var note  = document.getElementById('canaryNote');
+
+  var FIELD_OK   = '    {"name": "totalPrice", "type": "double"},';
+  var FIELD_REN  = '    {"name": <span class="hl">"totalPriceAmount"</span>, "type": "double"},';
+  var FIELD_TIPO = '    {"name": "totalPrice", "type": <span class="hl">"string"</span>},';
+
+  function avscHtml(fieldLine){
+    return '{\n' +
+      '  "namespace": "com.topaya.kcd2026.model.avro",\n' +
+      '  "type": "record",\n' +
+      '  "name": "OrderEvent",\n' +
+      '  "fields": [\n' +
+      '    {"name": "orderId",    "type": "long"},\n' +
+      '    {"name": "customerId", "type": "long"},\n' +
+      fieldLine + '\n' +
+      '    {"name": "orderTs",    "type": "long"}\n' +
+      '  ]\n' +
+      '}';
+  }
+
+  var TERM_OK = '<span class="cmd">$ ./mvnw -pl data-kcd2026 clean compile</span>\n' +
+    '[INFO] Compiling 9 source files with javac\n' +
+    '<span class="ok">[INFO] BUILD SUCCESS</span>\n' +
+    '<span class="dim">las clases se regeneran desde el contrato</span>';
+
+  var TERM_REN = '<span class="cmd">$ ./mvnw -pl data-kcd2026 clean compile</span>\n' +
+    '<span class="ko">[ERROR] RevenueAggregateFunction.java:[32,54] cannot find symbol</span>\n' +
+    '<span class="ko">  symbol:   method getTotalPrice()</span>\n' +
+    '<span class="ko">  location: variable order of type com.topaya.kcd2026.model.avro.OrderEvent</span>\n' +
+    '<span class="ko">[INFO] BUILD FAILURE</span>\n' +
+    '<span class="dim">ningún artefacto ejecutable · el pipeline no llega a arrancar</span>';
+
+  var TERM_TIPO = '<span class="cmd">$ ./mvnw -pl data-kcd2026 clean compile</span>\n' +
+    '<span class="ko">[ERROR] RevenueAggregateFunction.java:[32,47] incompatible types:</span>\n' +
+    '<span class="ko">        java.lang.String cannot be converted to double</span>\n' +
+    '<span class="ko">[INFO] BUILD FAILURE</span>\n' +
+    '<span class="dim">ningún artefacto ejecutable · el pipeline no llega a arrancar</span>';
+
+  var NOTE_OK = 'El job accede al importe <b>solo por el accesor generado</b> (<code>getTotalPrice()</code>), nunca por nombre dinámico. Esa decisión — FR-001 — es la que convierte la deriva en un error de compilación.';
+  var NOTE_KO = '<b>La salvaguarda del script:</b> si con la deriva la compilación PASARA, canary-deriva.sh aborta y lo denuncia — significaría que alguien reescribió el job con acceso dinámico por nombre y el canary ya no demuestra nada. El script es reversible por trap: restaura el contrato incluso ante Ctrl-C.';
+
+  function setState(mode){
+    if (mode === 'ren') {
+      box.classList.add('broken');
+      state.textContent = 'DERIVA: totalPrice → totalPriceAmount';
+      timer.textContent = 'medido: 4s · umbral SC-004: 30s';
+      avsc.innerHTML = avscHtml(FIELD_REN);
+      term.innerHTML = TERM_REN;
+      note.innerHTML = NOTE_KO;
+    } else if (mode === 'tipo') {
+      box.classList.add('broken');
+      state.textContent = 'DERIVA: double → string';
+      timer.textContent = 'medido: 5s · umbral SC-004: 30s';
+      avsc.innerHTML = avscHtml(FIELD_TIPO);
+      term.innerHTML = TERM_TIPO;
+      note.innerHTML = NOTE_KO;
+    } else {
+      box.classList.remove('broken');
+      state.textContent = 'CONTRATO ÍNTEGRO';
+      timer.textContent = './canary-deriva.sh · umbral SC-004: 30s';
+      avsc.innerHTML = avscHtml(FIELD_OK);
+      term.innerHTML = TERM_OK;
+      note.innerHTML = NOTE_OK;
+    }
+  }
+  document.getElementById('btnRen').addEventListener('click', function(){ setState('ren'); });
+  document.getElementById('btnTipo').addEventListener('click', function(){ setState('tipo'); });
+  document.getElementById('btnRev').addEventListener('click', function(){ setState('ok'); });
+})();
+</script>

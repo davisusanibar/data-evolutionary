@@ -49,3 +49,6 @@ infra/dockercompose/datanode_data/**
 # Build output del submodulo KCD2026
 data-kcd2026/target/
 data-kcd2026/dependency-reduced-pom.xml
+
+# Config local de preview (raiz); data-kcd2026/.claude SI se versiona
+/.claude/
