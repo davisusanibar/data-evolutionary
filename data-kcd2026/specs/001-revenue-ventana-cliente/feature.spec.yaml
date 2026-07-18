@@ -1,0 +1,27 @@
+schema: edaios.sdd.feature/v2
+id: 001-revenue-ventana-cliente
+artifact: specs/001-revenue-ventana-cliente/spec.md
+titulo: Revenue por cliente en ventana temporal con canary de deriva de contrato
+dominio: data-streaming
+owner: david-susanibar
+value_owner: topaya-value-office
+tramo_sensibilidad: T0
+tipo_cambio: feature
+fase: tasked
+estado: Propuesto
+requisitos:
+- FR-001
+- FR-002
+- FR-003
+- FR-004
+- FR-005
+- FR-006
+criterios:
+- SC-001
+- SC-002
+- SC-003
+- SC-004
+- SC-005
+trazas:
+- ADR-0016
+- ADR-0003
