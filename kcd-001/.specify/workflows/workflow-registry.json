@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "workflows": {
+    "speckit": {
+      "name": "Full SDD Cycle",
+      "version": "1.0.0",
+      "description": "Runs specify \u2192 plan \u2192 tasks \u2192 implement with review gates",
+      "source": "bundled",
+      "installed_at": "2026-07-18T13:51:21.892608+00:00",
+      "updated_at": "2026-07-18T13:51:21.892614+00:00"
+    },
+    "edaios-delivery": {
+      "name": "EDAIOS Governed Delivery",
+      "version": "3.1.0",
+      "description": "Ciclo SDD con aclaracion, analisis, gates EDAIOS y checkpoints humanos",
+      "source": "/Users/dsusanibara/Documents/ddsa/wks/kcd/edaios/core/framework/extensions/sdd-adapter/spec-kit/workflow/edaios-delivery.yml",
+      "installed_at": "2026-07-18T13:51:22.226385+00:00",
+      "updated_at": "2026-07-18T13:55:50.191530+00:00"
+    }
+  }
+}

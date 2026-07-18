@@ -1,0 +1,58 @@
+SC-006 · el job sobre la infraestructura real produce el mismo resultado que la verificación local
+Fecha: 2026-07-18 · Infra: infra/dockercompose (broker, schema-registry, flink-jobmanager, flink-taskmanager)
+
+== Infraestructura ==
+
+$ docker-compose up -d broker schema-registry flink-jobmanager flink-taskmanager
+$ curl -s http://localhost:18081/overview
+{"taskmanagers":1,"slots-total":3,...,"flink-version":"1.20.2"}
+
+== Producción del fixture (dentro de la red Docker) ==
+
+Las 9 órdenes del fixture + 2 eventos de avance de watermark (cliente 99, timestamps
+muy posteriores) producidos con kafka-avro-console-producer contra broker:9092,
+registrando el contrato en http://registry:8081.
+
+$ curl -s http://localhost:8081/subjects
+["orders-kcd001-value","revenue-por-cliente-ventana-value"]
+
+== Job sometido al cluster ==
+
+$ docker exec flink-jobmanager flink run -d /tmp/kcd-001.jar
+Job has been submitted with JobID 2947066e4ab33b57df57b9682b88ee68
+
+$ curl -s http://localhost:18081/jobs/overview
+"name": "KCD · revenue por cliente en ventana temporal", "state": "RUNNING",
+"tasks": {"running": 2, "failed": 0}
+
+== Salida real (kafka-avro-console-consumer sobre revenue-por-cliente-ventana) ==
+
+{"customerId":1,"windowStart":1749999960000,"windowEnd":1750000020000,"revenueTotal":160.0,"orderCount":3}
+{"customerId":1,"windowStart":1750000020000,"windowEnd":1750000080000,"revenueTotal":200.75,"orderCount":2}
+{"customerId":2,"windowStart":1749999960000,"windowEnd":1750000020000,"revenueTotal":75.25,"orderCount":1}
+{"customerId":2,"windowStart":1750000020000,"windowEnd":1750000080000,"revenueTotal":30.0,"orderCount":3}
+{"customerId":99,"windowStart":1750000200000,"windowEnd":1750000260000,"revenueTotal":0.01,"orderCount":1}
+
+== Comparación contra la tabla de referencia ==
+
+| Cliente y ventana      | Referencia          | End-to-end       | Coincide |
+|------------------------|---------------------|------------------|----------|
+| cliente 1 · W0         | 160.00 / 3 órdenes  | 160.0 / 3        | sí       |
+| cliente 2 · W0         |  75.25 / 1 orden    | 75.25 / 1        | sí       |
+| cliente 1 · W1         | 200.75 / 2 órdenes  | 200.75 / 2       | sí       |
+| cliente 2 · W1         |  30.00 / 3 órdenes  | 30.0 / 3         | sí       |
+
+La fila del cliente 99 es el subproducto esperado de los eventos de avance de
+watermark: su primera ventana cierra cuando el segundo evento empuja el watermark.
+No pertenece a la tabla de referencia y se excluye de la comparación.
+
+== Semántica de ventanas (verificada en la práctica) ==
+
+Sin los dos eventos de avance, la ventana W1 no cierra: con fuente Kafka no
+acotada el watermark solo avanza si siguen llegando eventos. Es la razón por la
+que el fixture end-to-end difiere del local en esos dos eventos auxiliares.
+
+== Sin verificar ==
+
+Checkpoints, recuperación ante fallo y garantías más fuertes que el
+AT_LEAST_ONCE configurado en el sink.

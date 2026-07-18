@@ -1,0 +1,24 @@
+Declaración de cierre de la feature 001-revenue-ventana-cliente
+================================================================
+
+Fecha: 2026-07-18
+Owner declarado en la spec: david-susanibar
+
+Declaración literal del owner, recibida por el canal de la sesión de trabajo:
+
+    "Yo David declaro el cierre de la feature"
+
+Antecedente: el mismo owner aprobó la implementación el 2026-07-18 con la
+declaración literal "Yo David apruebo la implementación".
+
+Alcance del cierre:
+- La feature pasa a estado Cerrado y fase implemented.
+- Cubre los artefactos de specs/001-revenue-ventana-cliente/ y el código del
+  módulo kcd-001 verificado por SC-001..SC-006 (ver verification.md y evidence/).
+- NO constituye autorización de commit, push, release ni publicación, que
+  siguen requiriendo autorización explícita (restricciones de la constitución).
+
+Naturaleza de este registro: es un registro de trazabilidad, no una firma
+criptográficamente verificable — EDAIOS no instala mecanismo de firma en este
+consumer. La autoridad del cierre reside en la declaración del owner y en el
+historial de la sesión que la conserva.

@@ -1,0 +1,32 @@
+{
+  "actors": [
+    {
+      "active": true,
+      "actor_id": "david-susanibar",
+      "capabilities": [
+        "approve",
+        "delegate",
+        "rollback"
+      ],
+      "roles": [
+        "initiative-owner",
+        "approver"
+      ],
+      "type": "human"
+    },
+    {
+      "active": true,
+      "actor_id": "topaya-value-office",
+      "capabilities": [
+        "outcome:verify"
+      ],
+      "roles": [
+        "value-owner"
+      ],
+      "type": "human"
+    }
+  ],
+  "initiative": "kcd-001",
+  "schema": "edaios.authority-registry/v1",
+  "version": "1.0.0"
+}

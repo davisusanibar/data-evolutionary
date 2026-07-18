@@ -1,0 +1,8 @@
+$ ./mvnw -pl kcd-001 clean compile   # 2026-07-18T14:48:39Z
+[INFO] Building topaya-kcd-001 1.0-SNAPSHOT
+[INFO] BUILD SUCCESS
+[INFO] Total time:  0.927 s
+
+$ ls kcd-001/target/generated-sources/avro/com/topaya/kcd001/model/avro/
+CustomerRevenueWindow.java
+OrderEvent.java

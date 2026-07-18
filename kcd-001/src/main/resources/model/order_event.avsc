@@ -1,0 +1,12 @@
+{
+  "namespace": "com.topaya.kcd001.model.avro",
+  "type": "record",
+  "name": "OrderEvent",
+  "doc": "Contrato de entrada: una orden de compra. Romper este archivo rompe la compilacion del job, que es el objetivo del canary de deriva.",
+  "fields": [
+    {"name": "orderId", "type": "long", "doc": "Identificador unico de la orden."},
+    {"name": "customerId", "type": "long", "doc": "Cliente al que se imputa el revenue."},
+    {"name": "totalPrice", "type": "double", "doc": "Importe total de la orden. Campo que el canary deriva a proposito."},
+    {"name": "orderTs", "type": "long", "doc": "Instante del evento en epoch millis; alimenta el event-time y los watermarks."}
+  ]
+}

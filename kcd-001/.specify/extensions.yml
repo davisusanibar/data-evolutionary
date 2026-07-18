@@ -1,0 +1,23 @@
+installed:
+- edaios-governance
+settings:
+  auto_execute_hooks: true
+hooks:
+  after_tasks:
+  - extension: edaios-governance
+    command: speckit.edaios-governance.gate
+    enabled: true
+    optional: false
+    priority: 10
+    prompt: Execute speckit.edaios-governance.gate?
+    description: Comprueba cobertura antes del analisis
+    condition: null
+  before_implement:
+  - extension: edaios-governance
+    command: speckit.edaios-governance.gate
+    enabled: true
+    optional: false
+    priority: 10
+    prompt: Execute speckit.edaios-governance.gate?
+    description: Bloquea implementacion con contratos inconsistentes
+    condition: null

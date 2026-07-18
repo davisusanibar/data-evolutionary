@@ -1,0 +1,59 @@
+schema_version: "1.0"
+workflow:
+  id: "edaios-delivery"
+  name: "EDAIOS Governed Delivery"
+  version: "3.1.0"
+  author: "EDAIOS"
+  description: "Ciclo SDD con aclaracion, analisis, gates EDAIOS y checkpoints humanos"
+requires:
+  speckit_version: ">=0.12.11"
+  integrations:
+    any: ["claude", "codex", "copilot"]
+inputs:
+  spec:
+    type: string
+    required: true
+    prompt: "Describe la iniciativa o cambio"
+  integration:
+    type: string
+    default: "auto"
+    prompt: "Integracion activa"
+steps:
+  - id: specify
+    command: speckit.specify
+    integration: "{{ inputs.integration }}"
+    input:
+      args: "{{ inputs.spec }}"
+  - id: clarify
+    command: speckit.clarify
+    integration: "{{ inputs.integration }}"
+  - id: checklist
+    command: speckit.checklist
+    integration: "{{ inputs.integration }}"
+  - id: review-spec
+    type: gate
+    message: "El owner revisa alcance, valor, sensibilidad y requisitos."
+    options: [approve, reject]
+    on_reject: abort
+  - id: plan
+    command: speckit.plan
+    integration: "{{ inputs.integration }}"
+  - id: review-plan
+    type: gate
+    message: "Arquitectura revisa Constitution Check, ADR y Gate Impact."
+    options: [approve, reject]
+    on_reject: abort
+  - id: tasks
+    command: speckit.tasks
+    integration: "{{ inputs.integration }}"
+  - id: analyze
+    command: speckit.analyze
+    integration: "{{ inputs.integration }}"
+  - id: approve-implementation
+    type: gate
+    message: "Aprobar implementacion solo con analisis y gates en verde."
+    options: [approve, reject]
+    on_reject: abort
+  - id: implement
+    command: speckit.implement
+    integration: "{{ inputs.integration }}"

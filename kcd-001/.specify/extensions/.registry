@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "extensions": {
+    "edaios-governance": {
+      "version": "3.1.0",
+      "source": "local",
+      "manifest_hash": "sha256:fd6d5b9126df3727a0b080d7d6d34baa9ea0fdeff827b4a5ee3976bcad927612",
+      "enabled": true,
+      "priority": 5,
+      "registered_commands": {
+        "claude": [
+          "speckit.edaios-governance.gate",
+          "edaios.gate"
+        ]
+      },
+      "registered_skills": [],
+      "installed_at": "2026-07-18T13:51:22.121607+00:00"
+    }
+  }
+}

@@ -1,0 +1,19 @@
+# Fixture sintetico determinista de ordenes. Sin PII, sin datos productivos (tramo T0).
+#
+# Ventana de referencia: 60000 ms. Las ventanas de Flink se alinean al epoch, de modo
+# que W0 = 1749999960000 es multiplo exacto de 60000 y W1 = W0 + 60000.
+#
+# La orden 4 llega DESORDENADA a proposito (su timestamp es anterior al de las ordenes
+# 1..3 ya emitidas): ejercita la estrategia de watermarks y demuestra que el resultado
+# depende del tiempo del evento y no del orden de llegada.
+#
+# orderId,customerId,totalPrice,orderTs
+1,1,100.00,1749999961000
+2,1,50.50,1749999962000
+3,2,75.25,1749999963000
+4,1,9.50,1749999960500
+5,1,200.00,1750000021000
+6,2,10.00,1750000022000
+7,2,10.00,1750000023000
+8,2,10.00,1750000024000
+9,1,0.75,1750000025000

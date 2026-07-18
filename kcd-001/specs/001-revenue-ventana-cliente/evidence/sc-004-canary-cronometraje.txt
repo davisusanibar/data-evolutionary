@@ -1,0 +1,9 @@
+SC-004 · el canary completo cabe en el umbral declarado de 30 segundos
+Fecha: 2026-07-18 · Un único comando, reversible por trap
+
+Variante renombrado : Canary completo en 5s
+Variante tipo       : Canary completo en 5s
+
+Umbral SC-004: 30s. Ambas variantes quedan muy por debajo (5s).
+El trap del script restaura el contrato incluso ante interrupción; tras cada
+ejecución el build vuelve a verde (verificado en la salida de cada variante).

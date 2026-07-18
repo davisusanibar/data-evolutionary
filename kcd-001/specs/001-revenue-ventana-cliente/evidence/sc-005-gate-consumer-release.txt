@@ -1,0 +1,22 @@
+SC-005 · el gate SDD consumer-release queda verde y vuelve a rojo si se degrada un artefacto
+Fecha: 2026-07-18 · Comando: python3 tools/validation/spec_kit_gate.py . --feature specs/001-revenue-ventana-cliente --profile consumer-release
+
+== Verde ==
+  [OK ] specs/001-revenue-ventana-cliente: matriz declara evidencia de cierre
+  [OK ] specs/001-revenue-ventana-cliente: paths de evidencia resolubles
+-- 42/42 checks OK --
+
+== Prueba negativa 1: pin de la constitución alterado un carácter ==
+  [FAIL] specs/001-revenue-ventana-cliente: pin vigente de la constitucion  · obsoleto: la constitucion cambio despues del plan — re-valida el check y actualiza el pin
+-- 41/42 checks OK --
+exit=1
+
+== Prueba negativa 2: FR-005 sin cobertura en tasks.md ==
+  [FAIL] specs/001-revenue-ventana-cliente: cobertura FR -> tareas  · FR-005
+  [FAIL] specs/001-revenue-ventana-cliente: tareas sin FR inexistente  · FR-905
+-- 40/42 checks OK --
+exit=1
+
+== Restaurado ==
+-- 42/42 checks OK --
+exit=0

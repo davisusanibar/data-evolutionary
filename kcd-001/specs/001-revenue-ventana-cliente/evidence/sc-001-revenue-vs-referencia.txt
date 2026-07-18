@@ -1,0 +1,32 @@
+SC-001 · el revenue por cliente y ventana coincide con la tabla de referencia
+Fecha: 2026-07-18 · Módulo: kcd-001 · Test: RevenueWindowPipelineTest
+
+== Ejecución verde ==
+
+$ ./mvnw -pl kcd-001 test
+[INFO] Running com.topaya.kcd001.revenue.RevenueWindowPipelineTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.059 s -- in com.topaya.kcd001.revenue.RevenueWindowPipelineTest
+[INFO] BUILD SUCCESS
+
+El test ejecuta RevenueWindowPipeline (el mismo código del job) sobre
+src/test/resources/fixture/orders.csv (9 órdenes, 1 desordenada a propósito) y
+compara contra src/test/resources/fixture/revenue-referencia.csv, calculada a
+mano e independiente del job:
+
+  cliente 1 · W0 [1749999960000,1750000020000) -> 160.00 sobre 3 órdenes
+  cliente 2 · W0                               ->  75.25 sobre 1 orden
+  cliente 1 · W1 [1750000020000,1750000080000) -> 200.75 sobre 2 órdenes
+  cliente 2 · W1                               ->  30.00 sobre 3 órdenes
+
+== Prueba negativa (el criterio se vio fallar) ==
+
+Perturbación: referencia alterada de 160.00 a 160.01.
+
+$ sed -i '' 's/160.00,3/160.01,3/' kcd-001/src/test/resources/fixture/revenue-referencia.csv
+$ ./mvnw -pl kcd-001 test
+[ERROR] RevenueWindowPipelineTest.revenueCoincideConLaReferencia:83
+  revenue distinto del de referencia en 1@1749999960000-1750000020000
+  ==> expected: <160.01> but was: <160.0>
+[ERROR] Tests run: 1, Failures: 1, Errors: 0, Skipped: 0
+
+Referencia restaurada; el test volvió a verde (Tests run: 1, Failures: 0).

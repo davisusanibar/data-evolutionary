@@ -1,0 +1,140 @@
+<svg viewBox="0 0 980 700" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif">
+  <defs>
+    <linearGradient id="demoband" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0f3d33"/>
+      <stop offset="1" stop-color="#14524a"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="980" height="700" fill="#f6f5f1"/>
+
+  <!-- Título -->
+  <text x="40" y="52" font-size="26" font-weight="700" fill="#1a1a1a">Spec-Driven Development — el panorama de opciones</text>
+  <text x="40" y="76" font-size="14" fill="#5a5a55">La spec (contrato, criterios, owner) precede al código; el agente implementa contra ella.</text>
+
+  <!-- ===== Fila 1 de tarjetas ===== -->
+  <!-- Spec Kit -->
+  <g>
+    <rect x="40" y="100" width="288" height="150" rx="10" fill="#ffffff" stroke="#2f6e5f" stroke-width="2.5"/>
+    <rect x="40" y="100" width="288" height="34" rx="10" fill="#2f6e5f"/>
+    <rect x="40" y="120" width="288" height="14" fill="#2f6e5f"/>
+    <text x="56" y="123" font-size="15" font-weight="700" fill="#ffffff">GitHub Spec Kit</text>
+    <text x="252" y="123" font-size="11" fill="#cfe8e0">open source</text>
+    <text x="56" y="156" font-size="12.5" fill="#333">Flujo /speckit.specify → plan → tasks →</text>
+    <text x="56" y="173" font-size="12.5" fill="#333">implement, con constitución y plantillas.</text>
+    <text x="56" y="190" font-size="12.5" fill="#333">Agnóstico del agente (Claude Code,</text>
+    <text x="56" y="207" font-size="12.5" fill="#333">Copilot, Gemini, Cursor…).</text>
+    <text x="56" y="234" font-size="11.5" font-weight="600" fill="#2f6e5f">★ Es la base que usa nuestra demo</text>
+  </g>
+
+  <!-- Kiro -->
+  <g>
+    <rect x="346" y="100" width="288" height="150" rx="10" fill="#ffffff" stroke="#c9c6bd" stroke-width="1.5"/>
+    <rect x="346" y="100" width="288" height="34" rx="10" fill="#6b5ca5"/>
+    <rect x="346" y="120" width="288" height="14" fill="#6b5ca5"/>
+    <text x="362" y="123" font-size="15" font-weight="700" fill="#ffffff">Kiro (AWS)</text>
+    <text x="556" y="123" font-size="11" fill="#e2ddf2">IDE comercial</text>
+    <text x="362" y="156" font-size="12.5" fill="#333">IDE completo con specs de tres piezas:</text>
+    <text x="362" y="173" font-size="12.5" fill="#333">requirements.md (sintaxis EARS),</text>
+    <text x="362" y="190" font-size="12.5" fill="#333">design.md y tasks.md, más hooks de</text>
+    <text x="362" y="207" font-size="12.5" fill="#333">agente. Muy integrado a su ecosistema.</text>
+    <text x="362" y="234" font-size="11.5" fill="#8a867c">Buena opción si vives dentro del IDE</text>
+  </g>
+
+  <!-- Tessl -->
+  <g>
+    <rect x="652" y="100" width="288" height="150" rx="10" fill="#ffffff" stroke="#c9c6bd" stroke-width="1.5"/>
+    <rect x="652" y="100" width="288" height="34" rx="10" fill="#b0562e"/>
+    <rect x="652" y="120" width="288" height="14" fill="#b0562e"/>
+    <text x="668" y="123" font-size="15" font-weight="700" fill="#ffffff">Tessl</text>
+    <text x="856" y="123" font-size="11" fill="#f4ddd2">comercial</text>
+    <text x="668" y="156" font-size="12.5" fill="#333">"Spec-as-source": la spec es la fuente</text>
+    <text x="668" y="173" font-size="12.5" fill="#333">de verdad y el código se regenera desde</text>
+    <text x="668" y="190" font-size="12.5" fill="#333">ella; registry de specs para librerías.</text>
+    <text x="668" y="207" font-size="12.5" fill="#333">Apuesta más radical del espectro.</text>
+    <text x="668" y="234" font-size="11.5" fill="#8a867c">El código pasa a ser artefacto derivado</text>
+  </g>
+
+  <!-- ===== Fila 2 de tarjetas ===== -->
+  <!-- OpenSpec -->
+  <g>
+    <rect x="40" y="272" width="288" height="150" rx="10" fill="#ffffff" stroke="#c9c6bd" stroke-width="1.5"/>
+    <rect x="40" y="272" width="288" height="34" rx="10" fill="#3d6d9e"/>
+    <rect x="40" y="292" width="288" height="14" fill="#3d6d9e"/>
+    <text x="56" y="295" font-size="15" font-weight="700" fill="#ffffff">OpenSpec</text>
+    <text x="252" y="295" font-size="11" fill="#d7e5f2">open source</text>
+    <text x="56" y="328" font-size="12.5" fill="#333">Ligero: propuestas de cambio (change</text>
+    <text x="56" y="345" font-size="12.5" fill="#333">proposals) versionadas junto al código,</text>
+    <text x="56" y="362" font-size="12.5" fill="#333">sin imponer flujo completo. Menos</text>
+    <text x="56" y="379" font-size="12.5" fill="#333">ceremonia que Spec Kit.</text>
+    <text x="56" y="406" font-size="11.5" fill="#8a867c">Para equipos que quieren SDD gradual</text>
+  </g>
+
+  <!-- BMAD -->
+  <g>
+    <rect x="346" y="272" width="288" height="150" rx="10" fill="#ffffff" stroke="#c9c6bd" stroke-width="1.5"/>
+    <rect x="346" y="272" width="288" height="34" rx="10" fill="#8a3d5f"/>
+    <rect x="346" y="292" width="288" height="14" fill="#8a3d5f"/>
+    <text x="362" y="295" font-size="15" font-weight="700" fill="#ffffff">BMAD-METHOD</text>
+    <text x="556" y="295" font-size="11" fill="#f0d8e3">open source</text>
+    <text x="362" y="328" font-size="12.5" fill="#333">Multiagente estilo ágil: agentes con rol</text>
+    <text x="362" y="345" font-size="12.5" fill="#333">(analista, PM, arquitecto, dev, QA) que</text>
+    <text x="362" y="362" font-size="12.5" fill="#333">producen PRD → arquitectura → historias</text>
+    <text x="362" y="379" font-size="12.5" fill="#333">antes de implementar.</text>
+    <text x="362" y="406" font-size="11.5" fill="#8a867c">SDD + ceremonia de equipo simulada</text>
+  </g>
+
+  <!-- cc-sdd -->
+  <g>
+    <rect x="652" y="272" width="288" height="150" rx="10" fill="#ffffff" stroke="#c9c6bd" stroke-width="1.5"/>
+    <rect x="652" y="272" width="288" height="34" rx="10" fill="#5f6b3d"/>
+    <rect x="652" y="292" width="288" height="14" fill="#5f6b3d"/>
+    <text x="668" y="295" font-size="15" font-weight="700" fill="#ffffff">cc-sdd y afines</text>
+    <text x="856" y="295" font-size="11" fill="#e3e8d4">open source</text>
+    <text x="668" y="328" font-size="12.5" fill="#333">Ports del flujo estilo Kiro (requirements /</text>
+    <text x="668" y="345" font-size="12.5" fill="#333">design / tasks) como comandos para</text>
+    <text x="668" y="362" font-size="12.5" fill="#333">Claude Code, Cursor o Gemini CLI, sin</text>
+    <text x="668" y="379" font-size="12.5" fill="#333">cambiar de editor.</text>
+    <text x="668" y="406" font-size="11.5" fill="#8a867c">Kiro-style sin el IDE de AWS</text>
+  </g>
+
+  <!-- ===== Banda: nuestra demo ===== -->
+  <rect x="40" y="452" width="900" height="212" rx="12" fill="url(#demoband)"/>
+  <text x="64" y="486" font-size="17" font-weight="700" fill="#ffffff">Lo que usa esta demo (módulo kcd-001)</text>
+  <text x="64" y="506" font-size="12.5" fill="#bcd9d0">EDAIOS no compite con Spec Kit: lo gobierna. Inyecta el bundle y le añade constitución, gate y firma humana.</text>
+
+  <!-- Caja EDAIOS -->
+  <rect x="64" y="524" width="250" height="116" rx="8" fill="#0b2b24" stroke="#3f8f7c" stroke-width="1.5"/>
+  <text x="80" y="548" font-size="14" font-weight="700" fill="#7fd4bd">EDAIOS Core 3.1.0</text>
+  <text x="80" y="568" font-size="12" fill="#d8ece5">Acelerador inyectado desde ../edaios</text>
+  <text x="80" y="585" font-size="12" fill="#d8ece5">· Constitución proyectada (7 principios)</text>
+  <text x="80" y="602" font-size="12" fill="#d8ece5">· Attachment de iniciativa (owner, T0)</text>
+  <text x="80" y="619" font-size="12" fill="#d8ece5">· Perfil consumer-release (ADR-0016)</text>
+
+  <!-- flecha -->
+  <path d="M 314 582 L 348 582" stroke="#7fd4bd" stroke-width="2.5"/>
+  <path d="M 342 576 L 352 582 L 342 588" fill="none" stroke="#7fd4bd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Caja Spec Kit -->
+  <rect x="352" y="524" width="250" height="116" rx="8" fill="#0b2b24" stroke="#3f8f7c" stroke-width="1.5"/>
+  <text x="368" y="548" font-size="14" font-weight="700" fill="#7fd4bd">Spec Kit 0.12.11 gobernado</text>
+  <text x="368" y="568" font-size="12" fill="#d8ece5">specify → plan → tasks → implement</text>
+  <text x="368" y="585" font-size="12" fill="#d8ece5">· spec.md + feature.spec.yaml (contrato)</text>
+  <text x="368" y="602" font-size="12" fill="#d8ece5">· FR-001..006 / SC-001..006 medibles</text>
+  <text x="368" y="619" font-size="12" fill="#d8ece5">· Constitution Check con pin sha256</text>
+
+  <!-- flecha -->
+  <path d="M 602 582 L 636 582" stroke="#7fd4bd" stroke-width="2.5"/>
+  <path d="M 630 576 L 640 582 L 630 588" fill="none" stroke="#7fd4bd" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Caja Gates -->
+  <rect x="640" y="524" width="276" height="116" rx="8" fill="#0b2b24" stroke="#3f8f7c" stroke-width="1.5"/>
+  <text x="656" y="548" font-size="14" font-weight="700" fill="#7fd4bd">Dos puertas + firma humana</text>
+  <text x="656" y="568" font-size="12" fill="#d8ece5">· Contrato Avro → el build (canary 5s)</text>
+  <text x="656" y="585" font-size="12" fill="#d8ece5">· Gate SDD → la entrega (43/43 checks)</text>
+  <text x="656" y="602" font-size="12" fill="#d8ece5">· Artículo VI: aprobación y cierre son</text>
+  <text x="656" y="619" font-size="12" fill="#d8ece5">&#160;&#160;declaraciones del owner (David)</text>
+
+  <!-- pie -->
+  <text x="40" y="688" font-size="11" fill="#8a867c">Feature 001-revenue-ventana-cliente · Flink 1.20.2 + Kafka + Schema Registry + Avro · specified 18/18 → planned 32/32 → tasked 42/42 → implemented 43/43</text>
+</svg>
