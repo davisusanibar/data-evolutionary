@@ -1,0 +1,15 @@
+Prueba rojo/verde del check 'cambio estructural respaldado por ADR'
+Fecha: 2026-07-18 · Feature stub: 002-persistencia-iceberg (tipo_cambio: architecture)
+
+== ROJO: trazas solo con RFC-0001 (formato válido, sin ADR) ==
+  [FAIL] specs/002-persistencia-iceberg: cambio estructural respaldado por ADR
+-- 17/18 checks OK --
+exit=1
+
+== VERDE: trazas con ADR-0001 (governance/ADR-0001-patrones-flink-del-consumer.md) ==
+  [OK ] specs/002-persistencia-iceberg: cambio estructural respaldado por ADR
+-- 18/18 checks OK --
+exit=0
+
+El gate valida el vínculo decisión→feature de forma fail-closed: una feature
+estructural no avanza sin ADR que la respalde (principio III de la constitución).

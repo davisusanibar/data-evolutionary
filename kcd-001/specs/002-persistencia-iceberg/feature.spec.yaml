@@ -1,0 +1,20 @@
+schema: edaios.sdd.feature/v2
+id: 002-persistencia-iceberg
+artifact: specs/002-persistencia-iceberg/spec.md
+titulo: Persistencia en Iceberg del revenue agregado (stub)
+dominio: data-streaming
+owner: david-susanibar
+value_owner: topaya-value-office
+tramo_sensibilidad: T0
+tipo_cambio: architecture
+fase: specified
+estado: Propuesto
+requisitos:
+- FR-001
+- FR-002
+criterios:
+- SC-001
+- SC-002
+trazas:
+- ADR-0001
+- RFC-0001
