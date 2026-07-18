@@ -1,0 +1,247 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 1020" width="1440" height="1020" role="img" aria-label="Arquitectura de un proyecto después de inyectar EDAIOS Core">
+  <title>Arquitectura de un proyecto tras inyectar EDAIOS Core 3.1.0</title>
+  <desc>Mapa de capas: EDAIOS Core como fuente externa, el script inject-consumer.sh, el repositorio del proyecto con el código intacto y los artefactos inyectados (.edaios, .specify, tools/validation, .claude/skills, CLAUDE.md, specs), y la banda de obligatoriedad del gate.</desc>
+
+  <defs>
+    <pattern id="grid" width="26" height="26" patternUnits="userSpaceOnUse">
+      <path d="M26 0H0V26" fill="none" stroke="#78684a" stroke-opacity=".13" stroke-width="1"/>
+    </pattern>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#9c6626"/>
+    </marker>
+    <marker id="arg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#7d8a97"/>
+    </marker>
+    <style>
+      .mono{font-family:ui-monospace,"SFMono-Regular","SF Mono",Menlo,Consolas,"Liberation Mono",monospace}
+      .sans{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif}
+      .h1{font-size:31px;font-weight:700;fill:#16202a;letter-spacing:-.4px}
+      .h2{font-size:15px;fill:#5f5643}
+      .eyebrow{font-size:12px;fill:#9c6626;font-weight:700;letter-spacing:2.4px}
+      .zone{font-size:12px;font-weight:700;letter-spacing:1.8px}
+      .card-h{font-size:14px;font-weight:700;fill:#16202a}
+      .card-s{font-size:10.5px;fill:#6b5f42;letter-spacing:.4px}
+      .item{font-size:11.5px;fill:#2c3742}
+      .note{font-size:11.5px;fill:#6b5f42}
+      .lbl{font-size:12px;fill:#5a6774}
+      .chip-t{font-size:12px;font-weight:700}
+    </style>
+  </defs>
+
+  <rect width="1440" height="1020" fill="#f6f3ea"/>
+  <rect width="1440" height="1020" fill="url(#grid)"/>
+  <rect x="14" y="14" width="1412" height="992" fill="none" stroke="#c9ba97" stroke-width="1.5" rx="8"/>
+
+  <!-- ================= CABECERA ================= -->
+  <text class="mono eyebrow" x="44" y="58">EDAIOS CORE 3.1.0 · PERFIL CONSUMER-RELEASE · ADR-0016</text>
+  <text class="sans h1" x="44" y="92">Arquitectura de un proyecto tras inyectar EDAIOS</text>
+  <text class="sans h2" x="44" y="116">El código no se toca. Se le adosa una capa de gobierno: contrato, constitución proyectada y un gate que decide.</text>
+
+  <!-- leyenda -->
+  <g transform="translate(1046,44)">
+    <rect x="0" y="0" width="352" height="76" fill="#ffffff" stroke="#d8ccae" rx="6"/>
+    <text class="mono card-s" x="14" y="20">LEYENDA</text>
+    <rect x="14" y="30" width="13" height="13" fill="#f3e6cf" stroke="#9c6626" stroke-width="1.5" rx="2.5"/>
+    <text class="mono item" x="34" y="41">autoridad</text>
+    <rect x="118" y="30" width="13" height="13" fill="#e6eef0" stroke="#2f7d84" stroke-width="1.5" rx="2.5"/>
+    <text class="mono item" x="138" y="41">gobierno SDD</text>
+    <rect x="238" y="30" width="13" height="13" fill="#f6dcd4" stroke="#b4432f" stroke-width="1.5" rx="2.5"/>
+    <text class="mono item" x="258" y="41">gate</text>
+    <rect x="14" y="52" width="13" height="13" fill="#ffffff" stroke="#8d99a5" stroke-width="1.5" rx="2.5"/>
+    <text class="mono item" x="34" y="63">tu código</text>
+    <rect x="118" y="52" width="13" height="13" fill="#f6f3ea" stroke="#b3a683" stroke-width="1.5" stroke-dasharray="4 3" rx="2.5"/>
+    <text class="mono item" x="138" y="63">aún no existe</text>
+  </g>
+
+  <!-- ================= CORE (FUENTE) ================= -->
+  <g>
+    <rect x="44" y="176" width="266" height="300" fill="#ffffff" stroke="#2f7d84" stroke-width="1.6" rx="8"/>
+    <rect x="44" y="176" width="266" height="34" fill="#e6eef0" stroke="#2f7d84" stroke-width="1.6" rx="8"/>
+    <rect x="44" y="200" width="266" height="10" fill="#e6eef0"/>
+    <text class="mono card-h" x="60" y="199" style="fill:#123037">EDAIOS Core · fuente</text>
+    <text class="mono card-s" x="60" y="228">repo externo · edaiosv</text>
+
+    <g class="mono item">
+      <rect x="60" y="240" width="234" height="44" fill="#f7fafb" stroke="#a9c6ca" rx="5"/>
+      <text x="72" y="258">wheel edaios-core 3.1.0</text>
+      <text x="72" y="274" class="note">paquete Python real</text>
+
+      <rect x="60" y="292" width="234" height="44" fill="#f7fafb" stroke="#a9c6ca" rx="5"/>
+      <text x="72" y="310">constitución compilada</text>
+      <text x="72" y="326" class="note">7 principios + pin sha256</text>
+
+      <rect x="60" y="344" width="234" height="44" fill="#f7fafb" stroke="#a9c6ca" rx="5"/>
+      <text x="72" y="362">bundle Spec Kit 0.12.11</text>
+      <text x="72" y="378" class="note">preset · extensión · workflow</text>
+
+      <rect x="60" y="396" width="234" height="44" fill="#f7fafb" stroke="#a9c6ca" rx="5"/>
+      <text x="72" y="414">spec_kit_gate.py</text>
+      <text x="72" y="430" class="note">+ integrations.lock.json</text>
+    </g>
+    <text class="mono note" x="60" y="462">Core no absorbe tu runtime.</text>
+  </g>
+
+  <!-- flecha de inyección -->
+  <g>
+    <text class="mono" x="390" y="286" text-anchor="middle" style="font-size:12.5px;font-weight:700;fill:#9c6626">inject-consumer.sh</text>
+    <text class="mono" x="390" y="303" text-anchor="middle" style="font-size:11px;fill:#6b5f42">idempotente</text>
+    <line x1="316" y1="322" x2="464" y2="322" stroke="#9c6626" stroke-width="2.2" marker-end="url(#ar)"/>
+    <text class="mono" x="390" y="344" text-anchor="middle" style="font-size:11px;fill:#6b5f42">capas A · B · C · D</text>
+    <text class="mono" x="390" y="360" text-anchor="middle" style="font-size:11px;fill:#6b5f42">fail-closed</text>
+  </g>
+
+  <!-- ================= PROYECTO ================= -->
+  <rect x="470" y="150" width="930" height="686" fill="#fdfcf8" stroke="#33404b" stroke-width="1.8" rx="10"/>
+  <rect x="470" y="150" width="930" height="40" fill="#eef1f3" stroke="#33404b" stroke-width="1.8" rx="10"/>
+  <rect x="470" y="178" width="930" height="12" fill="#eef1f3"/>
+  <text class="mono card-h" x="490" y="177">proyecto/ · repositorio Git</text>
+  <text class="mono" x="1382" y="177" text-anchor="end" style="font-size:11.5px;fill:#9c6626;font-weight:700">autoridad: Git + owner ≠ value-owner (Art. VI)</text>
+
+  <!-- tu código -->
+  <text class="mono zone" x="490" y="216" style="fill:#5a6774">TU CÓDIGO — EDAIOS NO LO TOCA</text>
+  <rect x="490" y="226" width="890" height="62" fill="#ffffff" stroke="#8d99a5" stroke-width="1.4" rx="6"/>
+  <g class="mono item">
+    <rect x="506" y="242" width="200" height="30" fill="#f4f6f8" stroke="#c2ccd5" rx="4"/>
+    <text x="520" y="261">src/main/java/…</text>
+    <rect x="722" y="242" width="200" height="30" fill="#f4f6f8" stroke="#c2ccd5" rx="4"/>
+    <text x="736" y="261">pom.xml</text>
+    <rect x="938" y="242" width="200" height="30" fill="#f4f6f8" stroke="#c2ccd5" rx="4"/>
+    <text x="952" y="261">README.md</text>
+    <text x="1156" y="261" class="note">…tu build sigue igual</text>
+  </g>
+
+  <!-- inyectado -->
+  <text class="mono zone" x="490" y="320" style="fill:#9c6626">INYECTADO POR EDAIOS — CAPA DE GOBIERNO</text>
+
+  <!-- CARD 1 .edaios -->
+  <g>
+    <rect x="490" y="332" width="283" height="212" fill="#ffffff" stroke="#9c6626" stroke-width="1.6" rx="7"/>
+    <rect x="490" y="332" width="283" height="4" fill="#9c6626" rx="2"/>
+    <text class="mono card-h" x="506" y="358">.edaios/</text>
+    <text class="mono card-s" x="506" y="374">ATTACHMENT · LOCAL, RECONSTRUIBLE</text>
+    <g class="mono item">
+      <text x="506" y="398">edaios.initiative.json</text>
+      <text x="506" y="418">authority-registry.json</text>
+      <text x="506" y="438">policies/initiative-policy</text>
+      <text x="506" y="458">policies/sensitivity-t0</text>
+      <text x="506" y="478">attachment-state.json</text>
+      <text x="506" y="498">agent-setup/receipts/</text>
+    </g>
+    <text class="mono note" x="506" y="524">sella los 4 con sha256 · draft T0</text>
+  </g>
+
+  <!-- CARD 2 .specify -->
+  <g>
+    <rect x="793" y="332" width="283" height="212" fill="#ffffff" stroke="#2f7d84" stroke-width="1.6" rx="7"/>
+    <rect x="793" y="332" width="283" height="4" fill="#2f7d84" rx="2"/>
+    <text class="mono card-h" x="809" y="358">.specify/</text>
+    <text class="mono card-s" x="809" y="374">SPEC KIT GOBERNADO 0.12.11</text>
+    <g class="mono item">
+      <text x="809" y="398">memory/constitution.md</text>
+      <text x="809" y="418">presets/edaios-governed…</text>
+      <text x="809" y="438">extensions/edaios-governance</text>
+      <text x="809" y="458">workflows/edaios-delivery</text>
+      <text x="809" y="478">integrations.lock.json</text>
+      <text x="809" y="498">templates/ · scripts/</text>
+    </g>
+    <text class="mono note" x="809" y="524">reemplaza los comandos speckit.*</text>
+  </g>
+
+  <!-- CARD 3 gate -->
+  <g>
+    <rect x="1096" y="332" width="284" height="212" fill="#ffffff" stroke="#b4432f" stroke-width="1.8" rx="7"/>
+    <rect x="1096" y="332" width="284" height="4" fill="#b4432f" rx="2"/>
+    <text class="mono card-h" x="1112" y="358">tools/validation/</text>
+    <text class="mono card-s" x="1112" y="374">EL GATE · QUIEN DECIDE</text>
+    <g class="mono item">
+      <text x="1112" y="398">spec_kit_gate.py</text>
+      <text x="1112" y="418">spec_kit_gate.SOURCE.md</text>
+    </g>
+    <rect x="1112" y="430" width="252" height="76" fill="#fdf2ef" stroke="#e0b3a7" rx="5"/>
+    <text class="mono note" x="1124" y="449" style="fill:#6d2116">valida: frontmatter · FR/SC</text>
+    <text class="mono note" x="1124" y="466" style="fill:#6d2116">Constitution Check (pin)</text>
+    <text class="mono note" x="1124" y="483" style="fill:#6d2116">cobertura FR→tarea · cierre</text>
+    <text class="mono note" x="1124" y="500" style="fill:#6d2116">matriz SC→evidencia</text>
+    <text class="mono note" x="1112" y="524" style="fill:#b4432f;font-weight:700">fail-closed: en rojo, nada avanza</text>
+  </g>
+
+  <!-- CARD 4 .claude/skills -->
+  <g>
+    <rect x="490" y="560" width="283" height="212" fill="#ffffff" stroke="#2f7d84" stroke-width="1.6" rx="7"/>
+    <rect x="490" y="560" width="283" height="4" fill="#2f7d84" rx="2"/>
+    <text class="mono card-h" x="506" y="586">.claude/skills/</text>
+    <text class="mono card-s" x="506" y="602">SUPERFICIE DEL AGENTE</text>
+    <g class="mono item">
+      <text x="506" y="626">speckit-specify/</text>
+      <text x="506" y="646">speckit-plan/ · tasks/</text>
+      <text x="506" y="666">speckit-analyze/ · …</text>
+      <text x="506" y="686">speckit-edaios-gate/</text>
+    </g>
+    <text class="mono note" x="506" y="712">12 skills proyectadas desde</text>
+    <text class="mono note" x="506" y="728">integrations.lock.json</text>
+    <text class="mono note" x="506" y="752" style="fill:#9c6626">invocables — no obligatorias</text>
+  </g>
+
+  <!-- CARD 5 CLAUDE.md -->
+  <g>
+    <rect x="793" y="560" width="283" height="212" fill="#ffffff" stroke="#9c6626" stroke-width="1.6" rx="7"/>
+    <rect x="793" y="560" width="283" height="4" fill="#9c6626" rx="2"/>
+    <text class="mono card-h" x="809" y="586">CLAUDE.md</text>
+    <text class="mono card-s" x="809" y="602">MEMORIA OPERATIVA DEL AGENTE</text>
+    <g class="mono item">
+      <text x="809" y="626">bloque EDAIOS-CORE:BEGIN</text>
+      <text x="809" y="646">superficie: claude-code</text>
+      <text x="809" y="666">lock: sha256:ff93e1…</text>
+    </g>
+    <rect x="809" y="678" width="251" height="58" fill="#faf4e9" stroke="#ddc9a4" rx="5"/>
+    <text class="mono note" x="821" y="697">«Git y los Knowledge Objects</text>
+    <text class="mono note" x="821" y="713">son la autoridad; .edaios/ es</text>
+    <text class="mono note" x="821" y="729">local y reconstruible.»</text>
+    <text class="mono note" x="809" y="756">gestionado por agent-setup</text>
+  </g>
+
+  <!-- CARD 6 specs -->
+  <g>
+    <rect x="1096" y="560" width="284" height="212" fill="#f7f5ee" stroke="#b3a683" stroke-width="1.6" stroke-dasharray="6 4" rx="7"/>
+    <text class="mono card-h" x="1112" y="586" style="fill:#6b5f42">specs/</text>
+    <text class="mono card-s" x="1112" y="602">AÚN NO EXISTE — LO CREA EL FLUJO</text>
+    <g class="mono item" style="fill:#6b5f42">
+      <text x="1112" y="626">001-feature/spec.md</text>
+      <text x="1112" y="646">001-feature/plan.md</text>
+      <text x="1112" y="666">001-feature/tasks.md</text>
+      <text x="1112" y="686">001-feature/checklist.md</text>
+    </g>
+    <text class="mono note" x="1112" y="712">nace con /speckit.specify</text>
+    <text class="mono note" x="1112" y="728">es lo que el gate valida</text>
+    <text class="mono note" x="1112" y="752" style="fill:#2f7d84">aquí vive el contrato SDD</text>
+  </g>
+
+  <!-- conexión gate -> specs -->
+  <path d="M1238 544 L1238 560" stroke="#b4432f" stroke-width="2" marker-end="url(#ar)" fill="none"/>
+  <text class="mono" x="1252" y="556" style="font-size:10.5px;fill:#b4432f">valida</text>
+
+  <!-- nota inferior dentro del proyecto -->
+  <text class="mono note" x="490" y="800">docs/ — mapa de arquitectura y procedencia · el resto del repo permanece intacto</text>
+  <text class="mono note" x="1382" y="800" text-anchor="end" style="fill:#9c6626">nada aquí se acepta sin firma humana</text>
+
+  <!-- ================= BANDA DE OBLIGATORIEDAD ================= -->
+  <rect x="44" y="866" width="1354" height="126" fill="#ffffff" stroke="#c9ba97" stroke-width="1.5" rx="8"/>
+  <text class="mono zone" x="66" y="896" style="fill:#16202a">¿QUIÉN OBLIGA A PASAR POR EL GATE?</text>
+
+  <g>
+    <rect x="66" y="910" width="404" height="62" fill="#eef7f0" stroke="#3f8f5b" stroke-width="1.6" rx="6"/>
+    <text class="mono chip-t" x="84" y="934" style="fill:#1c4e30">Invocación manual o skill · ACTIVO</text>
+    <text class="mono note" x="84" y="954">/speckit.* o python3 spec_kit_gate.py</text>
+  </g>
+  <g>
+    <rect x="490" y="910" width="404" height="62" fill="#fdf2ef" stroke="#b4432f" stroke-width="1.6" stroke-dasharray="6 4" rx="6"/>
+    <text class="mono chip-t" x="508" y="934" style="fill:#6d2116">Hook pre-push · NO INSTALADO</text>
+    <text class="mono note" x="508" y="954" style="fill:#6d2116">Core trae scripts/install-hooks.sh</text>
+  </g>
+  <g>
+    <rect x="914" y="910" width="404" height="62" fill="#fdf2ef" stroke="#b4432f" stroke-width="1.6" stroke-dasharray="6 4" rx="6"/>
+    <text class="mono chip-t" x="932" y="934" style="fill:#6d2116">CI · NO EXISTE</text>
+    <text class="mono note" x="932" y="954" style="fill:#6d2116">sin .github/workflows</text>
+  </g>
+  <text class="mono" x="1338" y="896" text-anchor="end" style="font-size:11.5px;fill:#b4432f;font-weight:700">hoy el gate es advisory</text>
+</svg>
