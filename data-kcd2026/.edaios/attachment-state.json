@@ -1,0 +1,12 @@
+{
+  "claim_boundary": "draft local; no adoption or approval implied",
+  "created_at": "2026-07-18T02:42:56.717066Z",
+  "files": {
+    ".edaios/authority-registry.json": "5d737b5b3d2da3fbcc10697aaa2c0ea5d04df2cee04157d02b94bd80026d9b1c",
+    ".edaios/policies/initiative-policy.json": "5fb1fde4859d142c6b44a709646191e9d1e28063a2a9f4bcf16a7c10d40e7d3a",
+    ".edaios/policies/sensitivity-t0.json": "729c434cad255eba9d373fb5d13d5639dbf8069974d817f0a302c476e9b9deb9",
+    "edaios.initiative.json": "7cbfb5f7f23bd2ebfb7efa0fa04c7a318cc7126120baf6e28b367378738477e8"
+  },
+  "initiative": "data-kcd2026",
+  "schema": "edaios.attachment-state/v1"
+}

@@ -44,7 +44,7 @@ módulo compilaba, los 5 tests estaban verdes y el job llegaba a `RUNNING`.
 ## Cierre
 
 - [x] [GATES] `contract_check.py` y `mvnw -pl data-kcd2026 clean test` en verde
-- [x] [LEDGER] value ledger: `N/A` — demo de conferencia sin iniciativa ni outcome
+- [x] [LEDGER] [INGEST] value ledger: `N/A` — demo de conferencia sin iniciativa ni outcome; no hay artefactos externos que ingerir como borradores
 - [ ] [SEAL] preparar el cambio para revisión; commit y push exigen autorización del owner
 
 ## Estado

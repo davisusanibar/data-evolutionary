@@ -9,20 +9,21 @@
 Verificado contra los 7 artículos de la Constitución EDAIOS. Un `VIOLA` detiene
 el plan; el camino sería un ADR, no una excepción.
 
-| # | Artículo | Veredicto | Evidencia |
-|---|---|---|---|
-| I | El conocimiento manda | PASS | El contrato vive en `feature.spec.yaml` y `spec.md`; el `.avsc` y el job los consumen. `contract_check.py` falla si el esquema pretende mandar sobre la spec. |
-| II | Spec antes que artefacto | PASS | La spec declara FR-001..FR-007 y SC-001..SC-006 antes del job. El contrato tipado precede al `.avsc`. |
-| III | El canon crece por decisión | N/A | La feature no introduce frontera estructural en EDAIOS Core. Es un consumer que aplica el gobierno existente. |
-| IV | Cero cifras sin fuente | PASS | La única cifra del pipeline (`sum_o_totalprice`) declara su fuente (tópico `orders`), su alcance (ventana de N segundos) y su límite (Clarification 2: no es exactitud fiscal). |
-| V | Una fuente, muchas vistas | PASS | El contrato tiene una fuente (`feature.spec.yaml`) y tres representaciones (prosa FR-002, `.avsc`, job). El gate verifica que no deriven. |
-| VI | La IA consume; el humano firma | PASS | El job lo genera un agente desde la spec; la aceptación de la feature y el cierre exigen firma del owner. Ningún gate acepta por su cuenta. |
-| VII | Privacidad por diseño | PASS | T0 declarado. `orders` es TPC-H sintético: no hay PII. Ningún campo del contrato de salida identifica a una persona; `o_custkey` es una clave sintética. |
+| Principio | Veredicto | Evidencia |
+|---|---|---|
+| I. El conocimiento manda | PASS | El contrato de datos vive en `data-contract.yaml` y `spec.md`; el `.avsc` y el job los consumen. `contract_check.py` falla si el esquema pretende mandar sobre la spec. |
+| II. Spec antes que artefacto | PASS | La spec declara FR-001..FR-007 y SC-001..SC-006 antes del job. El contrato de datos precede al `.avsc`. |
+| III. El canon crece por decisión | N/A | La feature no introduce frontera estructural en EDAIOS Core. Es un consumer que aplica el gobierno existente. |
+| IV. Cero cifras sin fuente | PASS | La única cifra (`sum_o_totalprice`) declara fuente, alcance y límite en `evidence/sources.md` (Clarification 2: no es exactitud fiscal). |
+| V. Una fuente, muchas vistas | PASS | El contrato tiene una fuente (`data-contract.yaml`) y tres representaciones (prosa FR-002, `.avsc`, job). El gate verifica que no deriven. |
+| VI. La IA consume; el humano firma | PASS | El job lo genera un agente desde la spec; la aceptación y el cierre exigen firma del owner. Ningún gate acepta por su cuenta. |
+| VII. Privacidad por diseño | PASS | T0 declarado. `orders` es TPC-H sintético: no hay PII. `o_custkey` es una clave sintética. |
 
-**Constitución verificada:** 1.0.0 · pin no aplicable — este consumer no vive en
-el árbol de Core y no puede resolver `constitution.md` localmente. La
-verificación es manual y se registra aquí. Esa es la frontera honesta: el
-consumer aplica los artículos, no los verifica mecánicamente.
+Constitucion verificada: 1.0.0 · sha256:c05dfd28b564bcfa8fbda15ae8db0a12b6f169f00f9057fbea5e4a0fca9892a3
+
+El pin resuelve contra la constitución proyectada en `.specify/memory/constitution.md`
+(inyectada por el adapter de Core). Ya no es "no aplicable": la verificación del
+Constitution Check se ancla a la huella de la constitución compilada de Core.
 
 ## Gate Impact
 

@@ -1,0 +1,22 @@
+{
+  "approval_roles": [
+    "initiative-owner"
+  ],
+  "data_classes": [
+    "public-metadata",
+    "synthetic-fixture"
+  ],
+  "forbidden_routes": [
+    "llm",
+    "external-network",
+    "production-data"
+  ],
+  "id": "sensitivity-t0",
+  "level": "T0",
+  "required_controls": [
+    "no-pii",
+    "no-secret",
+    "no-network-required"
+  ],
+  "schema": "edaios.sensitivity-profile/v1"
+}

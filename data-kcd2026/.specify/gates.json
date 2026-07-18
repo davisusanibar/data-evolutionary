@@ -1,0 +1,8 @@
+{
+  "schema": "edaios.sdd.gates/v1",
+  "version": "1.0.0",
+  "gates": [
+    {"id": "CONTRACT", "scope": "pre-push,ci", "command": "python3 data-kcd2026/tools/contract_check.py"},
+    {"id": "TEST", "scope": "pre-push,ci", "command": "./mvnw -pl data-kcd2026 test"}
+  ]
+}

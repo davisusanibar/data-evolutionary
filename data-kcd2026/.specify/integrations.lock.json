@@ -1,0 +1,96 @@
+{
+  "commands": {
+    "speckit.analyze": {
+      "sha256": "608cc91a300ed61d1b995b007631448b72a98ddab5ddd772dadab3d0f67a11e6",
+      "source": ".specify/commands/speckit.analyze.md",
+      "surfaces": [
+        ".agents/skills/speckit-analyze/SKILL.md",
+        ".agents/skills/speckit-analyze/agents/openai.yaml",
+        ".claude/commands/speckit.analyze.md",
+        ".github/prompts/speckit.analyze.prompt.md",
+        "core/framework/extensions/sdd-adapter/spec-kit/preset/commands/speckit.analyze.md"
+      ]
+    },
+    "speckit.checklist": {
+      "sha256": "d3511ce74e43a24d5fdd0a5ea36a6842f7c9807c71dfb44cba6d7f96f5ed71ac",
+      "source": ".specify/commands/speckit.checklist.md",
+      "surfaces": [
+        ".agents/skills/speckit-checklist/SKILL.md",
+        ".agents/skills/speckit-checklist/agents/openai.yaml",
+        ".claude/commands/speckit.checklist.md",
+        ".github/prompts/speckit.checklist.prompt.md",
+        "core/framework/extensions/sdd-adapter/spec-kit/preset/commands/speckit.checklist.md"
+      ]
+    },
+    "speckit.clarify": {
+      "sha256": "3848fae790faa8fc3e35bcf4eb041e724cf495bf1b85b948fe6182f10a71592f",
+      "source": ".specify/commands/speckit.clarify.md",
+      "surfaces": [
+        ".agents/skills/speckit-clarify/SKILL.md",
+        ".agents/skills/speckit-clarify/agents/openai.yaml",
+        ".claude/commands/speckit.clarify.md",
+        ".github/prompts/speckit.clarify.prompt.md",
+        "core/framework/extensions/sdd-adapter/spec-kit/preset/commands/speckit.clarify.md"
+      ]
+    },
+    "speckit.constitution": {
+      "sha256": "0c2b6f2cdbd42c40052729cbdb53fdd26a46bb6a53fa9100db427b7046a31d3e",
+      "source": ".specify/commands/speckit.constitution.md",
+      "surfaces": [
+        ".agents/skills/speckit-constitution/SKILL.md",
+        ".agents/skills/speckit-constitution/agents/openai.yaml",
+        ".claude/commands/speckit.constitution.md",
+        ".github/prompts/speckit.constitution.prompt.md",
+        "core/framework/extensions/sdd-adapter/spec-kit/preset/commands/speckit.constitution.md"
+      ]
+    },
+    "speckit.implement": {
+      "sha256": "9c251bf21e11ca9d0d20f7098dc67a553f1bc61a6431a674f8fb86962cbec3f2",
+      "source": ".specify/commands/speckit.implement.md",
+      "surfaces": [
+        ".agents/skills/speckit-implement/SKILL.md",
+        ".agents/skills/speckit-implement/agents/openai.yaml",
+        ".claude/commands/speckit.implement.md",
+        ".github/prompts/speckit.implement.prompt.md",
+        "core/framework/extensions/sdd-adapter/spec-kit/preset/commands/speckit.implement.md"
+      ]
+    },
+    "speckit.plan": {
+      "sha256": "d2da7544e1cee27b15bf10196a73dc726d4e321bcd9be2e11f44f8e5a1f08856",
+      "source": ".specify/commands/speckit.plan.md",
+      "surfaces": [
+        ".agents/skills/speckit-plan/SKILL.md",
+        ".agents/skills/speckit-plan/agents/openai.yaml",
+        ".claude/commands/speckit.plan.md",
+        ".github/prompts/speckit.plan.prompt.md",
+        "core/framework/extensions/sdd-adapter/spec-kit/preset/commands/speckit.plan.md"
+      ]
+    },
+    "speckit.specify": {
+      "sha256": "48b410931e22ba3f46c765681524458460b8977d86a0606689a9f229dff7d624",
+      "source": ".specify/commands/speckit.specify.md",
+      "surfaces": [
+        ".agents/skills/speckit-specify/SKILL.md",
+        ".agents/skills/speckit-specify/agents/openai.yaml",
+        ".claude/commands/speckit.specify.md",
+        ".github/prompts/speckit.specify.prompt.md",
+        "core/framework/extensions/sdd-adapter/spec-kit/preset/commands/speckit.specify.md"
+      ]
+    },
+    "speckit.tasks": {
+      "sha256": "c2b7553fdd729d70ea5374aba1fb441a4425beb197692600515a067acc8eb6b6",
+      "source": ".specify/commands/speckit.tasks.md",
+      "surfaces": [
+        ".agents/skills/speckit-tasks/SKILL.md",
+        ".agents/skills/speckit-tasks/agents/openai.yaml",
+        ".claude/commands/speckit.tasks.md",
+        ".github/prompts/speckit.tasks.prompt.md",
+        "core/framework/extensions/sdd-adapter/spec-kit/preset/commands/speckit.tasks.md"
+      ]
+    }
+  },
+  "generated_by": "tools/publishing/sync_spec_kit_integrations.py",
+  "schema": "edaios.speckit.integrations/v1",
+  "source": "edaios-core@v3.1.0+spec-kit@v0.12.11",
+  "spec_kit_version": "0.12.11"
+}

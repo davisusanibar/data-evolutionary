@@ -1,7 +1,7 @@
 ---
 id: KCD2026-ORDERS-REVENUE-WINDOW
 estado: Propuesto
-fase: implemented
+fase: tasked
 dominio: data-pipeline
 tramo_sensibilidad: T0
 owner: Data & AI Lead
@@ -9,10 +9,10 @@ tipo_cambio: feature
 trazas:
   - ADR-0001
   - ADR-0002
-spec_tipada: data-kcd2026/specs/001-orders-revenue-window/feature.spec.yaml
+spec_tipada: specs/001-orders-revenue-window/feature.spec.yaml
 fuentes:
-  - data-kcd2026/src/main/resources/model/orders_revenue_window.avsc
-  - data-cdc-kafka-flink-iceberg/src/main/resources/model/orders.avsc
+  - specs/001-orders-revenue-window/evidence/sources.md
+  - src/main/resources/model/orders_revenue_window.avsc
 value_ledger: "N/A: demo de conferencia; no hay iniciativa, owner de negocio ni baseline de outcome"
 hipotesis_valor: Un pipeline cuyo contrato de datos es verificable por un gate no puede derivar en silencio entre el esquema y lo que la especificación declara
 ---

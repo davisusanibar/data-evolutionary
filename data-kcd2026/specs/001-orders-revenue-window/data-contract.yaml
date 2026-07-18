@@ -1,0 +1,37 @@
+# Contrato de datos del pipeline. Lo consume tools/contract_check.py (gate de
+# dominio), que verifica que estas tres representaciones no deriven: este archivo,
+# la prosa FR-002 de spec.md y el .avsc que ejecuta Flink. Rutas relativas a la
+# raíz del monorepo (data-evolutionary), porque el gate de dominio se corre desde ahí.
+schema: kcd2026.data-contract/v1
+requirements:
+  - FR-001
+  - FR-002
+  - FR-003
+  - FR-004
+  - FR-005
+  - FR-006
+  - FR-007
+contract:
+  source_topic: orders
+  source_schema: data-cdc-kafka-flink-iceberg/src/main/resources/model/orders.avsc
+  sink_topic: orders_revenue_window
+  sink_schema: data-kcd2026/src/main/resources/model/orders_revenue_window.avsc
+  registry: http://registry:8081
+  bootstrap_servers: broker:9092
+  window_seconds: 60
+fields:
+  - name: o_custkey
+    type: long
+  - name: window_start
+    type: long
+    logicalType: timestamp-millis
+  - name: window_end
+    type: long
+    logicalType: timestamp-millis
+  - name: sum_o_totalprice
+    type: double
+  - name: order_count
+    type: int
+validation:
+  - data-kcd2026/tools/contract_check.py
+  - mvn -q -pl data-kcd2026 test

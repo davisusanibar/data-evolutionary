@@ -1,0 +1,32 @@
+{
+  "actors": [
+    {
+      "active": true,
+      "actor_id": "data-ai-lead",
+      "capabilities": [
+        "approve",
+        "delegate",
+        "rollback"
+      ],
+      "roles": [
+        "initiative-owner",
+        "approver"
+      ],
+      "type": "human"
+    },
+    {
+      "active": true,
+      "actor_id": "conference-value-owner",
+      "capabilities": [
+        "outcome:verify"
+      ],
+      "roles": [
+        "value-owner"
+      ],
+      "type": "human"
+    }
+  ],
+  "initiative": "data-kcd2026",
+  "schema": "edaios.authority-registry/v1",
+  "version": "1.0.0"
+}

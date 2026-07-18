@@ -3,7 +3,7 @@
 
 Verifica que tres representaciones del mismo contrato no hayan derivado entre si:
 
-    feature.spec.yaml  (contrato tipado)  <-- la fuente
+    data-contract.yaml (contrato de datos)  <-- la fuente
     spec.md            (FR-002, prosa)
     orders_revenue_window.avsc            (el esquema que ejecuta Flink)
 
@@ -30,7 +30,7 @@ import yaml
 
 MODULE = Path("data-kcd2026")
 SPEC_DIR = MODULE / "specs/001-orders-revenue-window"
-TYPED = SPEC_DIR / "feature.spec.yaml"
+TYPED = SPEC_DIR / "data-contract.yaml"
 PROSE = SPEC_DIR / "spec.md"
 JOB = MODULE / "src/main/java/com/topaya/kcd2026/JobOrdersRevenueWindow.java"
 
@@ -100,10 +100,10 @@ def check_schema_matches_contract(root: Path, data: dict) -> list[str]:
 
     for name in expected_names:
         if name not in actual_names:
-            problems.append(f"campo declarado en feature.spec.yaml y ausente del .avsc: {name!r}")
+            problems.append(f"campo declarado en data-contract.yaml y ausente del .avsc: {name!r}")
     for name in actual_names:
         if name not in expected_names:
-            problems.append(f"campo presente en el .avsc y no declarado en feature.spec.yaml: {name!r}")
+            problems.append(f"campo presente en el .avsc y no declarado en data-contract.yaml: {name!r}")
 
     for name, etype, elogical in expected:
         for aname, atype, alogical in actual:
@@ -197,7 +197,7 @@ def main(argv: list[str] | None = None) -> int:
     fields = ", ".join(name for name, _, _ in typed_fields(data))
     print(
         f"[contract] OK: {len(data['fields'])} campos coinciden entre "
-        f"feature.spec.yaml, FR-002 y {data['contract']['sink_schema']}"
+        f"data-contract.yaml, FR-002 y {data['contract']['sink_schema']}"
     )
     print(f"[contract] contrato: {fields}")
     return 0

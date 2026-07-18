@@ -1,0 +1,1 @@
+../../../.specify/extensions/edaios-governance/.specify-dev/agent-commands/claude/speckit-edaios-governance-gate/SKILL.md
