@@ -1,0 +1,247 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1200" width="1500" height="1200" role="img" aria-label="Cadena de control end-to-end de EDAIOS sobre la feature 001">
+  <title>EDAIOS · cadena de control end-to-end sobre la feature 001-revenue-ventana-cliente</title>
+  <desc>Cada artefacto creado está encadenado al siguiente por un check nombrado del gate: la constitución pinea el plan, el plan precede a la spec, la spec cubre tareas y matriz de verificación, y el gate decide antes de que Git conserve el resultado.</desc>
+
+  <defs>
+    <pattern id="grid" width="26" height="26" patternUnits="userSpaceOnUse">
+      <path d="M26 0H0V26" fill="none" stroke="#78684a" stroke-opacity=".13" stroke-width="1"/>
+    </pattern>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#9c6626"/>
+    </marker>
+    <marker id="arg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#8d99a5"/>
+    </marker>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#b4432f"/>
+    </marker>
+    <style>
+      .mono{font-family:ui-monospace,"SFMono-Regular","SF Mono",Menlo,Consolas,"Liberation Mono",monospace}
+      .sans{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif}
+      .h1{font-size:31px;font-weight:700;fill:#16202a;letter-spacing:-.4px}
+      .h2{font-size:15px;fill:#5f5643}
+      .eyebrow{font-size:12px;fill:#9c6626;font-weight:700;letter-spacing:2.4px}
+      .zone{font-size:12px;font-weight:700;letter-spacing:1.7px}
+      .ch{font-size:14.5px;font-weight:700;fill:#16202a}
+      .cs{font-size:10.5px;fill:#6b5f42;letter-spacing:.4px}
+      .item{font-size:11.5px;fill:#2c3742}
+      .note{font-size:11px;fill:#6b5f42}
+      .check{font-size:11px;fill:#9c6626;font-weight:700}
+      .num{font-size:11px;font-weight:700;fill:#fdfcf8}
+    </style>
+  </defs>
+
+  <rect width="1500" height="1200" fill="#f6f3ea"/>
+  <rect width="1500" height="1200" fill="url(#grid)"/>
+  <rect x="14" y="14" width="1472" height="1172" fill="none" stroke="#c9ba97" stroke-width="1.5" rx="8"/>
+
+  <!-- CABECERA -->
+  <text class="mono eyebrow" x="44" y="56">FEATURE 001-REVENUE-VENTANA-CLIENTE · GATE CONSUMER-RELEASE · 42/42</text>
+  <text class="sans h1" x="44" y="92">La cadena de control, eslabón por eslabón</text>
+  <text class="sans h2" x="44" y="116">Ningún artefacto flota: cada uno queda amarrado al siguiente por un check con nombre. Romper un eslabón pone el gate en rojo.</text>
+  <text class="mono note" x="1456" y="92" text-anchor="end" style="font-size:12px">columna central = cadena obligatoria</text>
+  <text class="mono note" x="1456" y="110" text-anchor="end" style="font-size:12px">laterales = lo que la sostiene</text>
+
+  <!-- ============ PANEL IZQUIERDO · ATTACHMENT ============ -->
+  <text class="mono zone" x="44" y="162" style="fill:#9c6626">QUIÉN PUEDE, Y SOBRE QUÉ DATOS</text>
+  <g>
+    <rect x="44" y="172" width="412" height="86" fill="#ffffff" stroke="#9c6626" stroke-width="1.5" rx="7"/>
+    <text class="mono ch" x="60" y="194">edaios.initiative.json</text>
+    <text class="mono cs" x="60" y="210">EL CONTRATO DE ADOPCIÓN</text>
+    <text class="mono item" x="60" y="230">owner: david-susanibar · lifecycle: draft</text>
+    <text class="mono item" x="60" y="248">namespace: com.topaya.kcd2026 · T0</text>
+  </g>
+  <g>
+    <rect x="44" y="268" width="412" height="72" fill="#ffffff" stroke="#9c6626" stroke-width="1.5" rx="7"/>
+    <text class="mono ch" x="60" y="290">authority-registry.json</text>
+    <text class="mono item" x="60" y="312">david-susanibar → approve · delegate</text>
+    <text class="mono item" x="60" y="330">topaya-value-office → outcome:verify</text>
+  </g>
+  <g>
+    <rect x="44" y="350" width="412" height="72" fill="#ffffff" stroke="#9c6626" stroke-width="1.5" rx="7"/>
+    <text class="mono ch" x="60" y="372">policies/sensitivity-t0.json</text>
+    <text class="mono item" x="60" y="394">prohíbe: llm · external-network</text>
+    <text class="mono item" x="60" y="412">prohíbe: production-data · PII · secretos</text>
+  </g>
+  <g>
+    <rect x="44" y="432" width="412" height="64" fill="#f5eddc" stroke="#8a6d2f" stroke-width="1.6" rx="7"/>
+    <text class="mono ch" x="60" y="454">attachment-state.json</text>
+    <text class="mono item" x="60" y="476">sella los 4 anteriores con sha256</text>
+  </g>
+  <text class="mono note" x="44" y="516">Este bloque no valida la feature: define el marco</text>
+  <text class="mono note" x="44" y="532">dentro del cual la feature puede existir.</text>
+
+  <!-- PRUEBA NEGATIVA -->
+  <text class="mono zone" x="44" y="586" style="fill:#b4432f">LA PRUEBA DE QUE CIERRA</text>
+  <rect x="44" y="596" width="412" height="196" fill="#fdf2ef" stroke="#b4432f" stroke-width="1.6" rx="7"/>
+  <text class="mono item" x="60" y="620" style="fill:#6d2116">Un gate visto solo en verde no consta.</text>
+  <text class="mono item" x="60" y="638" style="fill:#6d2116">Se rompió a propósito, dos veces:</text>
+  <g class="mono">
+    <rect x="60" y="652" width="380" height="42" fill="#ffffff" stroke="#e0b3a7" rx="5"/>
+    <text class="item" x="74" y="670">pin de la constitución · 1 carácter</text>
+    <text class="note" x="74" y="686" style="fill:#b4432f">→ 41/42 «pin obsoleto»</text>
+    <rect x="60" y="700" width="380" height="42" fill="#ffffff" stroke="#e0b3a7" rx="5"/>
+    <text class="item" x="74" y="718">FR-005 pierde su tarea</text>
+    <text class="note" x="74" y="734" style="fill:#b4432f">→ 41/42 «cobertura FR → tareas»</text>
+    <rect x="60" y="748" width="380" height="30" fill="#eef7f0" stroke="#3f8f5b" rx="5"/>
+    <text class="item" x="74" y="768" style="fill:#1c4e30">restaurado → 42/42 verde</text>
+  </g>
+
+  <!-- ============ COLUMNA CENTRAL · LA CADENA ============ -->
+  <text class="mono zone" x="500" y="162" style="fill:#16202a">CADENA OBLIGATORIA — CADA FLECHA ES UN CHECK DEL GATE</text>
+
+  <!-- C1 constitución -->
+  <g>
+    <rect x="500" y="172" width="500" height="68" fill="#e6eef0" stroke="#2f7d84" stroke-width="1.7" rx="7"/>
+    <circle cx="522" cy="194" r="11" fill="#2f7d84"/><text class="mono num" x="522" y="198" text-anchor="middle">1</text>
+    <text class="mono ch" x="542" y="198">.specify/memory/constitution.md</text>
+    <text class="mono item" x="542" y="222">7 principios proyectados desde Core · huella sha256</text>
+  </g>
+  <line x1="750" y1="240" x2="750" y2="264" stroke="#9c6626" stroke-width="2.2" marker-end="url(#ar)"/>
+  <rect x="576" y="243" width="348" height="18" fill="#f6f3ea"/>
+  <text class="mono check" x="750" y="256" text-anchor="middle">pin vigente de la constitucion</text>
+
+  <!-- C2 plan -->
+  <g>
+    <rect x="500" y="268" width="500" height="100" fill="#ffffff" stroke="#33404b" stroke-width="1.6" rx="7"/>
+    <circle cx="522" cy="290" r="11" fill="#33404b"/><text class="mono num" x="522" y="294" text-anchor="middle">2</text>
+    <text class="mono ch" x="542" y="294">plan.md</text>
+    <text class="mono item" x="520" y="318">Constitution Check · I a VII, con evidencia por principio</text>
+    <text class="mono item" x="520" y="336">Constitución verificada: sha256:c05dfd28…</text>
+    <text class="mono item" x="520" y="354">Gate Impact · VIOLA sería fallo directo</text>
+  </g>
+  <line x1="750" y1="368" x2="750" y2="392" stroke="#9c6626" stroke-width="2.2" marker-end="url(#ar)"/>
+  <rect x="596" y="371" width="308" height="18" fill="#f6f3ea"/>
+  <text class="mono check" x="750" y="384" text-anchor="middle">spec antes que artefacto (Art. II)</text>
+
+  <!-- C3 spec -->
+  <g>
+    <rect x="500" y="396" width="500" height="128" fill="#ffffff" stroke="#33404b" stroke-width="2" rx="7"/>
+    <rect x="500" y="396" width="500" height="4" fill="#9c6626" rx="2"/>
+    <circle cx="522" cy="420" r="11" fill="#9c6626"/><text class="mono num" x="522" y="424" text-anchor="middle">3</text>
+    <text class="mono ch" x="542" y="424">spec.md — el contrato</text>
+    <text class="mono item" x="520" y="448">frontmatter: id · fase tasked · estado Propuesto · T0</text>
+    <text class="mono item" x="520" y="466">owner · trazas ADR-0016, ADR-0003 · value_ledger</text>
+    <text class="mono item" x="520" y="484" style="fill:#9c6626;font-weight:700">FR-001 … FR-006      SC-001 … SC-005</text>
+    <text class="mono note" x="520" y="506">todo lo que sigue se mide contra estos identificadores</text>
+  </g>
+
+  <!-- bifurcación FR / SC -->
+  <path d="M660 524 L660 540 L620 540 L620 556" stroke="#9c6626" stroke-width="2.2" fill="none" marker-end="url(#ar)"/>
+  <path d="M840 524 L840 540 L880 540 L880 668" stroke="#9c6626" stroke-width="2.2" fill="none" marker-end="url(#ar)"/>
+  <text class="mono check" x="606" y="538" text-anchor="end">FR →</text>
+  <text class="mono check" x="894" y="538">SC →</text>
+
+  <!-- C4 tasks -->
+  <g>
+    <rect x="500" y="560" width="340" height="96" fill="#ffffff" stroke="#33404b" stroke-width="1.6" rx="7"/>
+    <circle cx="522" cy="582" r="11" fill="#33404b"/><text class="mono num" x="522" y="586" text-anchor="middle">4</text>
+    <text class="mono ch" x="542" y="586">tasks.md</text>
+    <text class="mono item" x="518" y="610">22 tareas · cada FR con tarea</text>
+    <text class="mono item" x="518" y="628">cierre: [GATES] [LEDGER]</text>
+    <text class="mono item" x="518" y="646">[INGEST] [SEAL]</text>
+  </g>
+  <text class="mono check" x="500" y="676">cobertura FR → tareas · tareas de cierre</text>
+
+  <!-- C5 verification -->
+  <g>
+    <rect x="500" y="692" width="500" height="96" fill="#ffffff" stroke="#33404b" stroke-width="1.6" rx="7"/>
+    <circle cx="522" cy="714" r="11" fill="#33404b"/><text class="mono num" x="522" y="718" text-anchor="middle">5</text>
+    <text class="mono ch" x="542" y="718">verification.md</text>
+    <text class="mono item" x="518" y="742">cada SC declara cómo se verifica y qué evidencia deja</text>
+    <text class="mono item" x="518" y="760">SC-003 y SC-005 exigen el par completo: verde y rojo</text>
+    <text class="mono note" x="518" y="778">la evidencia se produce al cerrar, no ahora</text>
+  </g>
+  <line x1="750" y1="788" x2="750" y2="812" stroke="#9c6626" stroke-width="2.2" marker-end="url(#ar)"/>
+
+  <!-- C6 gate -->
+  <g>
+    <rect x="500" y="816" width="500" height="104" fill="#f6dcd4" stroke="#b4432f" stroke-width="2" rx="7"/>
+    <circle cx="522" cy="838" r="11" fill="#b4432f"/><text class="mono num" x="522" y="842" text-anchor="middle">6</text>
+    <text class="mono ch" x="542" y="842" style="fill:#6d2116">spec_kit_gate.py — decide</text>
+    <text class="mono item" x="518" y="866" style="fill:#6d2116">--profile consumer-release · fail-closed</text>
+    <text class="mono item" x="518" y="890" style="fill:#1c4e30;font-weight:700">42 / 42 checks OK · exit 0</text>
+    <text class="mono note" x="518" y="908" style="fill:#6d2116">un solo eslabón roto ⇒ exit 1</text>
+  </g>
+  <line x1="750" y1="920" x2="750" y2="944" stroke="#9c6626" stroke-width="2.2" marker-end="url(#ar)"/>
+
+  <!-- C7 git -->
+  <g>
+    <rect x="500" y="948" width="500" height="68" fill="#f3e6cf" stroke="#9c6626" stroke-width="1.8" rx="7"/>
+    <circle cx="522" cy="970" r="11" fill="#9c6626"/><text class="mono num" x="522" y="974" text-anchor="middle">7</text>
+    <text class="mono ch" x="542" y="974" style="fill:#5b3d12">git — la autoridad final</text>
+    <text class="mono item" x="518" y="998" style="fill:#5b3d12">adc8e6b · el gate informa, la firma humana cierra</text>
+  </g>
+
+  <!-- ============ PANEL DERECHO · SATÉLITES ============ -->
+  <text class="mono zone" x="1044" y="162" style="fill:#2f7d84">LO QUE AMARRA LA CADENA</text>
+  <g>
+    <rect x="1044" y="172" width="412" height="86" fill="#ffffff" stroke="#2f7d84" stroke-width="1.5" rx="7"/>
+    <text class="mono ch" x="1060" y="194">feature.spec.yaml</text>
+    <text class="mono cs" x="1060" y="210">CONTRATO TIPADO</text>
+    <text class="mono item" x="1060" y="230">id + artifact enlazan con spec.md</text>
+    <text class="mono item" x="1060" y="248">schema v2 ⇒ verification.md obligatoria</text>
+  </g>
+  <path d="M1044 215 L1004 215" stroke="#8d99a5" stroke-width="1.6" stroke-dasharray="5 3" marker-end="url(#arg)" fill="none"/>
+
+  <g>
+    <rect x="1044" y="272" width="412" height="72" fill="#ffffff" stroke="#2f7d84" stroke-width="1.5" rx="7"/>
+    <text class="mono ch" x="1060" y="294">checklists/requirements.md</text>
+    <text class="mono item" x="1060" y="316">17 ítems de calidad de requisitos</text>
+    <text class="mono item" x="1060" y="334">0 pendientes — un «- [ ]» lo pone rojo</text>
+  </g>
+
+  <g>
+    <rect x="1044" y="358" width="412" height="90" fill="#ffffff" stroke="#8d99a5" stroke-width="1.5" rx="7"/>
+    <text class="mono ch" x="1060" y="380">fuentes declaradas</text>
+    <text class="mono item" x="1060" y="402">README.md · pom.xml</text>
+    <text class="mono item" x="1060" y="420">docs/edaios-arquitectura-proyecto.svg</text>
+    <text class="mono note" x="1060" y="438">deben existir dentro del módulo</text>
+  </g>
+
+  <g>
+    <rect x="1044" y="462" width="412" height="86" fill="#f7f5ee" stroke="#b3a683" stroke-width="1.6" stroke-dasharray="6 4" rx="7"/>
+    <text class="mono ch" x="1060" y="484" style="fill:#6b5f42">evidence/ — aún no existe</text>
+    <text class="mono item" x="1060" y="506" style="fill:#6b5f42">5 artefactos, uno por criterio SC</text>
+    <text class="mono note" x="1060" y="526">nace al cerrar; hoy sería una cifra sin fuente</text>
+  </g>
+  <path d="M1044 505 L1004 505 L1004 740" stroke="#b3a683" stroke-width="1.6" stroke-dasharray="5 3" marker-end="url(#arg)" fill="none"/>
+
+  <!-- LO QUE NO GOBIERNA NADIE -->
+  <text class="mono zone" x="1044" y="586" style="fill:#b4432f">FUERA DE LA CADENA, HOY</text>
+  <rect x="1044" y="596" width="412" height="196" fill="#ffffff" stroke="#b4432f" stroke-width="1.6" stroke-dasharray="6 4" rx="7"/>
+  <text class="mono item" x="1060" y="620" style="fill:#6d2116">La cadena gobierna los ARTEFACTOS.</text>
+  <text class="mono item" x="1060" y="638" style="fill:#6d2116">Nada obliga aún a entrar en ella:</text>
+  <g class="mono item" style="fill:#6d2116">
+    <text x="1060" y="664">·  hook pre-push — no instalado</text>
+    <text x="1060" y="686">·  CI — no existe</text>
+    <text x="1060" y="708">·  el prompt en sí — no se captura</text>
+    <text x="1060" y="730">·  el job Flink — sin implementar</text>
+  </g>
+  <text class="mono note" x="1060" y="760">El gate es advisory hasta que se cablee</text>
+  <text class="mono note" x="1060" y="776">una de las dos primeras.</text>
+
+  <!-- ============ BANDA INFERIOR · RECORRIDO ============ -->
+  <rect x="44" y="1046" width="1412" height="124" fill="#ffffff" stroke="#c9ba97" stroke-width="1.5" rx="8"/>
+  <text class="mono zone" x="66" y="1074" style="fill:#16202a">EL RECORRIDO HASTA AQUÍ — CUATRO COMMITS</text>
+
+  <line x1="86" y1="1116" x2="1400" y2="1116" stroke="#c9ba97" stroke-width="2"/>
+  <g class="mono">
+    <circle cx="180" cy="1116" r="7" fill="#8d99a5"/>
+    <text class="item" x="180" y="1104" text-anchor="middle">4787d57</text>
+    <text class="note" x="180" y="1140" text-anchor="middle">submódulo Maven</text>
+
+    <circle cx="560" cy="1116" r="7" fill="#9c6626"/>
+    <text class="item" x="560" y="1104" text-anchor="middle">2ff96da</text>
+    <text class="note" x="560" y="1140" text-anchor="middle">EDAIOS inyectado · 59 archivos</text>
+
+    <circle cx="940" cy="1116" r="7" fill="#2f7d84"/>
+    <text class="item" x="940" y="1104" text-anchor="middle">4c04620</text>
+    <text class="note" x="940" y="1140" text-anchor="middle">mapa de arquitectura</text>
+
+    <circle cx="1320" cy="1116" r="8.5" fill="#b4432f"/>
+    <text class="item" x="1320" y="1104" text-anchor="middle" style="font-weight:700">adc8e6b</text>
+    <text class="note" x="1320" y="1140" text-anchor="middle" style="fill:#b4432f">feature 001 · gate 42/42</text>
+  </g>
+  <text class="mono note" x="1400" y="1074" text-anchor="end">fase tasked · estado Propuesto · sin firma de cierre</text>
+</svg>
