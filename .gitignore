@@ -45,3 +45,7 @@ src/main/java/org/example/kcd101/
 ### Hadoop HDFS, Hive
 infra/dockercompose/hive_database/**
 infra/dockercompose/datanode_data/**
+
+# Build output del submodulo KCD2026
+data-kcd2026/target/
+data-kcd2026/dependency-reduced-pom.xml

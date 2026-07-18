@@ -1,0 +1,52 @@
+# SC-005 · gate SDD, perfil consumer-release
+# comando: python3 tools/validation/spec_kit_gate.py . --feature specs/001-revenue-ventana-cliente --profile consumer-release
+
+== Spec Kit Gate · EDAIOS · profile=consumer-release ==
+  [OK ] perfil consumer-release (raiz liviana, ADR-0016)  · sdd-contract, claim-surface
+  [OK ] gates.json opcional en consumer  · ausente
+  [OK ] specs/001-revenue-ventana-cliente: metadata obligatoria
+  [OK ] specs/001-revenue-ventana-cliente: fase valida  · tasked
+  [OK ] specs/001-revenue-ventana-cliente: estado de trabajo valido  · Propuesto
+  [OK ] specs/001-revenue-ventana-cliente: estado y fase compatibles  · estado=Propuesto fase=tasked
+  [OK ] specs/001-revenue-ventana-cliente: owner declarado
+  [OK ] specs/001-revenue-ventana-cliente: dominio declarado  · data-streaming
+  [OK ] specs/001-revenue-ventana-cliente: sensibilidad valida  · T0
+  [OK ] specs/001-revenue-ventana-cliente: trazas con formato valido
+  [OK ] specs/001-revenue-ventana-cliente: cambio estructural respaldado por ADR
+  [OK ] specs/001-revenue-ventana-cliente: spec tipada existe  · specs/001-revenue-ventana-cliente/feature.spec.yaml
+  [OK ] specs/001-revenue-ventana-cliente: contrato tipado enlaza id y artefacto  · id=001-revenue-ventana-cliente artifact=specs/001-revenue-ventana-cliente/spec.md
+  [OK ] specs/001-revenue-ventana-cliente: fuentes existen
+  [OK ] specs/001-revenue-ventana-cliente: vinculo de valor explicito  · N/A: demo KCD2026; el ledger de valor no esta instalado en este consumer
+  [OK ] specs/001-revenue-ventana-cliente: hipotesis de valor
+  [OK ] specs/001-revenue-ventana-cliente: requisitos FR declarados
+  [OK ] specs/001-revenue-ventana-cliente: criterios SC declarados
+  [OK ] specs/001-revenue-ventana-cliente: checklist de requisitos existe
+  [OK ] specs/001-revenue-ventana-cliente: checklist con items reales
+  [OK ] specs/001-revenue-ventana-cliente: checklist sin pendientes  · 0 pendientes
+  [OK ] specs/001-revenue-ventana-cliente: plan existe
+  [OK ] specs/001-revenue-ventana-cliente: seccion Constitution Check unica
+  [OK ] specs/001-revenue-ventana-cliente: Constitution Check declarado con contenido
+  [OK ] specs/001-revenue-ventana-cliente: los 7 principios enumerados (I..VII)
+  [OK ] specs/001-revenue-ventana-cliente: veredictos del dominio (PASS | N/A | VIOLA)
+  [OK ] specs/001-revenue-ventana-cliente: evidencia minima por principio
+  [OK ] specs/001-revenue-ventana-cliente: sin principios en VIOLA
+  [OK ] specs/001-revenue-ventana-cliente: pin de la constitucion declarado (una linea 'Constitucion verificada:')
+  [OK ] specs/001-revenue-ventana-cliente: pin vigente de la constitucion
+  [OK ] specs/001-revenue-ventana-cliente: Gate Impact declarado con contenido
+  [OK ] specs/001-revenue-ventana-cliente: plan sin placeholders bloqueantes
+  [OK ] specs/001-revenue-ventana-cliente: tasks existe
+  [OK ] specs/001-revenue-ventana-cliente: tasks con tareas reales  · 22 tareas
+  [OK ] specs/001-revenue-ventana-cliente: cobertura FR -> tareas
+  [OK ] specs/001-revenue-ventana-cliente: tareas sin FR inexistente
+  [OK ] specs/001-revenue-ventana-cliente: tareas de cierre
+  [OK ] specs/001-revenue-ventana-cliente: gate PII cuando aplica
+  [OK ] specs/001-revenue-ventana-cliente: matriz SC -> verificacion existe
+  [OK ] specs/001-revenue-ventana-cliente: cada SC tiene matriz de verificacion
+  [OK ] specs/001-revenue-ventana-cliente: matriz declara evidencia de cierre
+  [OK ] specs/001-revenue-ventana-cliente: paths de evidencia resolubles
+-- 42/42 checks OK --
+
+# Prueba negativa (fail-closed comprobado):
+#   pin de la constitucion alterado 1 caracter -> 41/42, 'pin obsoleto'
+#   FR-005 sin tarea que lo cubra            -> 41/42, 'cobertura FR -> tareas'
+#   restaurado                                -> verde de nuevo

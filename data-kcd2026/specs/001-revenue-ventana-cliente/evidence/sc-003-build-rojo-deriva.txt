@@ -1,0 +1,21 @@
+
+1 · Contrato integro
+   compila — el job y el contrato estan de acuerdo
+
+2 · Se introduce la deriva (tipo)
+   totalPrice: double  ->  string
+
+3 · Se compila con el contrato derivado
+   la compilacion FALLA — la deriva quedo atrapada en el build
+
+   [ERROR] /Users/dsusanibara/Documents/ddsa/wks/flink_tpm/claude/data-evolutionary/data-kcd2026/src/main/java/com/topaya/kcd2026/revenue/RevenueAggregateFunction.java:[32,47] incompatible types: java.lang.String cannot be converted to double
+   [ERROR] /Users/dsusanibara/Documents/ddsa/wks/flink_tpm/claude/data-evolutionary/data-kcd2026/src/main/java/com/topaya/kcd2026/revenue/RevenueAggregateFunction.java:[32,47] incompatible types: java.lang.String cannot be converted to double
+
+   No se produjo ningun artefacto ejecutable: el pipeline no llega a arrancar.
+
+4 · Se restaura el contrato
+   compila de nuevo — el repositorio queda como estaba
+
+Canary completo en 5s
+Umbral declarado en SC-004: 30s
+dentro del umbral

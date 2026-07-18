@@ -1,0 +1,13 @@
+# SC-001 · revenue agregado frente a la tabla de referencia
+# comando: ./mvnw -pl data-kcd2026 test
+# la referencia (revenue-referencia.csv) se calculo a mano, independiente del job
+
+[INFO] Running com.topaya.kcd2026.revenue.RevenueWindowPipelineTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.335 s -- in com.topaya.kcd2026.revenue.RevenueWindowPipelineTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] BUILD SUCCESS
+
+# Prueba negativa (la verificacion verifica de verdad):
+#   alterar la referencia 160.00 -> 160.01 produce:
+#   AssertionFailedError: revenue distinto del de referencia en 1@1749999960000-1750000020000
+#   expected: <160.01> but was: <160.0>

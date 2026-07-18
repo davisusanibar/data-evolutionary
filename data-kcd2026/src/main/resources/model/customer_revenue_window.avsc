@@ -1,0 +1,13 @@
+{
+  "namespace": "com.topaya.kcd2026.model.avro",
+  "type": "record",
+  "name": "CustomerRevenueWindow",
+  "doc": "Contrato de salida: revenue agregado de un cliente en una ventana temporal cerrada.",
+  "fields": [
+    {"name": "customerId", "type": "long", "doc": "Cliente agregado."},
+    {"name": "windowStart", "type": "long", "doc": "Inicio de la ventana en epoch millis, inclusive."},
+    {"name": "windowEnd", "type": "long", "doc": "Fin de la ventana en epoch millis, exclusive."},
+    {"name": "revenueTotal", "type": "double", "doc": "Suma de importes de las ordenes de la ventana."},
+    {"name": "orderCount", "type": "long", "doc": "Numero de ordenes agregadas en la ventana."}
+  ]
+}

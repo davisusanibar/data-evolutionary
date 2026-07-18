@@ -50,16 +50,69 @@ python3 tools/validation/spec_kit_gate.py . \
   --profile consumer-release
 ```
 
-## Infraestructura
+## Cómo ejecutarlo
 
-No levanta servicios propios: reutiliza `infra/dockercompose` de la raíz del
-repositorio (Kafka, Schema Registry, Flink 1.20.x, Postgres, MinIO/Iceberg).
+### El canary (no necesita infraestructura)
+
+Es la demo. Un solo comando, reversible, ~5 segundos:
 
 ```bash
-cd ../infra/dockercompose && docker compose up -d
+cd data-kcd2026 && ./canary-deriva.sh
 ```
+
+Rompe `totalPrice` en el contrato, compila, muestra el fallo, restaura y vuelve a
+verde. La variante por cambio de tipo:
+
+```bash
+./canary-deriva.sh --variante tipo
+```
+
+### La verificación numérica (tampoco necesita infraestructura)
+
+`RevenueWindowPipelineTest` ejecuta **el mismo pipeline** que el job sobre un
+fixture determinista y lo compara contra una tabla de referencia calculada a mano:
+
+```bash
+./mvnw -pl data-kcd2026 test
+```
+
+### El job completo (sí necesita infraestructura)
+
+```bash
+cd infra/dockercompose && docker compose up -d      # desde la raíz del repo
+./mvnw -pl data-kcd2026 clean package               # genera el jar shaded
+```
+
+Subir `target/data-kcd2026-1.0-SNAPSHOT-shaded.jar` al Flink Dashboard
+(`http://localhost:18081`) con entry class
+`com.topaya.kcd2026.revenue.RevenueWindowJob`. Parámetros y sus valores por defecto:
+
+| Parámetro | Defecto |
+|---|---|
+| `--bootstrap` | `broker:9092` |
+| `--registry` | `http://registry:8081` |
+| `--input-topic` | `orders-kcd2026` |
+| `--output-topic` | `revenue-por-cliente-ventana` |
+| `--window-seconds` | `60` |
+| `--out-of-orderness-seconds` | `5` |
+
+## Por qué el canary funciona
+
+`avro-maven-plugin` genera las clases Java desde los `.avsc` en `generate-sources`,
+y el job accede a los campos por los **accesores generados** (`getTotalPrice()`),
+nunca por acceso dinámico por nombre. Esa decisión es la que hace que la deriva sea
+un error de compilación:
+
+```
+symbol:   method getTotalPrice()
+location: variable order of type com.topaya.kcd2026.model.avro.OrderEvent
+```
+
+Si alguien reescribiera el job usando `GenericRecord.get("totalPrice")`, la deriva
+dejaría de romper el build y el canary perdería todo su valor. El script lo detecta:
+si la compilación del paso 3 pasa, aborta y lo denuncia.
 
 ## Estado
 
-La feature 001 está en fase `tasked` (contrato y plan aprobados, tareas
-pendientes de implementación). Nada se cierra sin la firma del owner.
+Feature 001 en fase `tasked`. Implementación ejecutada y verificada; queda
+pendiente la firma del owner para cerrarla (Artículo VI).

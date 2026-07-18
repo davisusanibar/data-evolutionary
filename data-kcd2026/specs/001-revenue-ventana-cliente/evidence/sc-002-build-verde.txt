@@ -1,0 +1,7 @@
+# SC-002 · build verde con el contrato integro
+# comando: ./mvnw -pl data-kcd2026 clean compile
+# fecha de captura: 2026-07-18
+
+[INFO] Compiling 9 source files with javac [debug release 11] to target/classes
+[INFO] BUILD SUCCESS
+[INFO] Total time:  1.041 s

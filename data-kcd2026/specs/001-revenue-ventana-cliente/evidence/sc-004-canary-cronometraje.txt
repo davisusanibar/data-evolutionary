@@ -1,0 +1,25 @@
+
+1 · Contrato integro
+   compila — el job y el contrato estan de acuerdo
+
+2 · Se introduce la deriva (renombrado)
+   totalPrice  ->  totalPriceAmount   (un productor renombro el campo)
+
+3 · Se compila con el contrato derivado
+   la compilacion FALLA — la deriva quedo atrapada en el build
+
+   [ERROR] /Users/dsusanibara/Documents/ddsa/wks/flink_tpm/claude/data-evolutionary/data-kcd2026/src/main/java/com/topaya/kcd2026/revenue/RevenueAggregateFunction.java:[32,54] cannot find symbol
+     symbol:   method getTotalPrice()
+     location: variable order of type com.topaya.kcd2026.model.avro.OrderEvent
+   [ERROR] /Users/dsusanibara/Documents/ddsa/wks/flink_tpm/claude/data-evolutionary/data-kcd2026/src/main/java/com/topaya/kcd2026/revenue/RevenueAggregateFunction.java:[32,54] cannot find symbol
+   [ERROR]   symbol:   method getTotalPrice()
+   [ERROR]   location: variable order of type com.topaya.kcd2026.model.avro.OrderEvent
+
+   No se produjo ningun artefacto ejecutable: el pipeline no llega a arrancar.
+
+4 · Se restaura el contrato
+   compila de nuevo — el repositorio queda como estaba
+
+Canary completo en 4s
+Umbral declarado en SC-004: 30s
+dentro del umbral

@@ -1,0 +1,28 @@
+# Tabla de revenue de REFERENCIA, calculada a mano a partir de orders.csv.
+#
+# Esta tabla es deliberadamente independiente del job: no la produce el pipeline ni
+# ningun codigo compartido con el. Si la calculara el mismo codigo que se quiere
+# verificar, SC-001 no verificaria nada.
+#
+# Derivacion, ventana por ventana:
+#
+#   W0 = [1749999960000, 1750000020000)
+#     cliente 1 -> ordenes 1, 2 y 4 (la desordenada cae aqui por su orderTs)
+#                  100.00 + 50.50 + 9.50 = 160.00   (3 ordenes)
+#     cliente 2 -> orden 3
+#                  75.25                            (1 orden)
+#
+#   W1 = [1750000020000, 1750000080000)
+#     cliente 1 -> ordenes 5 y 9
+#                  200.00 + 0.75 = 200.75           (2 ordenes)
+#     cliente 2 -> ordenes 6, 7 y 8
+#                  10.00 + 10.00 + 10.00 = 30.00    (3 ordenes)
+#
+# Todos los importes usan fracciones binarias exactas (.00 .25 .50 .75), de modo que
+# la suma en coma flotante es exacta y la comparacion no depende de la tolerancia.
+#
+# customerId,windowStart,windowEnd,revenueTotal,orderCount
+1,1749999960000,1750000020000,160.00,3
+2,1749999960000,1750000020000,75.25,1
+1,1750000020000,1750000080000,200.75,2
+2,1750000020000,1750000080000,30.00,3
