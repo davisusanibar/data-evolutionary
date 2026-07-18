@@ -1,0 +1,367 @@
+<title>EDAIOS · Mapa de inyección en data-kcd2026</title>
+<style>
+  :root{
+    --ground:#e9ecef; --card:#ffffff; --ink:#141d26; --muted:#5a6774;
+    --hair:#d3d9e0; --hair-strong:#b9c2cc;
+    --bronze:#9c6626; --bronze-soft:#f2e6d0; --teal:#2f7d84; --green:#3f8f5b; --red:#b4432f;
+    --sheet:#f6f3ea; --sheet-line:rgba(120,104,74,.14); --sheet-frame:#c9ba97; --sheet-ink:#16202a;
+    --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --ground:#0d1319; --card:#161f28; --ink:#dde4ea; --muted:#8b97a4;
+      --hair:#25303a; --hair-strong:#33414d;
+      --bronze:#d5a05a; --bronze-soft:#2a2114; --teal:#5bb3b9; --green:#5cb37e; --red:#e0745e;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0d1319; --card:#161f28; --ink:#dde4ea; --muted:#8b97a4;
+    --hair:#25303a; --hair-strong:#33414d;
+    --bronze:#d5a05a; --bronze-soft:#2a2114; --teal:#5bb3b9; --green:#5cb37e; --red:#e0745e;
+  }
+  :root[data-theme="light"]{
+    --ground:#e9ecef; --card:#ffffff; --ink:#141d26; --muted:#5a6774;
+    --hair:#d3d9e0; --hair-strong:#b9c2cc;
+    --bronze:#9c6626; --bronze-soft:#f2e6d0; --teal:#2f7d84; --green:#3f8f5b; --red:#b4432f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ground);color:var(--ink);font-family:var(--sans);
+    line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:clamp(20px,4vw,52px) clamp(16px,4vw,40px) 72px}
+
+  header{border-bottom:1px solid var(--hair-strong);padding-bottom:28px;margin-bottom:40px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--bronze);margin:0 0 14px;font-weight:600}
+  h1{font-size:clamp(26px,4.6vw,44px);line-height:1.06;margin:0 0 16px;font-weight:760;
+    letter-spacing:-.02em;text-wrap:balance;max-width:20ch}
+  .lede{font-size:clamp(15px,1.6vw,17.5px);color:var(--muted);max-width:66ch;margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;font-family:var(--mono);font-size:12.5px}
+  .chip{border:1px solid var(--hair-strong);border-radius:999px;padding:5px 12px;color:var(--ink);
+    background:var(--card)}
+  .chip b{color:var(--bronze);font-weight:700}
+
+  section{margin:52px 0 0}
+  .shead{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+  .snum{font-family:var(--mono);font-size:13px;color:var(--bronze);font-weight:700;
+    border:1px solid var(--bronze);border-radius:6px;padding:2px 8px;flex:none}
+  h2{font-size:clamp(19px,2.4vw,25px);margin:0;font-weight:720;letter-spacing:-.01em}
+  .sdesc{color:var(--muted);max-width:74ch;margin:10px 0 18px;font-size:15px}
+  .sdesc code{font-family:var(--mono);font-size:.86em;background:var(--card);
+    border:1px solid var(--hair);border-radius:5px;padding:1px 6px;color:var(--ink)}
+
+  .sheet{background:var(--sheet);border:1px solid var(--sheet-frame);border-radius:12px;
+    padding:clamp(14px,2.4vw,30px);overflow-x:auto;
+    background-image:linear-gradient(var(--sheet-line) 1px,transparent 1px),
+      linear-gradient(90deg,var(--sheet-line) 1px,transparent 1px);
+    background-size:26px 26px;
+    box-shadow:0 1px 0 rgba(0,0,0,.04),0 18px 40px -30px rgba(0,0,0,.5)}
+  .sheet pre.mermaid{background:transparent;margin:0;min-width:640px;text-align:center}
+  .sheet-cap{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:#8a7a5c;
+    text-transform:uppercase;margin:0 0 12px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+
+  .legend{display:flex;flex-wrap:wrap;gap:16px;margin:16px 2px 0;font-family:var(--mono);
+    font-size:12.5px;color:var(--muted)}
+  .legend span{display:inline-flex;align-items:center;gap:7px}
+  .sw{width:14px;height:14px;border-radius:3px;border:1.5px solid}
+  .sw.auth{background:var(--bronze-soft);border-color:var(--bronze)}
+  .sw.core{background:transparent;border-color:var(--teal)}
+  .sw.gate{background:transparent;border-color:var(--red)}
+  .sw.plain{background:var(--card);border-color:var(--hair-strong)}
+
+  .keys{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-top:22px}
+  .keycard{background:var(--card);border:1px solid var(--hair);border-radius:10px;padding:16px 18px;
+    border-left:3px solid var(--bronze)}
+  .keycard h3{margin:0 0 6px;font-family:var(--mono);font-size:13px;letter-spacing:.02em;color:var(--ink)}
+  .keycard p{margin:0;font-size:13.5px;color:var(--muted)}
+  .keycard.gate{border-left-color:var(--red)}
+  .keycard.const{border-left-color:var(--teal)}
+
+  footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--hair-strong);
+    font-family:var(--mono);font-size:12.5px;color:var(--muted);display:grid;gap:6px}
+  footer b{color:var(--ink);font-weight:700}
+  a{color:var(--bronze)}
+</style>
+
+<div class="wrap">
+  <header>
+    <p class="eyebrow">EDAIOS Core 3.1.0 · perfil consumer-release · ADR-0016</p>
+    <h1>Qué inyectó EDAIOS en el submódulo data-kcd2026</h1>
+    <p class="lede">El script <code style="font-family:var(--mono)">inject-consumer.sh</code> materializó un scaffold SDD gobernado en 4 capas. Git y el humano conservan la autoridad; Core solo proyecta contratos, perfiles y un gate <em>fail-closed</em>. Estas cuatro láminas muestran el sistema de arriba a abajo: la inyección, el mapa real de archivos, el ciclo de trabajo y qué ocurre —de verdad— cuando lanzas un prompt.</p>
+    <div class="meta">
+      <span class="chip">integración <b>edaios-core@v3.1.0+spec-kit@v0.12.11</b></span>
+      <span class="chip">lock <b>sha256:ff93e1…f453b9</b></span>
+      <span class="chip">gate pin <b>3810381</b></span>
+      <span class="chip">owner <b>david-susanibar</b></span>
+      <span class="chip">value-owner <b>topaya-value-office</b></span>
+      <span class="chip">sensibilidad <b>T0</b></span>
+    </div>
+  </header>
+
+  <!-- ============ 1 · ALTO NIVEL ============ -->
+  <section>
+    <div class="shead"><span class="snum">01</span><h2>Alto nivel · la inyección</h2></div>
+    <p class="sdesc">Cuatro capas parten de <b>EDAIOS Core</b> (repo <code>edaiosv</code>), pasan por el conducto idempotente <code>inject-consumer.sh</code> y aterrizan en el consumer <code>data-kcd2026</code>. La autoridad (Git + humano) no vive dentro de Core: lo gobierna desde arriba.</p>
+    <div class="sheet">
+      <p class="sheet-cap"><span>Lámina 01 — inyección Core → consumer</span><span>vector · zoom sin pérdida</span></p>
+      <pre class="mermaid">
+%%{init:{'theme':'base','themeVariables':{'fontFamily':'ui-monospace,SFMono-Regular,Menlo,monospace','fontSize':'14px','primaryColor':'#ffffff','primaryBorderColor':'#33404b','primaryTextColor':'#16202a','lineColor':'#8a7a5c','clusterBkg':'#efe9db','clusterBorder':'#c3b48f','edgeLabelBackground':'#f6f3ea'}}}%%
+flowchart LR
+  subgraph AUTH["AUTORIDAD · fuera de Core"]
+    direction LR
+    GIT["Git<br/>historia = verdad"]:::auth
+    HUM["Humano<br/>owner + value-owner<br/>firma Art. VI"]:::auth
+  end
+  subgraph CORE["EDAIOS Core · fuente (edaiosv)"]
+    direction TB
+    WHEEL["wheel<br/>edaios-core 3.1.0"]:::core
+    CONST0["constitución<br/>compilada"]:::core
+    BUNDLE0["bundle Spec Kit 0.12.11<br/>preset · extensión · workflow"]:::core
+    GATE0["spec_kit_gate.py<br/>+ integrations.lock"]:::core
+  end
+  INJ{{"inject-consumer.sh<br/>idempotente · fail-closed"}}:::pipe
+  subgraph CONS["data-kcd2026 · consumer"]
+    direction TB
+    A["A · paquete<br/>edaios-core doctor ✓"]
+    B["B · constitución + attachment<br/>constitution.md · edaios.initiative.json"]
+    C["C · Spec Kit + gate vendorizado<br/>.specify/ · tools/validation/"]:::gate
+    D["D · memoria de agente<br/>CLAUDE.md"]
+  end
+  OUT["Gate consumer-release<br/>valida features en specs/"]:::gate
+  CORE --> INJ --> CONS
+  WHEEL -.-> A
+  CONST0 -.-> B
+  BUNDLE0 -.-> C
+  GATE0 -.-> C
+  C ==> OUT
+  AUTH === CONS
+  classDef auth fill:#f3e6cf,stroke:#9c6626,color:#5b3d12,stroke-width:1.5px;
+  classDef core fill:#e6eef0,stroke:#2f7d84,color:#123037,stroke-width:1.2px;
+  classDef gate fill:#f6dcd4,stroke:#b4432f,color:#6d2116,stroke-width:1.5px;
+  classDef pipe fill:#fff,stroke:#33404b,color:#16202a,stroke-width:1.5px;
+      </pre>
+    </div>
+    <div class="legend">
+      <span><i class="sw auth"></i> Autoridad (humano / Git)</span>
+      <span><i class="sw core"></i> Activo de Core</span>
+      <span><i class="sw gate"></i> Gate fail-closed</span>
+      <span><i class="sw plain"></i> Artefacto local del consumer</span>
+    </div>
+  </section>
+
+  <!-- ============ 2 · DETALLADO: MAPA DE ARCHIVOS ============ -->
+  <section>
+    <div class="shead"><span class="snum">02</span><h2>Detallado · mapa de archivos</h2></div>
+    <p class="sdesc">Cada archivo real inyectado y cómo se referencian entre sí. El <b>attachment</b> (<code>edaios.initiative.json</code>) apunta a authority y políticas; <code>attachment-state.json</code> los <b>sella con sha256</b>. El <b>lock</b> pinnea los comandos y proyecta las superficies del agente. El <b>preset/extensión</b> reemplaza los comandos Spec Kit y el <code>edaios.gate</code> invoca al <b>gate</b> vendorizado.</p>
+    <div class="sheet">
+      <p class="sheet-cap"><span>Lámina 02 — relaciones entre archivos</span><span>data-kcd2026/</span></p>
+      <pre class="mermaid">
+%%{init:{'theme':'base','themeVariables':{'fontFamily':'ui-monospace,SFMono-Regular,Menlo,monospace','fontSize':'13px','primaryColor':'#ffffff','primaryBorderColor':'#33404b','primaryTextColor':'#16202a','lineColor':'#8a7a5c','clusterBkg':'#efe9db','clusterBorder':'#c3b48f','edgeLabelBackground':'#f6f3ea'}}}%%
+flowchart TB
+  README["README.md<br/>(fuente T0)"]
+
+  subgraph GOV[".edaios/ · attachment y gobierno (local, reconstruible)"]
+    direction TB
+    INIT["edaios.initiative.json<br/>manifest · lifecycle draft"]:::auth
+    STATE["attachment-state.json<br/>sha256 de integridad"]:::seal
+    AUTHR["authority-registry.json<br/>actores + capacidades"]:::auth
+    POL["policies/initiative-policy.json<br/>parent: initiative-adoption"]
+    SENS["policies/sensitivity-t0.json<br/>T0 · sin PII/secreto/red"]
+    RCPT["agent-setup/receipts/*.json<br/>backup + digest"]
+  end
+
+  subgraph SPEC[".specify/ · Spec Kit gobernado"]
+    direction TB
+    LOCK["integrations.lock.json<br/>pin spec-kit 0.12.11 + sha256"]:::core
+    CONST["memory/constitution.md<br/>7 principios + pin sha256"]:::core
+    PRESET["presets/edaios-governed-delivery<br/>reemplaza speckit.*"]:::core
+    EXT["extensions/edaios-governance<br/>extension.yml"]:::gate
+    GCMD["commands/edaios.gate.md"]:::gate
+    WF["workflows/edaios-delivery<br/>workflow.yml"]:::core
+    BREC["bundle-records.json"]
+  end
+
+  subgraph SURF["Superficie del agente"]
+    direction TB
+    SKILLS[".claude/skills/speckit-*<br/>SKILL.md × 12"]
+    CLAUDE["CLAUDE.md<br/>memoria operativa"]:::auth
+  end
+
+  subgraph VAL["tools/validation/ · gate vendorizado"]
+    direction TB
+    GATE["spec_kit_gate.py"]:::gate
+    GSRC["spec_kit_gate.SOURCE.md<br/>pin commit 3810381"]
+  end
+
+  SPECS["specs/NNN-feature/<br/>(pendiente · lo crea /speckit.specify)"]:::ghost
+
+  INIT -->|authority_registry| AUTHR
+  INIT -->|policy_profile| POL
+  INIT -->|sensitivity_profile| SENS
+  INIT -->|sources| README
+  POL -->|allowed_sensitivity| SENS
+  STATE -. sella sha256 .-> INIT
+  STATE -. sella sha256 .-> AUTHR
+  STATE -. sella sha256 .-> POL
+  STATE -. sella sha256 .-> SENS
+
+  LOCK -->|proyecta superficies| SKILLS
+  LOCK -->|digest| CLAUDE
+  RCPT -. respalda .-> CLAUDE
+  PRESET -->|surface claude| SKILLS
+  EXT -->|provides| GCMD
+  EXT -. hook after_tasks / before_implement .-> GCMD
+  WF -->|usa comandos| PRESET
+  WF -. checkpoints humanos .-> GCMD
+  GCMD ==>|invoca --profile consumer-release| GATE
+  GSRC -. procedencia .-> GATE
+  GATE -->|Constitution Check lee pin| CONST
+  GATE ==>|valida contrato| SPECS
+  AUTHR -. owner aprueba .-> INIT
+
+  classDef auth fill:#f3e6cf,stroke:#9c6626,color:#5b3d12,stroke-width:1.4px;
+  classDef seal fill:#e7ddc6,stroke:#8a6d2f,color:#4a3a12,stroke-width:1.4px;
+  classDef core fill:#e6eef0,stroke:#2f7d84,color:#123037,stroke-width:1.2px;
+  classDef gate fill:#f6dcd4,stroke:#b4432f,color:#6d2116,stroke-width:1.5px;
+  classDef ghost fill:#f6f3ea,stroke:#b3a683,color:#6b5f42,stroke-dasharray:5 4;
+      </pre>
+    </div>
+    <div class="legend">
+      <span><i class="sw auth"></i> Autoridad / attachment</span>
+      <span><i class="sw core"></i> Spec Kit + constitución</span>
+      <span><i class="sw gate"></i> Gate y su comando</span>
+      <span><i class="sw plain"></i> Sello / evidencia</span>
+      <span>— referencia&nbsp;&nbsp;·&nbsp;&nbsp;⇢ sello/hook&nbsp;&nbsp;·&nbsp;&nbsp;⇛ invocación</span>
+    </div>
+
+    <div class="keys">
+      <div class="keycard"><h3>edaios.initiative.json</h3><p>El manifest del attachment. Declara owner, namespace, sensibilidad y a qué políticas/registro obedece. Estado <b>draft</b> hasta la firma humana.</p></div>
+      <div class="keycard"><h3>attachment-state.json</h3><p>Congela el sha256 de cada archivo de gobierno: si alguno cambia sin re-sellar, la integridad se rompe.</p></div>
+      <div class="keycard const"><h3>.specify/memory/constitution.md</h3><p>Los 7 principios proyectados desde Core. Su pin <code>sha256</code> es lo que el gate exige en el Constitution Check del plan.</p></div>
+      <div class="keycard gate"><h3>tools/validation/spec_kit_gate.py</h3><p>Decide, fail-closed, con perfil <b>consumer-release</b>: frontmatter, FR/SC, checklist, cobertura FR→tarea, cierre y matriz SC→evidencia.</p></div>
+    </div>
+  </section>
+
+  <!-- ============ 3 · DETALLADO: FLUJO ============ -->
+  <section>
+    <div class="shead"><span class="snum">03</span><h2>Detallado · cómo trabaja el ciclo</h2></div>
+    <p class="sdesc">El <code>workflow.yml</code> encadena los comandos Spec Kit con <b>checkpoints humanos</b> y dos <b>hooks</b> que disparan el gate (<code>after_tasks</code> y <code>before_implement</code>). El gate es el mismo punto <em>fail-closed</em>: en rojo, nada avanza; nada se acepta sin la firma del owner.</p>
+    <div class="sheet">
+      <p class="sheet-cap"><span>Lámina 03 — flujo SDD gobernado</span><span>especificar → gate → implementar</span></p>
+      <pre class="mermaid">
+%%{init:{'theme':'base','themeVariables':{'fontFamily':'ui-monospace,SFMono-Regular,Menlo,monospace','fontSize':'13px','primaryColor':'#ffffff','primaryBorderColor':'#33404b','primaryTextColor':'#16202a','lineColor':'#8a7a5c','edgeLabelBackground':'#f6f3ea'}}}%%
+flowchart TB
+  S["/speckit.specify<br/>crea specs/NNN + contrato FR/SC"]
+  CL["/speckit.clarify"]
+  CK["/speckit.checklist"]
+  G1{"Revisión humana<br/>alcance · valor · sensibilidad"}:::auth
+  PL["/speckit.plan<br/>Constitution Check (pin sha256)"]
+  G2{"Revisión humana<br/>arquitectura · ADR"}:::auth
+  TK["/speckit.tasks<br/>cobertura FR→tarea"]
+  H1(["hook after_tasks"]):::hook
+  AN["/speckit.analyze"]
+  G3{"Aprobar implementación"}:::auth
+  H2(["hook before_implement"]):::hook
+  GATE["edaios.gate → spec_kit_gate.py<br/>--profile consumer-release"]:::gate
+  IMP["/speckit.implement"]:::done
+  STOP((rojo:<br/>detener)):::stop
+
+  S-->CL-->CK-->G1
+  G1-->|approve|PL-->G2
+  G2-->|approve|TK-->H1-->GATE
+  GATE-->|verde|AN-->G3
+  GATE-->|rojo|STOP
+  G3-->|approve|H2-->GATE
+  H2-->|verde|IMP
+  G1-->|reject|STOP
+  G2-->|reject|STOP
+  G3-->|reject|STOP
+
+  classDef auth fill:#f3e6cf,stroke:#9c6626,color:#5b3d12,stroke-width:1.5px;
+  classDef gate fill:#f6dcd4,stroke:#b4432f,color:#6d2116,stroke-width:1.6px;
+  classDef hook fill:#e6eef0,stroke:#2f7d84,color:#123037,stroke-width:1.2px;
+  classDef done fill:#dcefe2,stroke:#3f8f5b,color:#1c4e30,stroke-width:1.4px;
+  classDef stop fill:#f0d3cc,stroke:#b4432f,color:#6d2116,stroke-width:1.4px;
+      </pre>
+    </div>
+    <p class="sdesc" style="margin-top:16px">Comando manual equivalente del gate:<br>
+      <code>python3 data-kcd2026/tools/validation/spec_kit_gate.py data-kcd2026 --feature specs/NNN --profile consumer-release</code></p>
+  </section>
+
+  <!-- ============ 4 · EL PROMPT ============ -->
+  <section>
+    <div class="shead"><span class="snum">04</span><h2>¿Qué pasa cuando lanzas un prompt?</h2></div>
+    <p class="sdesc"><b>Respuesta corta: EDAIOS no captura tu prompt.</b> Lo verificamos en el repo, no lo asumimos — no hay <code>.claude/settings.json</code>, no hay hooks de Git instalados (<code>.git/hooks/</code> solo trae samples) y no hay CI. Los <code>hooks:</code> de <code>extension.yml</code> son del <b>runner de Spec Kit</b>, no del harness: solo disparan si ya estás dentro del workflow. Hoy el sistema es <b>opt-in</b>: gobierna al que decide entrar.</p>
+    <div class="sheet">
+      <p class="sheet-cap"><span>Lámina 04 — trayecto real de un prompt</span><span>estado verificado hoy</span></p>
+      <pre class="mermaid">
+%%{init:{'theme':'base','themeVariables':{'fontFamily':'ui-monospace,SFMono-Regular,Menlo,monospace','fontSize':'13px','primaryColor':'#ffffff','primaryBorderColor':'#33404b','primaryTextColor':'#16202a','lineColor':'#8a7a5c','edgeLabelBackground':'#f6f3ea'}}}%%
+flowchart TB
+  P["Tu prompt<br/>«implementa X en data-kcd2026»"]:::auth
+  CC["Claude Code<br/>lee CLAUDE.md (memoria EDAIOS)"]
+  D{"¿Entra por un<br/>comando /speckit.* ?"}
+
+  subgraph GOB["Camino gobernado · opt-in"]
+    direction TB
+    SK["skill speckit-specify<br/>user-invocable: true"]
+    SP["specs/NNN/spec.md<br/>contrato FR/SC + trazas"]
+    FLOW["clarify → plan → tasks<br/>+ checkpoints humanos"]
+    GATE["spec_kit_gate.py<br/>consumer-release · fail-closed"]:::gate
+    EV["artefactos + evidencia<br/>en el working tree"]:::done
+  end
+
+  subgraph LIBRE["Camino directo · sin fricción"]
+    direction TB
+    EDIT["Claude edita código<br/>KafkaHello.java, pom.xml…"]:::stop
+    NADA["sin spec · sin gate<br/>sin evidencia"]:::stop
+  end
+
+  GIT["git commit / push<br/>= la única autoridad real"]:::auth
+
+  subgraph CHOKE["Puntos de control posibles"]
+    direction TB
+    C1["skill model-invocation<br/>heurístico, no garantía"]:::warn
+    C2["hook pre-push<br/>NO INSTALADO"]:::stop
+    C3["CI<br/>NO EXISTE"]:::stop
+  end
+
+  P --> CC --> D
+  D -->|"sí (o el modelo lo elige)"| SK --> SP --> FLOW --> GATE
+  GATE -->|verde| EV --> GIT
+  GATE -->|rojo| STOPG((detener)):::stop
+  D -->|no| EDIT --> NADA --> GIT
+  C1 -. influye .-> D
+  C2 -. bloquearía .-> GIT
+  C3 -. bloquearía .-> GIT
+
+  NOTA["El PROMPT en sí no se persiste en .edaios/<br/>el runtime de memoria EDAIOS no está instalado.<br/>Lo que queda gobernado son los ARTEFACTOS."]:::ghost
+  CC -.-> NOTA
+
+  classDef auth fill:#f3e6cf,stroke:#9c6626,color:#5b3d12,stroke-width:1.5px;
+  classDef gate fill:#f6dcd4,stroke:#b4432f,color:#6d2116,stroke-width:1.6px;
+  classDef done fill:#dcefe2,stroke:#3f8f5b,color:#1c4e30,stroke-width:1.4px;
+  classDef stop fill:#f0d3cc,stroke:#b4432f,color:#6d2116,stroke-width:1.4px;
+  classDef warn fill:#f7ecd2,stroke:#b08328,color:#5f4410,stroke-width:1.4px;
+  classDef ghost fill:#f6f3ea,stroke:#b3a683,color:#6b5f42,stroke-dasharray:5 4;
+      </pre>
+    </div>
+    <div class="legend">
+      <span><i class="sw auth"></i> Humano / autoridad</span>
+      <span><i class="sw gate"></i> Bloquea o falta</span>
+      <span><i class="sw plain"></i> Artefacto gobernado</span>
+    </div>
+
+    <div class="keys">
+      <div class="keycard"><h3>Qué SÍ captura EDAIOS</h3><p>Los <b>artefactos</b>: spec, plan, tasks, Constitution Check y evidencia bajo <code>specs/</code>. La autoridad la conserva Git, no <code>.edaios/</code>.</p></div>
+      <div class="keycard gate"><h3>Qué NO captura</h3><p>El <b>texto de tu prompt</b>, y cualquier cambio hecho por el camino directo. El runtime de memoria EDAIOS no está instalado; <code>.edaios/</code> es local y reconstruible.</p></div>
+      <div class="keycard gate"><h3>El hueco de hoy</h3><p>Cero puntos de control automáticos: <b>sin</b> pre-push, <b>sin</b> CI, <b>sin</b> hooks de harness. El gate es <b>advisory</b> hasta que se cablee.</p></div>
+      <div class="keycard const"><h3>Cómo cerrarlo</h3><p>Core trae <code>scripts/install-hooks.sh</code> (pre-push fail-closed) que <code>inject-consumer.sh</code> <b>no</b> ejecuta. Instalarlo o añadir CI convierte el gate en obligatorio.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <div><b>Frontera de claims.</b> Todo es <b>local y reconstruible</b>: draft, sin adopción, publicación ni aceptación. El cierre exige firma humana (Artículo VI, ADR-0005).</div>
+    <div><b>Interim RFC-0002.</b> El gate y el <code style="font-family:var(--mono)">integrations.lock.json</code> se <b>copian</b> desde Core (no viajan en el wheel); su procedencia queda pineada en <code style="font-family:var(--mono)">spec_kit_gate.SOURCE.md</code>.</div>
+    <div>Fuente: <b>edaiosv</b> · commit <b>3810381</b> · inyectado por <b>inject-consumer.sh</b> en data-kcd2026.</div>
+  </footer>
+</div>

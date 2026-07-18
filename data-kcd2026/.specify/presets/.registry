@@ -1,0 +1,35 @@
+{
+  "schema_version": "1.0",
+  "presets": {
+    "edaios-governed-delivery": {
+      "version": "3.1.0",
+      "source": "local",
+      "manifest_hash": "sha256:5ed14ec2d139a81730d3a3acaeadf59b1f7fa6d1578c659bb557b60981c5cd3d",
+      "enabled": true,
+      "priority": 5,
+      "registered_commands": {
+        "claude": [
+          "speckit.constitution",
+          "speckit.specify",
+          "speckit.clarify",
+          "speckit.checklist",
+          "speckit.plan",
+          "speckit.tasks",
+          "speckit.analyze",
+          "speckit.implement"
+        ]
+      },
+      "registered_skills": [
+        "speckit-constitution",
+        "speckit-specify",
+        "speckit-clarify",
+        "speckit-checklist",
+        "speckit-plan",
+        "speckit-tasks",
+        "speckit-analyze",
+        "speckit-implement"
+      ],
+      "installed_at": "2026-07-18T05:32:53.104738+00:00"
+    }
+  }
+}

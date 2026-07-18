@@ -1,0 +1,30 @@
+{
+  "authority_registry": ".edaios/authority-registry.json",
+  "capabilities": [
+    "validate",
+    "evidence:create",
+    "evidence:verify"
+  ],
+  "conformance_profile": "initiative-adoption",
+  "core_compatibility": ">=3.1.0 <4.0.0",
+  "evidence_path": ".edaios/evidence",
+  "human_approval_required": true,
+  "id": "data-kcd2026",
+  "lifecycle": "draft",
+  "namespace": "com.topaya.kcd2026",
+  "owner": "david-susanibar",
+  "policy_profile": ".edaios/policies/initiative-policy.json",
+  "required_gates": [
+    "core-release",
+    "initiative-adoption"
+  ],
+  "schema": "edaios.initiative-manifest/v1",
+  "sensitivity_profile": ".edaios/policies/sensitivity-t0.json",
+  "sources": [
+    {
+      "authority": "david-susanibar",
+      "path": "README.md"
+    }
+  ],
+  "value_owner": "topaya-value-office"
+}

@@ -1,0 +1,33 @@
+schema_version: "1.0"
+extension:
+  id: "edaios-governance"
+  name: "EDAIOS Governance Gate"
+  version: "3.1.0"
+  description: "Valida trazabilidad, sensibilidad, valor y cobertura de artefactos Spec Kit"
+  author: "EDAIOS"
+  license: "MIT"
+  category: "process"
+  effect: "read-only"
+requires:
+  speckit_version: ">=0.12.11"
+provides:
+  commands:
+    - name: "speckit.edaios-governance.gate"
+      aliases: ["edaios.gate"]
+      file: "commands/edaios.gate.md"
+      description: "Ejecuta la puerta contractual Spec Kit de EDAIOS"
+hooks:
+  after_tasks:
+    command: "speckit.edaios-governance.gate"
+    optional: false
+    priority: 10
+    description: "Comprueba cobertura antes del analisis"
+  before_implement:
+    command: "speckit.edaios-governance.gate"
+    optional: false
+    priority: 10
+    description: "Bloquea implementacion con contratos inconsistentes"
+tags:
+  - "edaios"
+  - "governance"
+  - "quality-gate"
