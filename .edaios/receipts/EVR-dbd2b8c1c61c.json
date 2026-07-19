@@ -1,0 +1,51 @@
+{
+  "actor": {
+    "id": "David Dali Susanibar Arce",
+    "type": "human"
+  },
+  "approval": {
+    "required": true,
+    "roles": [
+      "initiative-owner"
+    ]
+  },
+  "base_commit": "272cc9fdb702a373de6616dda509a83ee609a6b7",
+  "claim_boundary": "Plan de tareas T001..T008 de la feature 001-data-kcd2026, con T001 [SEAL] cerrada por aceptacion humana. T008 sigue abierta. Acredita el plan de trabajo aceptado; no acredita cierre de la feature ni despliegue.",
+  "core_version": "3.1.0",
+  "evidence": [
+    {
+      "path": "specs/001-data-kcd2026/tasks.md",
+      "sha256": "f707077851db852e8730e3dc33c3dfd18e438c3c9cd759ec73589847549b0936",
+      "size": 1447
+    }
+  ],
+  "exit_code": 0,
+  "feature_run": "001-data-kcd2026",
+  "head_commit": "3c1d4adfdc2635f19ddfca4de3df55859d50da48",
+  "initiative": "data-evolutionary",
+  "integrity": {
+    "algorithm": "SHA-256",
+    "claim": "local-integrity-only; not identity or non-repudiation",
+    "payload_sha256": "a5f49a32d7ecb0b87af8558bead825e7358478e59f97b9eccd26a44d9691882c"
+  },
+  "policy": {
+    "digest": "046f780ef8b0f0ce1a7d4f9023a2b951bee9ea353beb177c1d42501601948e9a",
+    "id": "data-evolutionary-policy",
+    "version": "1.0.0"
+  },
+  "receipt_id": "EVR-dbd2b8c1c61c",
+  "recorded_at": "2026-07-19T03:03:35.356256Z",
+  "rollback": {
+    "steps": [
+      "git revert 8532759 para retirar el submodulo data-kcd2026 y su registro en <modules> del pom.xml raiz",
+      "verificar que ningun otro modulo declara dependencia sobre com.topaya.kcd2026",
+      "marcar ADR-0001 como derogado por una decision posterior; no borrar ni reusar el numero",
+      "mover specs/001-data-kcd2026 a estado Cerrado con fase revertida y registrar el motivo en evidence/"
+    ],
+    "target_ref": "272cc9fdb702a373de6616dda509a83ee609a6b7",
+    "verification": "./mvnw -q validate desde la raiz termina en exit 0 sin data-kcd2026 en el reactor, y los modulos data-hadoop, data-spark, data-cdc-kafka-flink-iceberg y data-kcd2025 siguen resolviendo"
+  },
+  "schema": "edaios.evidence-receipt/v2",
+  "sensitivity": "T0",
+  "verdict": "passed"
+}

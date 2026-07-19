@@ -1,0 +1,20 @@
+{
+  "actor": {
+    "id": "David Dali Susanibar Arce",
+    "type": "human"
+  },
+  "approved_at": "2026-07-19T03:03:42.471841Z",
+  "authority_role": "initiative-owner",
+  "evidence_receipt_digest": "1ce19170a146f63830e8eccbc57cfda3357c51e1f947ae855ff3ed46da20d587",
+  "feature_run": "001-data-kcd2026",
+  "initiative": "data-evolutionary",
+  "integrity": {
+    "algorithm": "SHA-256",
+    "claim": "local-integrity-only; not identity or non-repudiation",
+    "payload_sha256": "f608ae046a53e9e67fb103d02751c88f5e080b6a2725fa3b4ce7a90e957d61b6"
+  },
+  "receipt_id": "APR-280d2b2da795",
+  "schema": "edaios.approval-receipt/v1",
+  "statement": "Acepto el plan de tareas de la feature 001-data-kcd2026. Con esta firma quedan aceptados los tres componentes que exigia T001 [SEAL]: ADR-0001, el contrato SDD y las tareas, por lo que T001 se marca cerrada. La feature permanece en fase tasked / estado Propuesto por decision explicita: T008 sigue abierta y el cierre a implemented / Cerrado se pospone hasta despues de la demo KCD 2026.",
+  "verdict": "accepted"
+}

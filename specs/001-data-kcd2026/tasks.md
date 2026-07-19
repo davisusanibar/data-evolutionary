@@ -2,7 +2,7 @@
 
 ## Aprobación y contrato
 
-- [ ] [T001] [FR-001] [SEAL] Registrar la aceptación humana de ADR-0001, del plan y de estas tareas por David Dali Susanibar Arce antes de considerar cerrado el módulo.
+- [x] [T001] [FR-001] [SEAL] Registrar la aceptación humana de ADR-0001, del plan y de estas tareas por David Dali Susanibar Arce antes de considerar cerrado el módulo. Aceptaciones en `.edaios/approvals/`: ADR-0001 en `APR-95854eb8b28f`, contrato SDD en `APR-e3e59a6e6474`, tareas en el receipt emitido sobre esta versión del archivo.
 - [x] [T002] [FR-001] Crear la matriz `verification.md` enlazando cada SC con su FR, su tarea, su comando de verificación y su evidencia.
 
 ## Estructura del módulo
