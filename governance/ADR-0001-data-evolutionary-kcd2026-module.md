@@ -1,7 +1,8 @@
 # ADR-0001 — Submódulo Maven `data-kcd2026` para la demo Flink/Kafka de KCD 2026
 
-**Estado:** Propuesto
+**Estado:** Aceptado
 **Fecha:** 2026-07-18
+**Fecha de aceptación:** 2026-07-18
 **Owner:** David Dali Susanibar Arce
 
 ## Contexto
@@ -69,6 +70,20 @@ broker Kafka, no mide rendimiento y no constituye validación de producción.
 
 ## Aprobación
 
-Pendiente. Esta decisión no está aceptada: exige firma de David Dali Susanibar
-Arce (Artículo VI de la Constitución, ADR-0005 de Core). El número es estable;
-una decisión posterior deroga, no borra ni reusa.
+| Campo | Valor |
+|---|---|
+| Actor | David Dali Susanibar Arce |
+| Rol | `initiative-owner` / `approver` (`.edaios/authority-registry.json`) |
+| Fecha | 2026-07-18 |
+| Veredicto | Aceptado |
+| Evidencia | `specs/001-data-kcd2026/evidence/` · SC-001..SC-004 observados en exit 0 |
+| EvidenceReceipt | `.edaios/receipts/EVR-415bd62c715d.json` |
+| ApprovalReceipt | `.edaios/approvals/APR-95854eb8b28f.json` |
+| Plan de rollback | `specs/001-data-kcd2026/evidence/rollback-plan.json` |
+
+Alcance de la aceptación: la decisión de estructura descrita arriba — registro
+del módulo en el reactor, herencia del parent y dependencias declaradas. La
+aceptación **no** extiende el claim a despliegue, cluster, topología de topics ni
+rendimiento, que permanecen fuera de alcance.
+
+El número es estable; una decisión posterior deroga, no borra ni reusa.

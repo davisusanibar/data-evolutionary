@@ -1,0 +1,10 @@
+{
+  "target_ref": "272cc9fdb702a373de6616dda509a83ee609a6b7",
+  "steps": [
+    "git revert 8532759 para retirar el submodulo data-kcd2026 y su registro en <modules> del pom.xml raiz",
+    "verificar que ningun otro modulo declara dependencia sobre com.topaya.kcd2026",
+    "marcar ADR-0001 como derogado por una decision posterior; no borrar ni reusar el numero",
+    "mover specs/001-data-kcd2026 a estado Cerrado con fase revertida y registrar el motivo en evidence/"
+  ],
+  "verification": "./mvnw -q validate desde la raiz termina en exit 0 sin data-kcd2026 en el reactor, y los modulos data-hadoop, data-spark, data-cdc-kafka-flink-iceberg y data-kcd2025 siguen resolviendo"
+}

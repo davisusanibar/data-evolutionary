@@ -1,0 +1,76 @@
+{
+  "actor": {
+    "id": "David Dali Susanibar Arce",
+    "type": "human"
+  },
+  "approval": {
+    "required": true,
+    "roles": [
+      "initiative-owner"
+    ]
+  },
+  "base_commit": "272cc9fdb702a373de6616dda509a83ee609a6b7",
+  "claim_boundary": "Observacion local del workspace (Maven 3.9.8, 2026-07-18): validate, dependency:list y clean package en exit 0. No cubre despliegue, cluster Kafka/Flink, ni medicion de rendimiento.",
+  "core_version": "3.1.0",
+  "evidence": [
+    {
+      "path": "specs/001-data-kcd2026/evidence/rollback-plan.json",
+      "sha256": "34f727c76563cbf63160c25ea557a4a09e6f56d41df1e919bed81476787c0129",
+      "size": 682
+    },
+    {
+      "path": "specs/001-data-kcd2026/evidence/sc-001-module-registration.json",
+      "sha256": "b7fe9f7a3db1c732770fb69fc176e648d23eedce3fca48793dcf993a13748a2b",
+      "size": 408
+    },
+    {
+      "path": "specs/001-data-kcd2026/evidence/sc-002-flink-dependencies.json",
+      "sha256": "41433402857913b3fe5d36c3bebb29614256bcbe35e7efab6163f8c3ace2b504",
+      "size": 501
+    },
+    {
+      "path": "specs/001-data-kcd2026/evidence/sc-003-entrypoint.json",
+      "sha256": "1ee4b6168df66ff17739af7fdd55d9020471efd44759aa931e40da57ae85b17b",
+      "size": 580
+    },
+    {
+      "path": "specs/001-data-kcd2026/evidence/sc-004-build.json",
+      "sha256": "1a1f0bc97a5fd6a82ef6662e3d84530121ad9b5a0a1f981eee800364240bab53",
+      "size": 410
+    },
+    {
+      "path": "specs/001-data-kcd2026/evidence/sources.md",
+      "sha256": "43b3a046e632d3cc0279276ab0e83b0311df423ac2b6f9f0cb75310f05ed6f10",
+      "size": 1637
+    }
+  ],
+  "exit_code": 0,
+  "feature_run": "001-data-kcd2026",
+  "head_commit": "774ecc9f911b1cc538c13c80564de64be953942e",
+  "initiative": "data-evolutionary",
+  "integrity": {
+    "algorithm": "SHA-256",
+    "claim": "local-integrity-only; not identity or non-repudiation",
+    "payload_sha256": "61c3c407a994dc4fe9ff37d5d18aafebbd8fe103521c2d32c01beece3a94d0da"
+  },
+  "policy": {
+    "digest": "046f780ef8b0f0ce1a7d4f9023a2b951bee9ea353beb177c1d42501601948e9a",
+    "id": "data-evolutionary-policy",
+    "version": "1.0.0"
+  },
+  "receipt_id": "EVR-415bd62c715d",
+  "recorded_at": "2026-07-19T02:53:03.875250Z",
+  "rollback": {
+    "steps": [
+      "git revert 8532759 para retirar el submodulo data-kcd2026 y su registro en <modules> del pom.xml raiz",
+      "verificar que ningun otro modulo declara dependencia sobre com.topaya.kcd2026",
+      "marcar ADR-0001 como derogado por una decision posterior; no borrar ni reusar el numero",
+      "mover specs/001-data-kcd2026 a estado Cerrado con fase revertida y registrar el motivo en evidence/"
+    ],
+    "target_ref": "272cc9fdb702a373de6616dda509a83ee609a6b7",
+    "verification": "./mvnw -q validate desde la raiz termina en exit 0 sin data-kcd2026 en el reactor, y los modulos data-hadoop, data-spark, data-cdc-kafka-flink-iceberg y data-kcd2025 siguen resolviendo"
+  },
+  "schema": "edaios.evidence-receipt/v2",
+  "sensitivity": "T0",
+  "verdict": "passed"
+}

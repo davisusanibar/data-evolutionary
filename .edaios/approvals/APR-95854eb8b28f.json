@@ -1,0 +1,20 @@
+{
+  "actor": {
+    "id": "David Dali Susanibar Arce",
+    "type": "human"
+  },
+  "approved_at": "2026-07-19T02:53:10.869736Z",
+  "authority_role": "initiative-owner",
+  "evidence_receipt_digest": "abe881650c4e95b8a7532bba56eab8da18189595b866f268768976131d6b80b5",
+  "feature_run": "001-data-kcd2026",
+  "initiative": "data-evolutionary",
+  "integrity": {
+    "algorithm": "SHA-256",
+    "claim": "local-integrity-only; not identity or non-repudiation",
+    "payload_sha256": "11dad5ebc9d0c4caf084cfea6882fa00ef0d322f792f19a35e9104c635cc6410"
+  },
+  "receipt_id": "APR-95854eb8b28f",
+  "schema": "edaios.approval-receipt/v1",
+  "statement": "Acepto ADR-0001: estructura del submodulo data-kcd2026 en el reactor com.topaya:oss, con Flink 1.20.1 y conector Kafka 3.3.0-1.20 fijados con version explicita. La aceptacion cubre la decision de estructura registrada en el ADR; no extiende el claim a despliegue, cluster, topologia de topics ni rendimiento.",
+  "verdict": "accepted"
+}

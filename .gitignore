@@ -46,7 +46,6 @@ src/main/java/org/example/kcd101/
 infra/dockercompose/hive_database/**
 infra/dockercompose/datanode_data/**
 
-### EDAIOS (attachment local reconstruible)
+### EDAIOS (solo lo reconstruible; receipts y approvals SI se versionan)
 .edaios/agent-setup/backups/
 .edaios/memory/
-.edaios/receipts/
