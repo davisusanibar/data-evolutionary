@@ -1,0 +1,59 @@
+{
+  "actor": {
+    "id": "David Dali Susanibar Arce",
+    "type": "human"
+  },
+  "approval": {
+    "required": false,
+    "roles": []
+  },
+  "base_commit": "272cc9fdb702a373de6616dda509a83ee609a6b7",
+  "claim_boundary": "T008 [LEDGER][INGEST] cerrada: el limite del claim queda registrado en sources.md, verification.md, ADR-0001 y el claim_boundary de los receipts previos. tasks.md queda con 8/8 tareas marcadas. La feature sigue en fase tasked; esto no acredita cierre ni despliegue.",
+  "core_version": "3.1.0",
+  "evidence": [
+    {
+      "path": "specs/001-data-kcd2026/evidence/sources.md",
+      "sha256": "43b3a046e632d3cc0279276ab0e83b0311df423ac2b6f9f0cb75310f05ed6f10",
+      "size": 1637
+    },
+    {
+      "path": "specs/001-data-kcd2026/tasks.md",
+      "sha256": "396fff68f0a3248080b314a5786ee8976f891cd5447a8898f35aafd1daf19d3a",
+      "size": 1636
+    },
+    {
+      "path": "specs/001-data-kcd2026/verification.md",
+      "sha256": "51063e743905b631d840e9ef3065a0b95aaa76d773fda8f17a87f85fef111a1b",
+      "size": 1289
+    }
+  ],
+  "exit_code": 0,
+  "feature_run": "001-data-kcd2026",
+  "head_commit": "b3e192c1dfe428e5f28e2c86d65159bedd2db1be",
+  "initiative": "data-evolutionary",
+  "integrity": {
+    "algorithm": "SHA-256",
+    "claim": "local-integrity-only; not identity or non-repudiation",
+    "payload_sha256": "8a3463374f87beec4654f1c9ba5ea36b783f2e0d869451b2f7f0b3e3f696db96"
+  },
+  "policy": {
+    "digest": "046f780ef8b0f0ce1a7d4f9023a2b951bee9ea353beb177c1d42501601948e9a",
+    "id": "data-evolutionary-policy",
+    "version": "1.0.0"
+  },
+  "receipt_id": "EVR-3f75b7a04478",
+  "recorded_at": "2026-07-19T03:05:47.381379Z",
+  "rollback": {
+    "steps": [
+      "git revert 8532759 para retirar el submodulo data-kcd2026 y su registro en <modules> del pom.xml raiz",
+      "verificar que ningun otro modulo declara dependencia sobre com.topaya.kcd2026",
+      "marcar ADR-0001 como derogado por una decision posterior; no borrar ni reusar el numero",
+      "mover specs/001-data-kcd2026 a estado Cerrado con fase revertida y registrar el motivo en evidence/"
+    ],
+    "target_ref": "272cc9fdb702a373de6616dda509a83ee609a6b7",
+    "verification": "./mvnw -q validate desde la raiz termina en exit 0 sin data-kcd2026 en el reactor, y los modulos data-hadoop, data-spark, data-cdc-kafka-flink-iceberg y data-kcd2025 siguen resolviendo"
+  },
+  "schema": "edaios.evidence-receipt/v2",
+  "sensitivity": "T0",
+  "verdict": "passed"
+}

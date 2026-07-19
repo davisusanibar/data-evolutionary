@@ -15,4 +15,4 @@
 ## Verificación y cierre
 
 - [x] [T007] [FR-003] [GATES] Ejecutar `mvn -q -pl data-kcd2026 -am validate`, `dependency:list` y `clean package`, y registrar la salida observada en `evidence/`.
-- [ ] [T008] [FR-004] [LEDGER] [INGEST] Registrar el límite del claim: observación local del workspace, sin despliegue, sin cluster Kafka y sin medición de rendimiento.
+- [x] [T008] [FR-004] [LEDGER] [INGEST] Registrar el límite del claim: observación local del workspace, sin despliegue, sin cluster Kafka y sin medición de rendimiento. Registrado en `evidence/sources.md` (columna Límite), `verification.md` (sección Límites), ADR-0001 (Evidencia y frontera del claim) y el campo `claim_boundary` de cada EvidenceReceipt.
