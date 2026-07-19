@@ -1,0 +1,11 @@
+{
+  "schema": "edaios.feature-evidence/v1",
+  "criterion": "SC-004",
+  "status": "observed",
+  "observed_at": "2026-07-18",
+  "toolchain": "Apache Maven 3.9.8",
+  "command": "./mvnw -pl data-kcd2026 clean package",
+  "exit_code": 0,
+  "observation": "produce data-kcd2026/target/data-kcd2026-1.0-SNAPSHOT.jar (2372 bytes)",
+  "limits": "build local; sin despliegue, sin firma de artefacto y sin publicacion"
+}

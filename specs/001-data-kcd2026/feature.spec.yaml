@@ -1,0 +1,13 @@
+schema: edaios.sdd.feature/v2
+id: DATA-EVOLUTIONARY-KCD2026-FLINK-KAFKA
+artifact: specs/001-data-kcd2026/spec.md
+owner: David Dali Susanibar Arce
+authority: governance/ADR-0001-data-evolutionary-kcd2026-module.md
+purpose: registrar el submodulo Maven data-kcd2026 con Flink 1.20.1 y el conector Kafka 3.3.0-1.20 y su punto de entrada minimo
+requirements:
+  - FR-001
+  - FR-002
+  - FR-003
+  - FR-004
+validation:
+  - tools/validation/spec_kit_gate.py

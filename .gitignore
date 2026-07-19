@@ -45,3 +45,8 @@ src/main/java/org/example/kcd101/
 ### Hadoop HDFS, Hive
 infra/dockercompose/hive_database/**
 infra/dockercompose/datanode_data/**
+
+### EDAIOS (attachment local reconstruible)
+.edaios/agent-setup/backups/
+.edaios/memory/
+.edaios/receipts/

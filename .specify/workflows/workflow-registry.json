@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "workflows": {
+    "edaios-delivery": {
+      "name": "EDAIOS Governed Delivery",
+      "version": "3.1.0",
+      "description": "Ciclo SDD con aclaracion, analisis, gates EDAIOS y checkpoints humanos",
+      "source": "/Users/dsusanibara/Documents/ddsa/wks/kcd/live/edaios/core/framework/extensions/sdd-adapter/spec-kit/workflow/edaios-delivery.yml",
+      "installed_at": "2026-07-18T19:54:01.551828+00:00",
+      "updated_at": "2026-07-18T19:54:01.551947+00:00"
+    }
+  }
+}

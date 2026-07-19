@@ -1,0 +1,30 @@
+{
+  "authority_registry": ".edaios/authority-registry.json",
+  "capabilities": [
+    "validate",
+    "evidence:create",
+    "evidence:verify"
+  ],
+  "conformance_profile": "initiative-adoption",
+  "core_compatibility": ">=3.1.0 <4.0.0",
+  "evidence_path": ".edaios/evidence",
+  "human_approval_required": true,
+  "id": "data-evolutionary",
+  "lifecycle": "draft",
+  "namespace": "com.topaya.dataevolutionary",
+  "owner": "David Dali Susanibar Arce",
+  "policy_profile": ".edaios/policies/initiative-policy.json",
+  "required_gates": [
+    "core-release",
+    "initiative-adoption"
+  ],
+  "schema": "edaios.initiative-manifest/v1",
+  "sensitivity_profile": ".edaios/policies/sensitivity-t0.json",
+  "sources": [
+    {
+      "authority": "David Dali Susanibar Arce",
+      "path": "README.md"
+    }
+  ],
+  "value_owner": "KCD Peru Program"
+}

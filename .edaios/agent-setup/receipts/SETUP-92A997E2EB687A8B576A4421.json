@@ -1,0 +1,20 @@
+{
+  "after_digest": "sha256:5f9fc356d59cd47004440c756f1838b4a7064045c321f3aba93fbf11e4bfd9ec",
+  "backup": ".edaios/agent-setup/backups/SETUP-92A997E2EB687A8B576A4421/original.bin",
+  "before_digest": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "claim_boundary": "setup local reversible; no concede autoridad ni configura $HOME",
+  "integration_lock_digest": "sha256:ff93e1d189ff8c08c2d7d00411e5cb616a7bb2ff2dc3ac93fcf19b5027f453b9",
+  "integrity": {
+    "algorithm": "SHA-256",
+    "claim": "local-integrity-only; not identity or non-repudiation",
+    "payload_sha256": "sha256:f0fa785a2db8a194db044563358e3db5dfac4d90203d5e70fd1ecf6058529146"
+  },
+  "project_local": true,
+  "receipt_id": "SETUP-92A997E2EB687A8B576A4421",
+  "schema": "edaios.agent-setup-receipt/v1",
+  "status": "applied",
+  "surface": "claude-code",
+  "target": "CLAUDE.md",
+  "target_existed": false,
+  "write_authorized": true
+}

@@ -1,0 +1,14 @@
+{
+  "schema": "edaios.feature-evidence/v1",
+  "criterion": "SC-002",
+  "status": "observed",
+  "observed_at": "2026-07-18",
+  "toolchain": "Apache Maven 3.9.8",
+  "command": "./mvnw -pl data-kcd2026 dependency:list",
+  "exit_code": 0,
+  "observation": [
+    "org.apache.flink:flink-streaming-java:jar:1.20.1:compile",
+    "org.apache.flink:flink-connector-kafka:jar:3.3.0-1.20:compile"
+  ],
+  "limits": "mediacion transitiva resuelta contra el ~/.m2 de esta maquina; otro repositorio puede diferir"
+}

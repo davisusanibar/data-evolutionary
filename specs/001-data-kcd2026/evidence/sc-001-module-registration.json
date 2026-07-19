@@ -1,0 +1,11 @@
+{
+  "schema": "edaios.feature-evidence/v1",
+  "criterion": "SC-001",
+  "status": "observed",
+  "observed_at": "2026-07-18",
+  "toolchain": "Apache Maven 3.9.8",
+  "command": "./mvnw -q -pl data-kcd2026 -am validate",
+  "exit_code": 0,
+  "observation": "el reactor com.topaya:oss resuelve data-kcd2026 desde la raiz del monorepo",
+  "limits": "resolucion local del reactor; no prueba build en otro entorno"
+}

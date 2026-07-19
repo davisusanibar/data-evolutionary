@@ -1,0 +1,32 @@
+{
+  "actors": [
+    {
+      "active": true,
+      "actor_id": "David Dali Susanibar Arce",
+      "capabilities": [
+        "approve",
+        "delegate",
+        "rollback"
+      ],
+      "roles": [
+        "initiative-owner",
+        "approver"
+      ],
+      "type": "human"
+    },
+    {
+      "active": true,
+      "actor_id": "KCD Peru Program",
+      "capabilities": [
+        "outcome:verify"
+      ],
+      "roles": [
+        "value-owner"
+      ],
+      "type": "human"
+    }
+  ],
+  "initiative": "data-evolutionary",
+  "schema": "edaios.authority-registry/v1",
+  "version": "1.0.0"
+}

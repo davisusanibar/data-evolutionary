@@ -1,0 +1,11 @@
+{
+  "schema": "edaios.feature-evidence/v1",
+  "criterion": "SC-003",
+  "status": "observed",
+  "observed_at": "2026-07-18",
+  "toolchain": "unzip + javap (JDK del workspace)",
+  "command": "unzip -l data-kcd2026/target/data-kcd2026-1.0-SNAPSHOT.jar; javap -p com/topaya/kcd2026/KafkaHello.class",
+  "exit_code": 0,
+  "observation": "el jar contiene com/topaya/kcd2026/KafkaHello.class (606 bytes) y javap reporta la clase publica com.topaya.kcd2026.KafkaHello con main(java.lang.String[])",
+  "limits": "presencia y paquete de la clase; no ejecuta un job ni contacta un broker"
+}

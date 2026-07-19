@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "presets": {
+    "edaios-governed-delivery": {
+      "version": "3.1.0",
+      "source": "local",
+      "manifest_hash": "sha256:5ed14ec2d139a81730d3a3acaeadf59b1f7fa6d1578c659bb557b60981c5cd3d",
+      "enabled": true,
+      "priority": 5,
+      "registered_commands": {},
+      "registered_skills": [],
+      "installed_at": "2026-07-18T19:54:01.340689+00:00"
+    }
+  }
+}
