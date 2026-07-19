@@ -1,0 +1,20 @@
+{
+  "actor": {
+    "id": "David Dali Susanibar Arce",
+    "type": "human"
+  },
+  "approved_at": "2026-07-19T03:01:35.975629Z",
+  "authority_role": "initiative-owner",
+  "evidence_receipt_digest": "954c3fa418fc536da991d8ea9fc4a22b7a3cc6650225b87debab5279f0c5b61f",
+  "feature_run": "001-data-kcd2026",
+  "initiative": "data-evolutionary",
+  "integrity": {
+    "algorithm": "SHA-256",
+    "claim": "local-integrity-only; not identity or non-repudiation",
+    "payload_sha256": "341534de04f23535ff7155714f0c6ecb09f1a37ab5a147a53d9376c335f4aef6"
+  },
+  "receipt_id": "APR-e3e59a6e6474",
+  "schema": "edaios.approval-receipt/v1",
+  "statement": "Acepto el plan de la feature 001-data-kcd2026 (specs/001-data-kcd2026/plan.md), junto con la spec, la spec tipada, la matriz de verificacion y el checklist de requisitos, en el estado verificado por el gate consumer-release 43/43. Alcance: aceptacion del contrato SDD. NO acepta las tareas (T001 y T008 siguen abiertas) y NO cierra la feature: permanece en fase tasked / estado Propuesto hasta despues de la demo KCD 2026.",
+  "verdict": "accepted"
+}

@@ -1,0 +1,71 @@
+{
+  "actor": {
+    "id": "David Dali Susanibar Arce",
+    "type": "human"
+  },
+  "approval": {
+    "required": true,
+    "roles": [
+      "initiative-owner"
+    ]
+  },
+  "base_commit": "272cc9fdb702a373de6616dda509a83ee609a6b7",
+  "claim_boundary": "Revision del contrato SDD (plan, spec, spec tipada, matriz de verificacion y checklist) con gate consumer-release en 43/43. Acredita coherencia del contrato; no acredita implementacion cerrada ni despliegue.",
+  "core_version": "3.1.0",
+  "evidence": [
+    {
+      "path": "specs/001-data-kcd2026/checklists/requirements.md",
+      "sha256": "ce38bc7cd6fcc672664f797f47de89b05f306a0af62e7fa69851f6a6e1ce47e4",
+      "size": 1082
+    },
+    {
+      "path": "specs/001-data-kcd2026/feature.spec.yaml",
+      "sha256": "b22b5625517483c2e4aa51902485f385781baf927917aa616017305ba485a708",
+      "size": 449
+    },
+    {
+      "path": "specs/001-data-kcd2026/plan.md",
+      "sha256": "117616cfea18707f978016d3cdb0f72b34b68b454745d55a1e66fb79a7055ab7",
+      "size": 2672
+    },
+    {
+      "path": "specs/001-data-kcd2026/spec.md",
+      "sha256": "20b5c0cef0aaee290a439dc890f2ecd8ca840f9fcb7b9db76142654499464e62",
+      "size": 3016
+    },
+    {
+      "path": "specs/001-data-kcd2026/verification.md",
+      "sha256": "51063e743905b631d840e9ef3065a0b95aaa76d773fda8f17a87f85fef111a1b",
+      "size": 1289
+    }
+  ],
+  "exit_code": 0,
+  "feature_run": "001-data-kcd2026",
+  "head_commit": "7f5d62312f693ef5dcbcdfb83be71fe0ae90f016",
+  "initiative": "data-evolutionary",
+  "integrity": {
+    "algorithm": "SHA-256",
+    "claim": "local-integrity-only; not identity or non-repudiation",
+    "payload_sha256": "db887805507a41f59035588e46d9855456497b8c08001a23e5fec89b3a153cf6"
+  },
+  "policy": {
+    "digest": "046f780ef8b0f0ce1a7d4f9023a2b951bee9ea353beb177c1d42501601948e9a",
+    "id": "data-evolutionary-policy",
+    "version": "1.0.0"
+  },
+  "receipt_id": "EVR-452c04b11692",
+  "recorded_at": "2026-07-19T03:01:27.771851Z",
+  "rollback": {
+    "steps": [
+      "git revert 8532759 para retirar el submodulo data-kcd2026 y su registro en <modules> del pom.xml raiz",
+      "verificar que ningun otro modulo declara dependencia sobre com.topaya.kcd2026",
+      "marcar ADR-0001 como derogado por una decision posterior; no borrar ni reusar el numero",
+      "mover specs/001-data-kcd2026 a estado Cerrado con fase revertida y registrar el motivo en evidence/"
+    ],
+    "target_ref": "272cc9fdb702a373de6616dda509a83ee609a6b7",
+    "verification": "./mvnw -q validate desde la raiz termina en exit 0 sin data-kcd2026 en el reactor, y los modulos data-hadoop, data-spark, data-cdc-kafka-flink-iceberg y data-kcd2025 siguen resolviendo"
+  },
+  "schema": "edaios.evidence-receipt/v2",
+  "sensitivity": "T0",
+  "verdict": "passed"
+}
